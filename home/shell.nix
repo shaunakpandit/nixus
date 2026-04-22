@@ -60,6 +60,7 @@
       c = "clear";
       ".." = "cd ..";
       zs = "source ~/.zshrc";
+      jk = "exit";
     };
   };
   programs.gh = {
