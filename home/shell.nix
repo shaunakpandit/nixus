@@ -18,6 +18,10 @@
     fzf
   ];
 
+  programs.btop = {
+    enable = true;
+  };
+
   programs.zoxide = {
     enable = true;
   };
