@@ -1,12 +1,12 @@
 { config, pkgs, ... }:
 {
   xdg.configFile."tmux" = {
-    source = ./dotfiles/tmux/.config/tmux;
+    source = ../dotfiles/tmux/.config/tmux;
     recursive = true;
   };
 
   xdg.configFile."ghostty" = {
-    source = ./dotfiles/ghostty/.config/ghostty;
+    source = ../dotfiles/ghostty/.config/ghostty;
     recursive = true;
   };
 
