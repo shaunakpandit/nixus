@@ -3,7 +3,7 @@
   xdg.configFile."nvim" = {
     source = builtins.filterSource (
       path: type: baseNameOf path != "nvim-pack-lock.json"
-    ) ../dotfiles/nvim/.config/nvim;
+    ) ../dotfiles/nvim;
     recursive = true;
   };
 
