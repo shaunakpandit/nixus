@@ -59,6 +59,7 @@
       vim = "nvim";
       c = "clear";
       ".." = "cd ..";
+      zs = "source ~/.zshrc";
     };
   };
   programs.gh = {
