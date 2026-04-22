@@ -1,12 +1,12 @@
 { config, pkgs, ... }:
 {
   xdg.configFile."tmux" = {
-    source = ../dotfiles/tmux;
+    source = ../dots/tmux;
     recursive = true;
   };
 
   xdg.configFile."ghostty" = {
-    source = ../dotfiles/ghostty;
+    source = ../dots/ghostty;
     recursive = true;
   };
 
@@ -53,6 +53,8 @@
       nixos = "cd ~/dev/nixos";
       vi = "nvim";
       vim = "nvim";
+      c = "clear";
+      ".." = "cd ..";
     };
   };
   programs.gh = {
