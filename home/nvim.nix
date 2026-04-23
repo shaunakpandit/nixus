@@ -22,6 +22,10 @@
     ];
   };
 
+  home.packages = with pkgs; [
+    stylua
+  ];
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
