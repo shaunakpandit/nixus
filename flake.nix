@@ -45,7 +45,6 @@
               imports = [
                 ./home.nix
                 inputs.mangowm.hmModules.mango
-                stylix.homeModules.stylix
               ];
             };
           }

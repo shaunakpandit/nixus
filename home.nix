@@ -25,7 +25,15 @@
 
   programs.firefox = {
     enable = true;
+    profiles.void = {
+      isDefault = true;
+      settings = {
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+      };
+    };
   };
+
+  stylix.targets.firefox.profileName = [ "void" ];
 
   home.stateVersion = "25.11";
 }
