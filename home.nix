@@ -3,6 +3,7 @@
   imports = [
     ./home/nvim.nix
     ./home/shell.nix
+    ./home/stylix.nix
     ./home/mango
   ];
 
@@ -14,7 +15,18 @@
     nil
     nixpkgs-fmt
     nodejs
+
+    waybar
+    wmenu
   ];
+
+  programs.waybar = {
+    enable = true;
+  };
+
+  programs.firefox = {
+    enable = true;
+  };
 
   home.stateVersion = "25.11";
 }
