@@ -25,15 +25,26 @@
 
   programs.firefox = {
     enable = true;
-    profiles.void = {
-      isDefault = true;
-      settings = {
-        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+    profiles = {
+      void = {
+        isDefault = true;
+        extensions = {
+          force = true;
+        };
+        settings = {
+          # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        };
       };
     };
   };
 
-  stylix.targets.firefox.profileName = [ "void" ];
+  stylix.targets.firefox = {
+    enable = true;
+    colorTheme.enable = true;
+    colors.enable = true;
+    fonts.enable = true;
+    profileNames = [ "void" ];
+  };
 
   home.stateVersion = "25.11";
 }
