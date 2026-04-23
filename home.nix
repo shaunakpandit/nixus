@@ -3,7 +3,6 @@
   imports = [
     ./home/nvim.nix
     ./home/shell.nix
-    ./home/stylix.nix
     ./home/mango
   ];
 
