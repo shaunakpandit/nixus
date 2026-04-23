@@ -75,5 +75,4 @@
   programs.starship = {
     enable = true;
   };
-
 }
