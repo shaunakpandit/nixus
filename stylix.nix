@@ -2,6 +2,6 @@
 {
   stylix = {
     enable = true;
-    base16Scheme = "";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/black-metal-immortal.yaml";
   };
 }
