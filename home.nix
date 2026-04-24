@@ -23,6 +23,35 @@
 
   programs.waybar = {
     enable = true;
+    settings = [
+      {
+        modules-left = [
+          "ext/workspaces"
+          "dwl/window"
+        ];
+
+        modules-right = [
+          "network"
+          "cpu"
+          "memory"
+          "disk"
+          "temperature"
+          "clock"
+        ];
+
+        "ext/workspaces" = {
+          format = "{icon}";
+          ignore-hidden = true;
+          on-click = "activate";
+          on-click-right = "deactivate";
+          sort-by-id = true;
+        };
+
+        "dwl/window" = {
+          format = "[{layout}] {title}";
+        };
+      }
+    ];
   };
 
   programs.firefox = {

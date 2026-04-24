@@ -32,7 +32,8 @@
       		xkb_rules_options=caps:ctrl_modifier,altwin:swap_lalt_lwin
     '';
     autostart_sh = ''
-      		exec-once=waybar
-      	    '';
+      waybar &
+      swaybg -i ~/dev/nixos/walls/solar.png &
+    '';
   };
 }
