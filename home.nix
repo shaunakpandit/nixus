@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   imports = [
     ./home/nvim.nix
@@ -27,6 +32,13 @@
         isDefault = true;
         extensions = {
           force = true;
+
+          packages = with inputs.firefox-addons.packages.${pkgs.system}; [
+            ublock-origin
+            darkreader
+            proton-pass
+            vimium
+          ];
         };
         settings = {
           # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;

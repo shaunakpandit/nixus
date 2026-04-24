@@ -93,6 +93,7 @@
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [
+      thunar
       #  thunderbird
     ];
   };
@@ -119,7 +120,6 @@
     slurp
     swaybg
 
-    #languages
     fd
     bc
     gcc
@@ -133,6 +133,7 @@
     bat
     fzf
     ripgrep
+    unzip
   ];
   # for zsh autocompletions
   # see: https://home-manager-options.extranix.com/?query=programs&release=master
