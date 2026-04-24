@@ -120,7 +120,19 @@
     swaybg
 
     #languages
+    fd
+    bc
+    gcc
+    git-ignore
+    xdg-utils
+    curl
     go
+    comma
+    lua
+    luarocks
+    bat
+    fzf
+    ripgrep
   ];
   # for zsh autocompletions
   # see: https://home-manager-options.extranix.com/?query=programs&release=master

@@ -23,7 +23,8 @@
   };
 
   home.packages = with pkgs; [
-    stylua
+    lua-language-server
+    nodejs
   ];
 
   programs.neovim = {

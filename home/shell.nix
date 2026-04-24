@@ -12,10 +12,6 @@
 
   home.packages = with pkgs; [
     fastfetch
-    ripgrep
-    rustup
-    fd
-    fzf
   ];
 
   programs.btop = {
@@ -45,6 +41,12 @@
   programs.tmux = {
     enable = true;
   };
+
+  # Add go binaries to PATH
+  home.sessionPath = [
+    "$HOME/go/bin"
+    "$HOME/.local/bin"
+  ];
 
   programs.zsh = {
     enable = true;
