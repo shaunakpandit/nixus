@@ -158,7 +158,7 @@
   environment.pathsToLink = [ "/share/zsh" ];
 
   fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
+    nerd-fonts.lilex
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
