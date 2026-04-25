@@ -30,13 +30,17 @@
           "dwl/window"
         ];
 
+        modules-center = [
+          "cpu"
+          "clock"
+          "memory"
+        ];
+
         modules-right = [
           "network"
-          "cpu"
-          "memory"
           "disk"
           "temperature"
-          "clock"
+          "battery"
         ];
 
         "ext/workspaces" = {
@@ -45,6 +49,14 @@
           on-click = "activate";
           on-click-right = "deactivate";
           sort-by-id = true;
+        };
+
+        "cpu" = {
+          format = "cpu {usage}%";
+        };
+
+        "memory" = {
+          format = "ram {percentage}%";
         };
 
         "dwl/window" = {
