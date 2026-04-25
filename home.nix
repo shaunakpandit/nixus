@@ -85,15 +85,6 @@ in
           border-bottom: 0px solid transparent;
           box-shadow: none;
       } 
-
-      #workspaces button.empty {
-          color: #${c.base05};
-      }
-
-      #workspaces button.empty.active {
-          color: #${c.base0B};
-      }
-
     '';
   };
 
