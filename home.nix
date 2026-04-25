@@ -79,10 +79,6 @@ in
       }
     ];
     style = ''
-      #workspaces button {
-          color: #${c.base0B};
-      }
-
       #workspaces button.active {
           color: #${c.base0B};
           border-radius: 0px;
