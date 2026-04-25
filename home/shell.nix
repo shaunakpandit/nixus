@@ -60,7 +60,7 @@
       nixos = "cd ~/dev/nixos";
       vi = "nvim";
       vim = "nvim";
-      tm = "tmux new -A -s code -n code \; new-window -d -S -n term";
+      tm = "tmux new -A -s code -n code \; neww -d -S -t code: -n term";
       c = "clear";
       ".." = "cd ..";
       zs = "source ~/.zshrc";

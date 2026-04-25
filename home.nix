@@ -65,10 +65,15 @@ in
         };
 
         "dwl/window" = {
-          format = "[{layout}] {title}";
+          format = "[{layout}] {app_id}";
         };
       }
     ];
+    style = ''
+      #workspaces button.active {
+           color: #${c.base0B};
+      } 
+    '';
   };
 
   programs.firefox = {
