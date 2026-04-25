@@ -52,10 +52,12 @@
         };
 
         "cpu" = {
+          interval = 1;
           format = "cpu {usage}%";
         };
 
         "memory" = {
+          interval = 1;
           format = "{percentage}% ram";
         };
 
