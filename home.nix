@@ -79,12 +79,25 @@ in
       }
     ];
     style = ''
+      #workspaces button {
+          color: #${c.base0B};
+      }
+
       #workspaces button.active {
           color: #${c.base0B};
           border-radius: 0px;
           border-bottom: 0px solid transparent;
           box-shadow: none;
       } 
+
+      #workspaces button.empty {
+          color: #${c.base05};
+      }
+
+      #workspaces button.empty.active {
+          color: #${c.base0B};
+      }
+
     '';
   };
 
