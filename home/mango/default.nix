@@ -1,4 +1,7 @@
 { config, pkgs, ... }:
+let
+  c = config.lib.stylix.colors;
+in
 {
   wayland.windowManager.mango = {
     enable = true;
@@ -30,6 +33,14 @@
       		repeat_delay=200
       		xkb_rules_layout=us
       		xkb_rules_options=caps:ctrl_modifier,altwin:swap_lalt_lwin
+            borderpx=2
+            blur=1
+            focused_opacity=.92
+            unfocused_opacity=.87
+            cursor_size = 28
+            bordercolor=0x${c.base03}ff
+            focuscolor=0x${c.base0B}ff
+            urgentcolor=0x${c.base08}ff
     '';
     autostart_sh = ''
       waybar &

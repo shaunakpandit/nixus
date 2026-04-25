@@ -56,9 +56,11 @@
     enableCompletion = true;
     shellAliases = {
       rb = "sudo nixos-rebuild switch --flake ~/dev/nixos#t14";
+      nc = "sudo nix profile wipe-history --older-than 7d --profile /nix/var/nix/profiles/system ; sudo nix-collect-garbage --delete-old ; nix-collect-garbage --delete-old";
       nixos = "cd ~/dev/nixos";
       vi = "nvim";
       vim = "nvim";
+      tm = "tmux new -A -s code -n code \; new-window -d -S -n term";
       c = "clear";
       ".." = "cd ..";
       zs = "source ~/.zshrc";
