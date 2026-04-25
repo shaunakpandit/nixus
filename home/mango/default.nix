@@ -11,6 +11,10 @@ in
       		bind=SUPER,d,spawn,wmenu-run -l 10
       		bind=SUPER,q,killclient,
       		bind=SUPER,b,spawn,firefox
+      		bind=SUPER+CTRL,h,scroller_stack,left
+      		bind=SUPER+CTRL,j,scroller_stack,down
+      		bind=SUPER+CTRL,k,scroller_stack,up
+      		bind=SUPER+CTRL,l,scroller_stack,right	
       		bind=SUPER,h,focusdir,left
       		bind=SUPER,j,focusdir,down
       		bind=SUPER,k,focusdir,up
@@ -20,6 +24,7 @@ in
       		bind=SUPER,3,view,3
       		bind=SUPER,4,view,4
       		bind=SUPER,5,view,5
+            bind=SUPER+SHIFT,n,switch_layout
       		bind=SUPER+SHIFT,1,tagsilent,1	
       		bind=SUPER+SHIFT,2,tagsilent,2	
       		bind=SUPER+SHIFT,3,tagsilent,3	
@@ -41,6 +46,11 @@ in
             bordercolor=0x${c.base03}ff
             focuscolor=0x${c.base0B}ff
             urgentcolor=0x${c.base08}ff
+            new_is_master=0
+            tagrule=id:1,layout_name:right_tile
+            tagrule=id:2,layout_name:vertical_scroller
+            tagrule=id:3,layout_name:right_tile
+            tagrule=id:4,layout_name:right_tile
     '';
     autostart_sh = ''
       waybar &
