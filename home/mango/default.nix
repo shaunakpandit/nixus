@@ -34,6 +34,8 @@ in
       		bind=SUPER+SHIFT,j,exchange_client,down
       		bind=SUPER+SHIFT,k,exchange_client,up
       		bind=SUPER+SHIFT,l,exchange_client,right	
+            bind=SUPER,f,togglemaximizescreen
+            bind=SUPER+SHIFT,F,togglefullscreen
       		repeat_rate=70
       		repeat_delay=200
       		xkb_rules_layout=us
