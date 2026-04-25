@@ -56,7 +56,7 @@
         };
 
         "memory" = {
-          format = "ram {percentage}%";
+          format = "{percentage}% ram";
         };
 
         "dwl/window" = {
