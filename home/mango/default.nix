@@ -53,6 +53,14 @@ in
             tagrule=id:2,layout_name:vertical_scroller
             tagrule=id:3,layout_name:right_tile
             tagrule=id:4,layout_name:right_tile
+            gesturebind=none,left,3,focusdir,left
+            gesturebind=none,right,3,focusdir,right
+            gesturebind=none,up,3,focusdir,up
+            gesturebind=none,down,3,focusdir,down
+            gesturebind=none,left,4,viewtoleft_have_client
+            gesturebind=none,right,4,viewtoright_have_client
+            gesturebind=none,up,4,toggleoverview
+            gesturebind=none,down,4,toggleoverview
     '';
     autostart_sh = ''
       waybar &

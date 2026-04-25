@@ -4,6 +4,9 @@
   inputs,
   ...
 }:
+let
+  c = config.lib.stylix.colors;
+in
 {
   imports = [
     ./home/nvim.nix
