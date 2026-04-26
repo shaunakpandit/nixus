@@ -61,6 +61,8 @@ in
             gesturebind=none,right,4,viewtoright_have_client
             gesturebind=none,up,4,toggleoverview
             gesturebind=none,down,4,toggleoverview
+            switchbind=fold,exec,systemctl hibernate
+            switchbind=unfold,exec,wlr-randr --output eDP-1 --on
     '';
     autostart_sh = ''
       waybar &
