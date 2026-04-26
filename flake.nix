@@ -5,6 +5,7 @@
     # NixOS official package source, using the nixos-25.11 branch here
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,6 +32,7 @@
       mangowm,
       stylix,
       firefox-addons,
+      nixos-hardware,
       ...
     }@inputs:
     {
@@ -54,6 +56,7 @@
               ];
             };
           }
+          nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
           mangowm.nixosModules.mango
           stylix.nixosModules.stylix
         ];
