@@ -11,10 +11,10 @@ in
     settings = ''
       		bind=SUPER,r,reload_config
       		bind=SUPER,Return,spawn,ghostty
-      		bind=SUPER,d,spawn,wmenu-run -l 10
+      		bind=SUPER,SPACE,spawn,fuzzel
       		bind=SUPER,q,killclient,
       		bind=SUPER,b,spawn,firefox
-      		bind=SUPER+SHIFT,b,spawn,firefox --private
+      		bind=SUPER+SHIFT,b,spawn,firefox --private-window
       		bind=SUPER+CTRL,h,scroller_stack,left
       		bind=SUPER+CTRL,j,scroller_stack,down
       		bind=SUPER+CTRL,k,scroller_stack,up
