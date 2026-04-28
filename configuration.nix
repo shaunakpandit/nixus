@@ -144,6 +144,7 @@
     brightnessctl
     wireplumber
     playerctl
+    tree-sitter
   ];
   # for zsh autocompletions
   # see: https://home-manager-options.extranix.com/?query=programs&release=master
