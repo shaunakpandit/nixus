@@ -140,6 +140,10 @@
     ripgrep
     unzip
     dig
+    wev
+    brightnessctl
+    wireplumber
+    playerctl
   ];
   # for zsh autocompletions
   # see: https://home-manager-options.extranix.com/?query=programs&release=master

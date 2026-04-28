@@ -41,6 +41,8 @@ in
 
         modules-right = [
           "network"
+          "pulseaudio"
+          "backlight"
           "disk"
           "temperature"
           "battery"

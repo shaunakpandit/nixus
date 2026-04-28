@@ -3,6 +3,9 @@ let
   c = config.lib.stylix.colors;
 in
 {
+  home.packages = with pkgs; [
+  ];
+
   wayland.windowManager.mango = {
     enable = true;
     settings = ''
@@ -11,6 +14,7 @@ in
       		bind=SUPER,d,spawn,wmenu-run -l 10
       		bind=SUPER,q,killclient,
       		bind=SUPER,b,spawn,firefox
+      		bind=SUPER+SHIFT,b,spawn,firefox --private
       		bind=SUPER+CTRL,h,scroller_stack,left
       		bind=SUPER+CTRL,j,scroller_stack,down
       		bind=SUPER+CTRL,k,scroller_stack,up
@@ -36,10 +40,22 @@ in
       		bind=SUPER+SHIFT,l,exchange_client,right	
             bind=SUPER,f,togglemaximizescreen
             bind=SUPER+SHIFT,F,togglefullscreen
+            bind=NONE,XF86MonBrightnessUp,spawn,brightnessctl s +2%
+            bind=SHIFT,XF86MonBrightnessUp,spawn,brightnessctl s 100%
+            bind=NONE,XF86MonBrightnessDown,spawn,brightnessctl s 2%-
+            bind=SHIFT,XF86MonBrightnessDown,spawn,brightnessctl s 1%
+            bind=NONE,XF86AudioRaiseVolume,spawn,wpctl set-volume @DEFAULT_SINK@ 5%+
+            bind=NONE,XF86AudioLowerVolume,spawn,wpctl set-volume @DEFAULT_SINK@ 5%-
+            bind=NONE,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SINK@ toggle
+            bind=SHIFT,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SOURCE@ toggle
+            bind=SUPER,p,spawn,playerctl next
+            bind=SUPER,i,spawn,playerctl previous
+            bind=SUPER,o,spawn,playerctl play-pause
       		repeat_rate=70
       		repeat_delay=200
       		xkb_rules_layout=us
       		xkb_rules_options=caps:ctrl_modifier,altwin:swap_lalt_lwin
+            trackpad_natural_scrolling=1
             borderpx=2
             blur=1
             focused_opacity=.92

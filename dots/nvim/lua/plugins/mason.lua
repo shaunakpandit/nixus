@@ -28,6 +28,7 @@ require("mason-tool-installer").setup({
 		"bash-language-server",
 		"rust-analyzer",
 		"helm-ls",
+        "superhtml",
 		-- nix
 		"nil",
 		"nixfmt",
