@@ -40,6 +40,8 @@ in
       		bind=SUPER+SHIFT,l,exchange_client,right	
             bind=SUPER,f,togglemaximizescreen
             bind=SUPER+SHIFT,F,togglefullscreen
+            bind=SUPER,t,togglefloating
+            bind=SUPER+SHIFT,t,centerwin
             bind=NONE,XF86MonBrightnessUp,spawn,brightnessctl s +2%
             bind=SHIFT,XF86MonBrightnessUp,spawn,brightnessctl s 100%
             bind=NONE,XF86MonBrightnessDown,spawn,brightnessctl s 2%-
