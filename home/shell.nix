@@ -1,7 +1,9 @@
 { config, pkgs, ... }:
+let
+  c = config.lib.stylix.colors;
+in
 {
   home.packages = with pkgs; [
-    fastfetch
   ];
   xdg.configFile."tmux" = {
     source = ../dots/tmux;
@@ -13,12 +15,44 @@
     recursive = true;
   };
 
+  programs.fastfetch = {
+    enable = true;
+    settings = {
+      logo = {
+        type = "small";
+        source = "nixos";
+      };
+      modules = [
+        "os"
+        "kernel"
+        "bios"
+        "break"
+        "host"
+        "cpu"
+        "gpu"
+        "chasis"
+        "break"
+        "cpuusage"
+        "memory"
+        "physicaldisk"
+        "physicalmemory"
+        "break"
+        "packages"
+        "processes"
+        "uptime"
+      ];
+    };
+  };
+
   programs.zsh = {
     enable = true;
     autosuggestion = {
       enable = true;
     };
     enableCompletion = true;
+    initExtra = ''
+      fastfetch
+    '';
     shellAliases = {
       rb = "sudo nixos-rebuild switch --flake ~/dev/nixos#t14";
       nc = "sudo nix profile wipe-history --older-than 7d --profile /nix/var/nix/profiles/system ; sudo nix-collect-garbage --delete-old ; nix-collect-garbage --delete-old";
@@ -31,11 +65,15 @@
       zs = "source ~/.zshrc";
       jk = "exit";
       ms = "mango";
+      faf = "fastfetch";
     };
   };
 
   programs.btop = {
     enable = true;
+    settings = {
+      vim_keys = true;
+    };
   };
 
   programs.zoxide = {

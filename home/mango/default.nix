@@ -15,6 +15,7 @@ in
       		bind=SUPER,q,killclient,
       		bind=SUPER,b,spawn,firefox
       		bind=SUPER+SHIFT,b,spawn,firefox --private-window
+      		bind=SUPER+SHIFT,m,spawn,btop
       		bind=SUPER+CTRL,h,scroller_stack,left
       		bind=SUPER+CTRL,j,scroller_stack,down
       		bind=SUPER+CTRL,k,scroller_stack,up
@@ -81,6 +82,8 @@ in
             gesturebind=none,down,4,toggleoverview
             bind=SUPER+ALT,h,spawn,systemctl suspend
             bind=SUPER+SHIFT,o,spawn,wlr-dpms on
+            cursor_size=32
+            cursor_theme=phingers-cursors-dark
     '';
     autostart_sh = ''
       waybar &

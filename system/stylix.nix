@@ -33,5 +33,10 @@
         name = "Noto Color Emoji";
       };
     };
+    cursor = {
+      package = pkgs.phinger-cursors;
+      name = "phingers-cursors-dark";
+      size = 32;
+    };
   };
 }
