@@ -15,7 +15,7 @@ in
       		bind=SUPER,q,killclient,
       		bind=SUPER,b,spawn,firefox
       		bind=SUPER+SHIFT,b,spawn,firefox --private-window
-      		bind=SUPER+SHIFT,m,spawn,btop
+      		bind=SUPER+SHIFT,m,spawn,ghostty -e btop
       		bind=SUPER+CTRL,h,scroller_stack,left
       		bind=SUPER+CTRL,j,scroller_stack,down
       		bind=SUPER+CTRL,k,scroller_stack,up
