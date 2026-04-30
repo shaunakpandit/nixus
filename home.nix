@@ -15,6 +15,7 @@ in
     ./home/utils.nix
     ./home/firefox.nix
     ./home/waybar.nix
+    ./home/fuzzel.nix
   ];
 
   home.username = "void";
@@ -27,29 +28,14 @@ in
     "$HOME/.nix-profile/bin"
   ];
 
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    TERMINAL = "ghostty";
+  };
+
   home.packages = with pkgs; [
     jq
   ];
-
-  programs.fuzzel = {
-    enable = true;
-    settings = {
-      main = {
-        icons-enabled = false;
-        anchor = "top";
-        lines = 7;
-        horiozontal-pad = 12;
-        vertical-pad = 4;
-      };
-      border = {
-        radius = 0;
-      };
-      key-bindings = {
-        next-with-wrap = "Control+j";
-        prev-with-wrap = "Control+k";
-      };
-    };
-  };
 
   home.stateVersion = "25.11";
 }

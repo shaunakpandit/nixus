@@ -105,6 +105,15 @@
 
   programs.zsh.enable = true;
 
+  xdg.terminal-exec = {
+    enable = true;
+    settings = {
+      default = [
+        "ghostty.desktop"
+      ];
+    };
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
