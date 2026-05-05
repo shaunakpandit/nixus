@@ -16,17 +16,18 @@ in
     ./home/firefox.nix
     ./home/waybar.nix
     ./home/fuzzel.nix
+    ./home/sioyek.nix
   ];
 
   home.username = "void";
   home.homeDirectory = "/home/void";
 
   # to add binaries to path
-  home.sessionPath = [
-    "$HOME/.local/bin"
-    "$HOME/bin"
-    "$HOME/.nix-profile/bin"
-  ];
+  # home.sessionPath = [
+  #   "$HOME/.local/bin"
+  #   "$HOME/bin"
+  #   "$HOME/.nix-profile/bin"
+  # ];
 
   home.sessionVariables = {
     EDITOR = "nvim";

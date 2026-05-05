@@ -144,6 +144,7 @@
     comma
     lua
     luarocks
+    cargo
     bat
     fzf
     ripgrep

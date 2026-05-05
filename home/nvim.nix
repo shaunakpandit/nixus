@@ -25,6 +25,7 @@
   home.packages = with pkgs; [
     lua-language-server
     nodejs
+    nil
   ];
 
   programs.neovim = {
