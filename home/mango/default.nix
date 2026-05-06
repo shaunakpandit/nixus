@@ -73,12 +73,12 @@ in
         "SUPER,p,spawn,playerctl play-pause"
 
         "SUPER,m,toggle_named_scratchpad,none,btop-scratch,ghostty --title=btop-scratch -e btop"
-        "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e z pkm"
+        "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'cd ~/pkm && nvim'"
       ];
 
       windowrule = [
         "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
-        "isnamedscratchpad:1,width:500,height:300,title:notes-scratch"
+        "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
       ];
 
       enable_hotarea = 0;
