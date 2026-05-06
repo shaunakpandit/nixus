@@ -17,12 +17,12 @@ in
         "SUPER,q,killclient,"
         "SUPER+ALT,h,spawn,systemctl suspend"
         "SUPER+SHIFT,o,spawn,wlr-dpms on"
-        "SUPER,m,quit"
         "SUPER,o,toggleoverview"
 
-        "SUPER,s,toggle_scratchpad"
-        "SUPER+SHIFT,s,minimized"
-        "SUPER+CRTL,s,restore_minimized"
+        "SUPER,i,toggle_scratchpad"
+        "SUPER,s,minimized"
+        "SUPER+SHIFT,s,restore_minimized"
+
         "SUPER+SHIFT,F,togglefullscreen"
         "SUPER,f,togglemaximizescreen"
         "SUPER,t,togglefloating"
@@ -71,13 +71,14 @@ in
         "NONE,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SINK@ toggle"
         "SHIFT,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SOURCE@ toggle"
         "SUPER,p,spawn,playerctl play-pause"
-        "ALT,m,toggle_named_scratchpad,none,monitor,ghostty -e btop"
-        "ALT,g,toggle_named_scratchpad,none,notes,ghostty -e 'z pkm && nvim'"
+
+        "SUPER,m,toggle_named_scratchpad,none,btop-scratch,ghostty --title=btop-scratch -e btop"
+        "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e z pkm"
       ];
 
       windowrule = [
-        "isnamedscratchpad:1,width:1000,height:700,title:btop"
-        "isnamedscratchpad:1,width:500,height:300,title:notes"
+        "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
+        "isnamedscratchpad:1,width:500,height:300,title:notes-scratch"
       ];
 
       enable_hotarea = 0;
