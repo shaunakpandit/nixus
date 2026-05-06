@@ -73,7 +73,7 @@ in
         "SUPER,p,spawn,playerctl play-pause"
 
         "SUPER,m,toggle_named_scratchpad,none,btop-scratch,ghostty --title=btop-scratch -e btop"
-        "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'cd ~/pkm && nvim'"
+        "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'tmux new-session -A -s notes -c \"$HOME/pkm\" nvim'"
       ];
 
       windowrule = [
