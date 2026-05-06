@@ -6,6 +6,8 @@ in
   home.packages = with pkgs; [
   ];
 
+  # see https://github.com/mangowm/mango/blob/586ee8e6991e67cc1e76a84804bce7c861e0c9bb/nix/hm-modules.nix
+  # for definition
   wayland.windowManager.mango = {
     enable = true;
 
@@ -69,8 +71,8 @@ in
         "NONE,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SINK@ toggle"
         "SHIFT,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SOURCE@ toggle"
         "SUPER,p,spawn,playerctl play-pause"
-        "ALT,m,toggle_named_scratchpad,none,monitor,btop"
-        "ALT,g,toggle_named_scratchpad,none,notes,ghostty -e z pkm && nvim"
+        "ALT,m,toggle_named_scratchpad,none,monitor,ghostty -e btop"
+        "ALT,g,toggle_named_scratchpad,none,notes,ghostty -e 'z pkm && nvim'"
       ];
 
       windowrule = [
