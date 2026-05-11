@@ -4,7 +4,9 @@ let
 in
 {
   home.packages = with pkgs; [
+
   ];
+
   xdg.configFile."tmux" = {
     source = ../dots/tmux;
     recursive = true;
