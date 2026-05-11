@@ -23,7 +23,6 @@
   };
 
   home.packages = with pkgs; [
-    lua-language-server
     nodejs
     nil
   ];
@@ -34,5 +33,8 @@
     withNodeJs = true;
     withPython3 = true;
     withRuby = true;
+    extraPackages = with pkgs; [
+      lua-language-server
+    ];
   };
 }
