@@ -39,7 +39,7 @@ keymap.set("n", "gl", "$", { desc = "Jump: End of line" })
 -- norm
 keymap.set({ "n", "v", "x" }, "<leader>n", ":norm ", { desc = "ENTER NORM COMMAND." })
 -- Open Netrw in the current file's directory
-keymap.set("n", "<Leader>ex", "<cmd>Ex %:p:h<CR>")
+keymap.set("n", "<Leader>ex", "<cmd>Vex %:p:h<CR>")
 
 -- Exit insert mode with jk
 keymap.set({ "i" }, "jk", "<Esc>", { noremap = true, silent = true, desc = "Exit mode" })
