@@ -72,12 +72,14 @@ in
         "SHIFT,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SOURCE@ toggle"
         "SUPER,p,spawn,playerctl play-pause"
 
+        "SUPER+SHIFT,Return,toggle_named_scratchpad,none,term-scratch,ghostty --title=term-scratch -e sh -lc 'tmux new-session -A -s temp -n scratch'"
         "SUPER,m,toggle_named_scratchpad,none,btop-scratch,ghostty --title=btop-scratch -e btop"
         "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'tmux new-session -A -s notes -c \"$HOME/pkm\" nvim'"
         "SUPER+SHIFT,t,toggle_named_scratchpad,none,SillyTavern*, firefox --private-window 192.168.4.28:8000"
       ];
 
       windowrule = [
+        "isnamedscratchpad:1,width:1000,height:700,title:term-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
         "isnamedscratchpad:1,width:400,height:600,title:SillyTavern*"
