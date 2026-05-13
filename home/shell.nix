@@ -48,6 +48,9 @@ in
 
   programs.zsh = {
     enable = true;
+    sessionVariables = {
+      MUSIC_LEAGUE_DB_URL = "mysql://mluser:mlpassword@192.168.4.28:33061/musicleague";
+    };
     autosuggestion = {
       enable = true;
     };

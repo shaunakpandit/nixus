@@ -155,6 +155,7 @@
     wireplumber
     playerctl
     tree-sitter
+    mysql84
   ];
   # for zsh autocompletions
   # see: https://home-manager-options.extranix.com/?query=programs&release=master
