@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  import = [
+  imports = [
     ./drivers.nix
     ./steam.nix
     ./runelite.nix
