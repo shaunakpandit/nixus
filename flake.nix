@@ -42,7 +42,7 @@
         modules = [
           # Import the previous configuration.nix we used,
           # so the old configuration file still takes effect
-          ./configuration.nix
+          ./hosts/t14/configuration.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -51,7 +51,7 @@
             home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.void = {
               imports = [
-                ./home.nix
+                ./hosts/t14/home.nix
                 inputs.mangowm.hmModules.mango
               ];
             };
