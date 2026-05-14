@@ -2,8 +2,9 @@
 {
   hardware.trackpoint = {
     enable = true;
-    sensitivity = 100;
-    speed = 50;
+    sensitivity = 50;
+    speed = 25;
+    inertia = 2;
   };
 
   ## POWER

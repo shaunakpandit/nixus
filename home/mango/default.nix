@@ -93,10 +93,13 @@ in
       repeat_rate = 70;
       repeat_delay = 200;
 
+      trackpad_natural_scrolling = 1;
+      mouse_accel_profile = 1;
+      mouse_accel_speed = 0.2;
+
       xkb_rules_layout = "us";
       xkb_rules_options = "caps:ctrl_modifier,altwin:swap_lalt_lwin";
 
-      trackpad_natural_scrolling = 1;
       borderpx = 2;
       blur = 1;
       focused_opacity = 0.92;
