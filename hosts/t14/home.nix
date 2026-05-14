@@ -9,14 +9,14 @@ let
 in
 {
   imports = [
-    ./home/nvim.nix
-    ./home/shell.nix
-    ./home/mango
-    ./home/utils.nix
-    ./home/firefox.nix
-    ./home/waybar.nix
-    ./home/fuzzel.nix
-    ./home/sioyek.nix
+    ../../home/nvim.nix
+    ../../home/shell.nix
+    ../../home/mango
+    ../../home/utils.nix
+    ../../home/firefox.nix
+    ../../home/waybar.nix
+    ../../home/fuzzel.nix
+    ../../home/sioyek.nix
   ];
 
   home.username = "void";
