@@ -37,29 +37,55 @@
     }@inputs:
     {
       # Please replace my-nixos with your hostname
-      nixosConfigurations.t14 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          # Import the previous configuration.nix we used,
-          # so the old configuration file still takes effect
-          ./hosts/t14/configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.void = {
-              imports = [
-                ./hosts/t14/home.nix
-                inputs.mangowm.hmModules.mango
-              ];
-            };
-          }
-          nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
-          mangowm.nixosModules.mango
-          stylix.nixosModules.stylix
-        ];
+      nixosConfigurations = {
+        t14 = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            # Import the previous configuration.nix we used,
+            # so the old configuration file still takes effect
+            ./hosts/t14/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.users.void = {
+                imports = [
+                  ./hosts/t14/home.nix
+                  inputs.mangowm.hmModules.mango
+                ];
+              };
+            }
+            nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
+            mangowm.nixosModules.mango
+            stylix.nixosModules.stylix
+          ];
+        };
+        d4080 = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            # Import the previous configuration.nix we used,
+            # so the old configuration file still takes effect
+            ./hosts/d4080/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.users.void = {
+                imports = [
+                  ./hosts/d4080/home.nix
+                  inputs.mangowm.hmModules.mango
+                ];
+              };
+            }
+            nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
+            mangowm.nixosModules.mango
+            stylix.nixosModules.stylix
+          ];
+        };
       };
     };
 }
