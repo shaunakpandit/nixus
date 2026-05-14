@@ -54,7 +54,7 @@ in
           ### Fingerprinting resistance
           "privacy.resistFingerprinting" = true;
           "privacy.resistFingerprinting.pbmode" = true;
-          "webgl.disabled" = true;
+          "webgl.disabled" = false;
 
           ### WebRTC IP leak reduction
           "media.peerconnection.enabled" = false;

@@ -55,38 +55,14 @@
     ];
   };
 
-  programs.mango.enable = true;
-
   programs.zsh.enable = true;
-
-  hardware.trackpoint = {
-    enable = true;
-    sensitivity = 100;
-    speed = 50;
-  };
-
-  xdg.terminal-exec = {
-    enable = true;
-    settings = {
-      default = [
-        "ghostty.desktop"
-      ];
-    };
-  };
+  # for zsh autocompletions
+  # see: https://home-manager-options.extranix.com/?query=programs&release=master
+  environment.pathsToLink = [ "/share/zsh" ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    git
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    ghostty
-
-    wl-clipboard
-    grim
-    slurp
-    swaybg
-
     fd
     bc
     gcc
@@ -104,15 +80,9 @@
     unzip
     dig
     wev
-    brightnessctl
-    wireplumber
-    playerctl
     tree-sitter
     mysql84
   ];
-  # for zsh autocompletions
-  # see: https://home-manager-options.extranix.com/?query=programs&release=master
-  environment.pathsToLink = [ "/share/zsh" ];
 
   fonts.packages = with pkgs; [
     nerd-fonts.lilex
@@ -144,5 +114,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.11"; # Did you read the comment?
-
 }
