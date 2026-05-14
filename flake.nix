@@ -82,7 +82,6 @@
                 ];
               };
             }
-            nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
             mangowm.nixosModules.mango
             stylix.nixosModules.stylix
           ];
@@ -103,12 +102,9 @@
               home-manager.users.void = {
                 imports = [
                   ./hosts/s1080/home.nix
-                  inputs.mangowm.hmModules.mango
                 ];
               };
             }
-            nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
-            mangowm.nixosModules.mango
             stylix.nixosModules.stylix
           ];
         };
