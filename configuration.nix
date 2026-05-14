@@ -104,6 +104,12 @@
     ];
   };
 
+  hardware.trackpoint = {
+    enable = true;
+    sensitivity = 100;
+    speed = 50;
+  };
+
   programs.zsh.enable = true;
 
   xdg.terminal-exec = {

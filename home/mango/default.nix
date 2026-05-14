@@ -74,11 +74,13 @@ in
 
         "SUPER+SHIFT,Return,toggle_named_scratchpad,none,term-scratch,ghostty --title=term-scratch -e sh -lc 'tmux new-session -A -s temp -n scratch'"
         "SUPER,m,toggle_named_scratchpad,none,btop-scratch,ghostty --title=btop-scratch -e btop"
+        "SUPER,slash,toggle_named_scratchpad,none,yazi-scratch,ghostty --title=yazi-scratch -e yazi"
         "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'tmux new-session -A -s notes -c \"$HOME/pkm\" nvim'"
         "SUPER+SHIFT,t,toggle_named_scratchpad,none,SillyTavern*, firefox --private-window 192.168.4.28:8000"
       ];
 
       windowrule = [
+        "isnamedscratchpad:1,width:1000,height:700,title:yazi-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:term-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
