@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -15,6 +16,7 @@
     ../../system/locale.nix
     ../../system/nvidia.nix
     ../../system/mango.nix
+    ../../system/gaming/starcitizen.nix
     ../../system/gaming
   ];
 

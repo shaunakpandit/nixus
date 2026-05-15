@@ -22,6 +22,7 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-citizen.url = "github:LovingMelody/nix-citizen";
   };
 
   outputs =
@@ -33,6 +34,7 @@
       stylix,
       firefox-addons,
       nixos-hardware,
+      nix-citizen,
       ...
     }@inputs:
     {
@@ -65,6 +67,7 @@
 
         d4080 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
           modules = [
             # Import the previous configuration.nix we used,
             # so the old configuration file still takes effect
