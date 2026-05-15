@@ -10,7 +10,8 @@
     loader = {
       efi.canTouchEfiVariables = true;
       systemd-boot = {
-        enable = true;
+        enable = false;
+        consoleMode = "auto";
         configurationLimit = 10;
       };
       grub = {
