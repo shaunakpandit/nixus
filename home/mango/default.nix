@@ -114,6 +114,11 @@ in
 
       new_is_master = 0;
 
+      montitorrule = [
+        "model:AW3225QF, width:3840, height:2160, refresh:239.99"
+        "model:27GN950 , width:3840, height:2160, x:2160, y:-1300, rr:3"
+      ];
+
       tagrule = [
         "id:1,layout_name:right_tile"
         "id:2,layout_name:vertical_scroller"
