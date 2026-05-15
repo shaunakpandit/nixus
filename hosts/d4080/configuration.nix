@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -8,7 +13,7 @@
     ../../system/audio.nix
     ../../system/boot.nix
     ../../system/locale.nix
-    ../../system/laptop.nix
+    ../../system/nvidia.nix
     ../../system/mango.nix
     ../../system/gaming
   ];
