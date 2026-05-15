@@ -21,17 +21,17 @@
         device = "nodev"; # For UEFI ('nodev'); use actual device for legacy BIOS (e.g., "/dev/sda")
       };
     };
+    tmp.cleanOnBoot = true;
+    # Silent boot
+    kernelParams = [
+      "quiet"
+      "splash"
+      "rd.systemd.show_status=false"
+      "rd.udev.log_level=3"
+      "udev.log_priority=3"
+      "boot.shell_on_fail"
+    ];
   };
-  tmp.cleanOnBoot = true;
-  # Silent boot
-  kernelParams = [
-    "quiet"
-    "splash"
-    "rd.systemd.show_status=false"
-    "rd.udev.log_level=3"
-    "udev.log_priority=3"
-    "boot.shell_on_fail"
-  ];
 
   # To avoid systemd services hanging on shutdown
   systemd.settings.Manager = {
