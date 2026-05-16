@@ -9,6 +9,7 @@ let
 in
 {
   imports = [
+    ./variables.nix
     ../../home/nvim.nix
     ../../home/shell.nix
     ../../home/mango

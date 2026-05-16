@@ -8,6 +8,7 @@
 
 {
   imports = [
+    ./variables.nix
     ./hardware-configuration.nix
     ../../system/stylix.nix
     ../../system/optimization.nix
