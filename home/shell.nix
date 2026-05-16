@@ -93,6 +93,11 @@ in
     enable = true;
     userName = "shaunakpandit";
     userEmail = "shaunakdpandit@gmail.com";
+    settings = {
+      pull = {
+        rebase = false;
+      };
+    };
   };
 
   programs.ssh = {
