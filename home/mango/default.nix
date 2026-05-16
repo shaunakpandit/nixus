@@ -98,7 +98,7 @@ in
       mouse_accel_speed = 0.2;
 
       xkb_rules_layout = "us";
-      xkb_rules_options = config.var.remap;
+      xkb_rules_options = "${config.var.remap}";
 
       borderpx = 2;
       blur = 1;
