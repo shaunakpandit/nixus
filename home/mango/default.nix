@@ -42,6 +42,8 @@ in
         "SUPER,j,focusdir,down"
         "SUPER,k,focusdir,up"
         "SUPER,l,focusdir,right"
+        "SUPER+SHIFT,h,focusmon,left"
+        "SUPER+SHIFT,l,focusmon,right"
 
         "SUPER,1,view,1"
         "SUPER,2,view,2"
