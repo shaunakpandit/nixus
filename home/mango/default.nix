@@ -142,7 +142,7 @@ in
 
     autostart_sh = ''
       waybar &
-      swaybg -i ~/dev/nixos/walls/solar.png &
+      swaybg -i ~/dev/nixus/walls/solar.png &
     '';
   };
 }
