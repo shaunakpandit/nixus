@@ -45,6 +45,10 @@ in
           sort-by-id = true;
         };
 
+        "clock" = {
+          format = "{:%Y-%m-%d %H:%M}";
+        };
+
         "cpu" = {
           interval = 1;
           format = "cpu {usage}%";
