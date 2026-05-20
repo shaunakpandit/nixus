@@ -74,6 +74,7 @@ in
       ms = "mango";
       faf = "fastfetch";
       ff = "fzf --preview 'bat --color=always {-1}' --bind 'enter:become(nvim {-1})' --layout reverse";
+      gl = "git pull";
     };
   };
 
