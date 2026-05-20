@@ -46,6 +46,13 @@ in
           "browser.tabs.crashReporting.sendReport" = false;
           "breakpad.reportURL" = "";
 
+          ### Password prevent
+          "signon.rememberSignons" = false;
+          "signon.autofillForms" = false;
+          "signon.autofillForms.http" = false;
+          "signon.management.page.enabled" = false;
+          "signon.generation.enabled" = false;
+
           ### Tracking protection
           "privacy.trackingprotection.enabled" = true;
           "privacy.trackingprotection.pbmode.enabled" = true;
