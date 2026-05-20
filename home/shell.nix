@@ -63,7 +63,7 @@ in
       rbt = "sudo nixos-rebuild switch --flake ~/dev/nixus#t14";
       rbd = "sudo nixos-rebuild switch --flake ~/dev/nixus#d4080";
       nc = "sudo nix profile wipe-history --older-than 7d --profile /nix/var/nix/profiles/system ; sudo nix-collect-garbage --delete-old ; nix-collect-garbage --delete-old";
-      nixos = "cd ~/dev/nixos";
+      nixos = "cd ~/dev/nixus";
       vi = "nvim";
       vim = "nvim";
       tm = "tmux new -A -s code -n code ';' neww -d -S -t code: -n term";
