@@ -56,6 +56,7 @@ in
     };
     enableCompletion = true;
     initExtra = ''
+      source <(fzf --zsh)
       fastfetch
     '';
     shellAliases = {
@@ -72,7 +73,16 @@ in
       jk = "exit";
       ms = "mango";
       faf = "fastfetch";
+      ff = "fzf --preview 'bat --color=always {-1}' --bind 'enter:become(nvim {-1})' --layout reverse";
     };
+  };
+
+  programs.fzf = {
+    enable = true;
+  };
+
+  programs.bat = {
+    enable = true;
   };
 
   programs.yazi = {
