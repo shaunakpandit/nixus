@@ -143,6 +143,7 @@ in
     autostart_sh = ''
       waybar &
       swaybg -i ~/dev/nixus/walls/SvddenDeathBackgroundSkinny.png &
+      wl-paste --type text --watch cliphist store & 
     '';
   };
 }

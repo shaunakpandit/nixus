@@ -60,8 +60,7 @@ in
       fastfetch
     '';
     shellAliases = {
-      rbt = "sudo nixos-rebuild switch --flake ~/dev/nixus#t14";
-      rbd = "sudo nixos-rebuild switch --flake ~/dev/nixus#d4080";
+      rb = "${config.var.rebuildCommand}";
       nc = "sudo nix profile wipe-history --older-than 7d --profile /nix/var/nix/profiles/system ; sudo nix-collect-garbage --delete-old ; nix-collect-garbage --delete-old";
       nixos = "cd ~/dev/nixus";
       vi = "nvim";
@@ -73,7 +72,12 @@ in
       jk = "exit";
       ms = "mango";
       faf = "fastfetch";
-      ff = "fzf --preview 'bat --color=always {-1}' --bind 'enter:become(nvim {-1})' --layout reverse";
+      ff = "ls | fuzzel -d | xargs -r nvim";
+      fc = "cliphist list | fuzzel -d | cliphist decode | wl-copy";
+      fg = "fuzzel -d --lines=0 --prompt=\"google: \" | xargs -I {} xdg-open \"https://google.com/search?q={}\"";
+      fh = "fuzzel -d --lines=0 --prompt=\"nix-options: \" | xargs -I {} xdg-open \"https://home-manager-options.extranix.com/?query={}&release=master\"";
+      fn = "fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\"";
+
       gl = "git pull";
     };
   };

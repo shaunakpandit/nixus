@@ -15,6 +15,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     ghostty
+    cliphist
     wl-clipboard
     grim
     slurp
