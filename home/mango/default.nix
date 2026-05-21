@@ -28,8 +28,13 @@ in
         "SUPER,t,togglefloating"
         "SUPER+SHIFT,t,centerwin"
 
-        "SUPER,Return,spawn,ghostty"
         "SUPER,SPACE,spawn,fuzzel"
+        "SUPER+SHIFT,c,spawn_shell,cliphist list | fuzzel -d | cliphist decode | wl-copy"
+        "SUPER+SHIFT,g,spawn_shell,fuzzel -d --lines=0 --prompt=\"google: \" | xargs -I {} xdg-open \"https://google.com/search?q={}\""
+        "SUPER+SHIFT,h,spawn_shell,fuzzel -d --lines=0 --prompt=\"nix-options: \" | xargs -I {} xdg-open \"https://home-manager-options.extranix.com/?query={}&release=master\""
+        "SUPER+SHIFT,o,spawn_shell,fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\""
+
+        "SUPER,Return,spawn,ghostty"
         "SUPER,b,spawn,firefox"
         "SUPER+SHIFT,b,spawn,firefox --private-window"
         "SUPER+SHIFT,m,spawn,ghostty -e btop"
