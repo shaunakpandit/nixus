@@ -30,9 +30,9 @@ in
 
         "SUPER,SPACE,spawn,fuzzel"
         "SUPER+SHIFT,c,spawn_shell,cliphist list | fuzzel -d | cliphist decode | wl-copy"
-        "SUPER+SHIFT,g,spawn_shell,fuzzel -d --lines=0 --prompt=\"google: \" | xargs -I {} xdg-open \"https://google.com/search?q={}\""
-        "SUPER+SHIFT,h,spawn_shell,fuzzel -d --lines=0 --prompt=\"nix-options: \" | xargs -I {} xdg-open \"https://home-manager-options.extranix.com/?query={}&release=master\""
-        "SUPER+SHIFT,o,spawn_shell,fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\""
+        "SUPER+SHIFT,w,spawn_shell,fuzzel -d --lines=0 --prompt=\"google: \" | xargs -I {} xdg-open \"https://google.com/search?q={}\""
+        "SUPER+SHIFT,e,spawn_shell,fuzzel -d --lines=0 --prompt=\"nix-options: \" | xargs -I {} xdg-open \"https://home-manager-options.extranix.com/?query={}&release=master\""
+        "SUPER+SHIFT,r,spawn_shell,fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\""
 
         "SUPER,Return,spawn,ghostty"
         "SUPER,b,spawn,firefox"
@@ -112,7 +112,7 @@ in
       focused_opacity = 0.92;
       unfocused_opacity = 0.87;
 
-      cursor_size = 32;
+      cursor_size = config.var.cursorSize;
       cursor_theme = "phingers-cursors-dark";
 
       bordercolor = "0x${c.base03}ff";
@@ -122,8 +122,8 @@ in
       new_is_master = 0;
 
       monitorrule = [
-        "model:AW3225QF, width:3840, height:2160, refresh:239.99"
-        "model:27GN950 , width:3840, height:2160, x:2160, y:-1300, rr:3"
+        "model:AW3225QF, width:3840, height:2160, refresh:239.99, vrr:1, scale: 1.5"
+        "model:27GN950 , width:3840, height:2160, refresh:144, x:2160, y:-1300, rr:3, vrr:1, scale: 1.5"
       ];
 
       tagrule = [
