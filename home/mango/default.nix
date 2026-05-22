@@ -47,8 +47,8 @@ in
         "SUPER,j,focusdir,down"
         "SUPER,k,focusdir,up"
         "SUPER,l,focusdir,right"
-        "SUPER+SHIFT,h,focusmon,left"
-        "SUPER+SHIFT,l,focusmon,right"
+        "SHIFT+CTRL,h,focusmon,left"
+        "SHIFT+CTRL,l,focusmon,right"
 
         "SUPER,1,view,1"
         "SUPER,2,view,2"
@@ -122,8 +122,8 @@ in
       new_is_master = 0;
 
       monitorrule = [
-        "model:AW3225QF, width:3840, height:2160, refresh:239.99, vrr:1, scale: 1.5"
-        "model:27GN950 , width:3840, height:2160, refresh:144, x:2160, y:-1300, rr:3, vrr:1, scale: 1.5"
+        "model:AW3225QF, width:3840, height:2160, refresh:239.99, vrr:1"
+        "model:27GN950 , width:3840, height:2160, refresh:144, x:2160, y:-1300, rr:3, vrr:1"
       ];
 
       tagrule = [
