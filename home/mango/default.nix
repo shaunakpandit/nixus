@@ -29,7 +29,7 @@ in
         "SUPER+SHIFT,t,centerwin"
 
         "SUPER,SPACE,spawn,fuzzel"
-        "SUPER+SHIFT,c,spawn_shell,cliphist list | fuzzel -d | cliphist decode | wl-copy"
+        "SUPER+SHIFT,c,spawn_shell,cliphist list | fuzzel -d --prompt=\"copy: \" | cliphist decode | wl-copy"
         "SUPER+SHIFT,w,spawn_shell,fuzzel -d --lines=0 --prompt=\"google: \" | xargs -I {} xdg-open \"https://google.com/search?q={}\""
         "SUPER+SHIFT,e,spawn_shell,fuzzel -d --lines=0 --prompt=\"nix-options: \" | xargs -I {} xdg-open \"https://home-manager-options.extranix.com/?query={}&release=master\""
         "SUPER+SHIFT,r,spawn_shell,fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\""
