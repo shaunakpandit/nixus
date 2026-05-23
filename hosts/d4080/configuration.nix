@@ -23,11 +23,6 @@
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
-    # see https://github.com/LovingMelody/nix-citizen/tree/main/pkgs/rsi-launcher
-    kernel.sysctl = {
-      "vm.max_map_count" = 16777216;
-      "fs.file-max" = 524288;
-    };
   };
 
   networking.hostName = "d4080"; # Define your hostname.
@@ -48,6 +43,7 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "input"
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [
