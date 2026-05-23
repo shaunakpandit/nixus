@@ -96,6 +96,7 @@ in
         "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
         "isnamedscratchpad:1,width:400,height:600,title:SillyTavern*"
+        "monitor:model:AW3225QF,appid:starcitizen.exe"
       ];
 
       enable_hotarea = 0;
@@ -126,7 +127,7 @@ in
       new_is_master = 0;
 
       monitorrule = [
-        "model:27GN950 , width:3840, height:2160, refresh:144, x:0, y:0, rr:3, vrr:1"
+        "model:27GN950, width:3840, height:2160, refresh:144, x:0, y:0, rr:3, vrr:1"
         "model:AW3225QF, width:3840, height:2160, refresh:239.99, vrr:1, x:2160, y:50"
       ];
 
