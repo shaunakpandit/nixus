@@ -16,7 +16,7 @@ in
         "SUPER,r,reload_config"
         "SUPER,q,killclient,"
         "SUPER+ALT,h,spawn,systemctl suspend"
-        "SUPER+SHIFT,o,spawn,wlr-dpms on"
+        "SUPER+SHIFT,o,toggle_monitor,name:.*"
         "SUPER,o,toggleoverview"
 
         "SUPER,i,toggle_scratchpad"
@@ -31,8 +31,8 @@ in
         "SUPER,SPACE,spawn,fuzzel"
         "SUPER+SHIFT,c,spawn_shell,cliphist list | fuzzel -d --prompt=\"copy: \" | cliphist decode | wl-copy"
         "SUPER+SHIFT,w,spawn_shell,fuzzel -d --lines=0 --prompt=\"google: \" | xargs -I {} xdg-open \"https://google.com/search?q={}\""
-        "SUPER+SHIFT,e,spawn_shell,fuzzel -d --lines=0 --prompt=\"nix-options: \" | xargs -I {} xdg-open \"https://home-manager-options.extranix.com/?query={}&release=master\""
-        "SUPER+SHIFT,r,spawn_shell,fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\""
+        "SUPER+SHIFT,r,spawn_shell,fuzzel -d --lines=0 --prompt=\"homemanager: \" | xargs -I {} xdg-open \"https://home-manager-options.extranix.com/?query={}&release=master\""
+        "SUPER+SHIFT,e,spawn_shell,fuzzel -d --lines=0 --prompt=\"nix: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\""
 
         "SUPER,Return,spawn,ghostty"
         "SUPER,b,spawn,firefox"
@@ -85,6 +85,10 @@ in
         "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'tmux new-session -A -s notes -c \"$HOME/pkm\" nvim'"
         "SUPER+SHIFT,t,toggle_named_scratchpad,none,SillyTavern*, firefox --private-window 192.168.4.28:8000"
       ];
+      mousebind = [
+        "SUPER,btn_left,moveresize,curmove"
+        "SUPER,btn_right,moveresize,curresize"
+      ];
 
       windowrule = [
         "isnamedscratchpad:1,width:1000,height:700,title:yazi-scratch"
@@ -122,8 +126,8 @@ in
       new_is_master = 0;
 
       monitorrule = [
-        "model:AW3225QF, width:3840, height:2160, refresh:239.99, vrr:1"
-        "model:27GN950 , width:3840, height:2160, refresh:144, x:2160, y:-1300, rr:3, vrr:1"
+        "model:27GN950 , width:3840, height:2160, refresh:144, x:0, y:0, rr:3, vrr:1"
+        "model:AW3225QF, width:3840, height:2160, refresh:239.99, vrr:1, x:2160, y:50"
       ];
 
       tagrule = [

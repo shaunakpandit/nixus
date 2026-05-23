@@ -21,6 +21,8 @@
     slurp
     swaybg
 
+    wlr-randr
+
     brightnessctl
     wireplumber
     playerctl
