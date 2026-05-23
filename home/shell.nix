@@ -72,7 +72,7 @@ in
       jk = "exit";
       ms = "mango";
       faf = "fastfetch";
-      ff = "ls | fuzzel -d | xargs -r nvim";
+      ff = "ls -R | fuzzel -d | xargs -r nvim";
       fc = "cliphist list | fuzzel -d | cliphist decode | wl-copy";
       fg = "fuzzel -d --lines=0 --prompt=\"google: \" | xargs -I {} xdg-open \"https://google.com/search?q={}\"";
       fh = "fuzzel -d --lines=0 --prompt=\"nix-options: \" | xargs -I {} xdg-open \"https://home-manager-options.extranix.com/?query={}&release=master\"";
