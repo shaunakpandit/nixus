@@ -16,7 +16,8 @@ in
         "SUPER,r,reload_config"
         "SUPER,q,killclient,"
         "SUPER+ALT,h,spawn,systemctl suspend"
-        "SUPER+SHIFT,o,toggle_monitor,name:.*"
+        "SUPER+SHIFT,[,spawn,wlr-randr --off"
+        "SUPER+SHIFT,],spawn,wlr-randr --on"
         "SUPER,o,toggleoverview"
 
         "SUPER,i,toggle_scratchpad"
@@ -73,6 +74,8 @@ in
         "SHIFT,XF86MonBrightnessUp,spawn,brightnessctl s 100%"
         "NONE,XF86MonBrightnessDown,spawn,brightnessctl s 2%-"
         "SHIFT,XF86MonBrightnessDown,spawn,brightnessctl s 1%"
+        "SHIFT,F4,spawn,wpctl set-volume @DEFAULT_SINK@ 5%+"
+        "SHIFT,F3,spawn,wpctl set-volume @DEFAULT_SINK@ 5%-"
         "NONE,XF86AudioRaiseVolume,spawn,wpctl set-volume @DEFAULT_SINK@ 5%+"
         "NONE,XF86AudioLowerVolume,spawn,wpctl set-volume @DEFAULT_SINK@ 5%-"
         "NONE,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SINK@ toggle"
@@ -136,6 +139,8 @@ in
         "id:2,layout_name:vertical_scroller"
         "id:3,layout_name:right_tile"
         "id:4,layout_name:right_tile"
+        "id:1,monitor_model:27GN950, layout_name:dwindle"
+        "id:2,monitor_model:27GN950, layout_name:dwindle"
       ];
 
       gesturebind = [
