@@ -16,8 +16,8 @@ in
         "SUPER,r,reload_config"
         "SUPER,q,killclient,"
         "SUPER+ALT,h,spawn,systemctl suspend"
-        "SUPER+SHIFT,[,spawn,wlr-randr --off"
-        "SUPER+SHIFT,],spawn,wlr-randr --on"
+        "SUPER,F1,spawn,wlr-randr --off"
+        "SUPER,F2,spawn,wlr-randr --on"
         "SUPER,o,toggleoverview"
 
         "SUPER,i,toggle_scratchpad"
