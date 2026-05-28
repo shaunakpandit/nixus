@@ -5,9 +5,6 @@
     # NixOS official package source, using the nixos-25.11 branch here
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
-    chaotic = {
-      url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
-    };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -26,19 +23,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-citizen.url = "github:LovingMelody/nix-citizen";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
 
   outputs =
     {
       self,
       nixpkgs,
-      chaotic,
       home-manager,
       mangowm,
       stylix,
       firefox-addons,
       nixos-hardware,
       nix-citizen,
+      nix-cachyos-kernel,
       ...
     }@inputs:
     {
@@ -66,7 +64,6 @@
             nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
             mangowm.nixosModules.mango
             stylix.nixosModules.stylix
-            chaotic.nixosModules.default
           ];
         };
 
@@ -92,7 +89,22 @@
             }
             mangowm.nixosModules.mango
             stylix.nixosModules.stylix
-            chaotic.nixosModules.default
+            (
+              { pkgs, ... }:
+              {
+                nixpkgs.overlays = [
+                  # Use nixpkgs from your environment, nixpkgs.config will apply.
+                  # Has small chance of kernel modules not being compatible with kernel version.
+                  nix-cachyos-kernel.overlays.default
+
+                  # Alternatively, use the exact nixpkgs revision as defined in this repo.
+                  # Guarantees you have binary cache, but initializes another nixpkgs instance.
+                  # nix-cachyos-kernel.overlays.pinned
+
+                  # Only use one of the two overlays!
+                ];
+              }
+            )
           ];
         };
 
