@@ -19,7 +19,8 @@
     ../../system/gaming
   ];
 
-  # Use latest kernel.
+  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
+  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "t14"; # Define your hostname.

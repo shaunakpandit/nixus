@@ -64,6 +64,22 @@
             nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
             mangowm.nixosModules.mango
             stylix.nixosModules.stylix
+            (
+              { pkgs, ... }:
+              {
+                nixpkgs.overlays = [
+                  # Use nixpkgs from your environment, nixpkgs.config will apply.
+                  # Has small chance of kernel modules not being compatible with kernel version.
+                  nix-cachyos-kernel.overlays.default
+
+                  # Alternatively, use the exact nixpkgs revision as defined in this repo.
+                  # Guarantees you have binary cache, but initializes another nixpkgs instance.
+                  # nix-cachyos-kernel.overlays.pinned
+
+                  # Only use one of the two overlays!
+                ];
+              }
+            )
           ];
         };
 
