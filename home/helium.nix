@@ -1,4 +1,9 @@
-{ }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 {
 
   programs.helium = {

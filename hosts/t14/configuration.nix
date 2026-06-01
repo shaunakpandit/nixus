@@ -35,6 +35,8 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  # udev access for qmk keyboards
+  hardware.keyboard.qmk.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
