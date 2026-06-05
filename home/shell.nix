@@ -101,6 +101,10 @@ in
     };
   };
 
+  programs.bottom = {
+    enable = true;
+  };
+
   programs.zoxide = {
     enable = true;
   };
