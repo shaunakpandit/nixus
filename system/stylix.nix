@@ -38,5 +38,9 @@
       name = "phingers-cursors-dark";
       size = 42;
     };
+
+    targets = {
+      chromium.enable = true;
+    };
   };
 }

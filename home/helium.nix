@@ -2,11 +2,10 @@
   config,
   pkgs,
   inputs,
+  lib,
   ...
 }:
 {
-  stylix.targets.chromium.enable = true;
-
   # see https://gitlab.com/ntgn/helium-flake
   # for configuration
   programs.helium = {
