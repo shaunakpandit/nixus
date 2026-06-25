@@ -4,7 +4,7 @@
   inputs = {
     # NixOS official package source, using the nixos-25.11 branch here
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -22,6 +22,7 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    helium.url = "gitlab:ntgn/helium-flake";
     nix-citizen.url = "github:LovingMelody/nix-citizen";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
@@ -36,6 +37,7 @@
       firefox-addons,
       nixos-hardware,
       nix-citizen,
+      helium,
       nix-cachyos-kernel,
       ...
     }@inputs:
@@ -58,12 +60,14 @@
                 imports = [
                   ./hosts/t14/home.nix
                   inputs.mangowm.hmModules.mango
+                  inputs.helium.homeModules.helium
                 ];
               };
             }
             nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
             mangowm.nixosModules.mango
             stylix.nixosModules.stylix
+            helium.nixosModules.helium
             (
               { pkgs, ... }:
               {
@@ -100,11 +104,13 @@
                 imports = [
                   ./hosts/d4080/home.nix
                   inputs.mangowm.hmModules.mango
+                  inputs.helium.homeModules.helium
                 ];
               };
             }
             mangowm.nixosModules.mango
             stylix.nixosModules.stylix
+            helium.nixosModules.helium
             (
               { pkgs, ... }:
               {

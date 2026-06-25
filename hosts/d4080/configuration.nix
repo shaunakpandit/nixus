@@ -13,6 +13,7 @@
     ../../system/stylix.nix
     ../../system/optimization.nix
     ../../system/audio.nix
+    ../../system/peripherals.nix
     ../../system/boot.nix
     ../../system/locale.nix
     ../../system/nvidia.nix
