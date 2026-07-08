@@ -100,7 +100,8 @@ in
         "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
         "isnamedscratchpad:1,width:400,height:600,title:SillyTavern*"
         "monitor:model:AW3225QF,appid:starcitizen.exe"
-        "unfocused_opacity:1.0,title:.*YouTube.*"
+        "noblur:1,focused_opacity:1,unfocused_opacity:1,title:.*YouTube.*"
+        "unfocused_opacity:1.0,appid:firefox"
       ];
 
       enable_hotarea = 0;

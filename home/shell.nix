@@ -77,8 +77,8 @@ in
       fg = "fuzzel -d --lines=0 --prompt=\"google: \" | xargs -I {} xdg-open \"https://google.com/search?q={}\"";
       fh = "fuzzel -d --lines=0 --prompt=\"nix-options: \" | xargs -I {} xdg-open \"https://home-manager-options.extranix.com/?query={}&release=master\"";
       fo = "fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\"";
-
       gl = "git pull";
+      bios = "systemctl reboot --firmware-setup";
     };
   };
 
