@@ -80,9 +80,9 @@ in
       gl = "git pull";
       bios = "systemctl reboot --firmware-setup";
       singapl = "ssh singapl@192.168.4.28";
-      cplex = "rsync -avh --progress \ singapl@192.168.4.28:/mnt/library/music/ \ ~/Music/NewMusic";
-      cdone = "mv ~/Music/NewMusic ~/Music";
-      tplex = "rsync -avh --progress \ ~/Music \ singapl@192.168.4.28:/mnt/library/music/ ";
+      cplex = "rsync -avh --progress \ singapl@192.168.4.28:/mnt/library/music/ \ ~/Music";
+      cdone = "mv ~/Music/NewDownloads ~/Music";
+      tplex = "rsync -avh --progress \ ~/Music/NewDownloads \ singapl@192.168.4.28:/mnt/library/music/ ";
       mzip = "unzip *.zip -d ~/Music/NewDownloads && rm *.zip";
     };
   };
