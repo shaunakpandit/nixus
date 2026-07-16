@@ -83,7 +83,7 @@ in
       cplex = "rsync -avh --progress \ singapl@192.168.4.28:/mnt/library/music/ \ ~/Music";
       cdone = "mv ~/Music/NewDownloads ~/Music";
       tplex = "rsync -avh --progress \ ~/Music/NewDownloads \ singapl@192.168.4.28:/mnt/library/music/ ";
-      mzip = "unzip *.zip -d ~/Music/NewDownloads && rm *.zip";
+      mzip = "for f in *.zip; do unzip '$f' -d ~/Music/NewDownloads; done";
     };
   };
 
