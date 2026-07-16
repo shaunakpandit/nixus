@@ -80,10 +80,10 @@ in
       gl = "git pull";
       bios = "systemctl reboot --firmware-setup";
       singapl = "ssh singapl@192.168.4.28";
-      cplex = "rsync -avh --progress \ singapl@192.168.4.28:/mnt/library/music/ \ ~/Music";
+      cplex = "rsync -avh --progress singapl@192.168.4.28:/mnt/library/music/ ~/Music";
       cdone = "cp -r ~/Music/NewDownloads/ ~/Music/";
-      tplex = "rsync -avh --progress \ ~/Music/NewDownloads \ singapl@192.168.4.28:/mnt/library/music/ ";
-      mzip = "for f in *.zip; do unzip '$f' -d ~/Music/NewDownloads; done";
+      tplex = "rsync -avh --progress ~/Music/NewDownloads singapl@192.168.4.28:/mnt/library/music/ ";
+      mzip = "for f in *.zip; do unzip \"$f\" -d ~/Music/NewDownloads; done";
     };
   };
 
