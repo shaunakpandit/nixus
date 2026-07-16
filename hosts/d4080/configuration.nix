@@ -16,6 +16,7 @@
     ../../system/peripherals.nix
     ../../system/boot.nix
     ../../system/locale.nix
+    ../../system/utils.nix
     ../../system/nvidia.nix
     ../../system/mango.nix
     ../../system/gaming/starcitizen.nix

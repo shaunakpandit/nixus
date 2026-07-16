@@ -85,8 +85,6 @@ in
     };
   };
 
-  services.rsync.enable = true;
-
   programs.fzf = {
     enable = true;
   };
