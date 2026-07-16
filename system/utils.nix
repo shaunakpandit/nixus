@@ -6,4 +6,7 @@
 }:
 {
   services.rsync.enable = true;
+  environment.systemPackages = [
+    pkgs.unzip
+  ];
 }
