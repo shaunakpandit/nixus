@@ -12,7 +12,6 @@ in
 
   programs.firefox = {
     enable = true;
-    defaultBrowser = false;
     profiles = {
       void = {
         isDefault = true;
