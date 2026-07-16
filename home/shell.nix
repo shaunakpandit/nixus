@@ -79,6 +79,7 @@ in
       fo = "fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\"";
       gl = "git pull";
       bios = "systemctl reboot --firmware-setup";
+      singapl = "ssh singapl@192.168.4.28";
     };
   };
 

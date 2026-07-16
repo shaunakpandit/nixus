@@ -12,6 +12,7 @@ in
 
   programs.firefox = {
     enable = true;
+    defaultBrowser = false;
     profiles = {
       void = {
         isDefault = true;
@@ -39,7 +40,7 @@ in
           "browser.feeds.showFirstRunUI" = false;
           "browser.messaging-system.whatsNewPanel.enabled" = false;
           "browser.rights.3.shown" = true;
-          "browser.shell.checkDefaultBrowser" = false;
+          "browser.shell.checkDefaultBrowser" = true;
           "browser.shell.defaultBrowserCheckCount" = 1;
           "browser.startup.homepage_override.mstone" = "ignore";
           "browser.uitour.enabled" = false;

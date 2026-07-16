@@ -10,7 +10,7 @@
   # for configuration
   programs.helium = {
     enable = true;
-    defaultBrowser = true;
+    defaultBrowser = false;
 
     # id="dbepggeogbaibhgnhhndojpepiihcmeb"
     # url="https://clients2.google.com/service/update2/crx?response=redirect&prodversion=131.0&acceptformat=crx2,crx3&x=id%3D${id}%26uc"
