@@ -19,6 +19,7 @@ in
     ../../home/waybar.nix
     ../../home/fuzzel.nix
     ../../home/sioyek.nix
+    ../../home/games.nix
   ];
 
   home.username = "void";
