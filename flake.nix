@@ -45,7 +45,6 @@
       # Please replace my-nixos with your hostname
       nixosConfigurations = {
         t14 = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs; };
           system = "x86_64-linux";
           modules = [
             # Import the previous configuration.nix we used,
@@ -61,14 +60,14 @@
                 imports = [
                   ./hosts/t14/home.nix
                   inputs.mangowm.hmModules.mango
-                  # inputs.helium.homeModules.helium
+                  inputs.helium.homeModules.helium
                 ];
               };
             }
             nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
             mangowm.nixosModules.mango
             stylix.nixosModules.stylix
-            # helium.nixosModules.helium
+            helium.nixosModules.helium
             (
               { pkgs, ... }:
               {
