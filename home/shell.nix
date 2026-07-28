@@ -62,6 +62,7 @@ in
     shellAliases = {
       rb = "${config.var.rebuildCommand}";
       nc = "sudo nix profile wipe-history --older-than 7d --profile /nix/var/nix/profiles/system ; sudo nix-collect-garbage --delete-old ; nix-collect-garbage --delete-old";
+      sc = "sudo nix-store --verify --check-contents --repair";
       nixos = "cd ~/dev/nixus";
       vi = "nvim";
       vim = "nvim";
