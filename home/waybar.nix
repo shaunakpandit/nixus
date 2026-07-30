@@ -9,17 +9,18 @@ let
 in
 {
   home.packages = with pkgs; [
-    waybar
     jq
   ];
 
   programs.waybar = {
     enable = true;
+    package = inputs.waybar-git.packages.${pkgs.system}.default;
     settings = [
       {
         modules-left = [
-          "ext/workspaces"
-          "dwl/window"
+          "mango/workspaces"
+          # "mango/window"
+          "mango/layout"
         ];
 
         modules-center = [
@@ -37,12 +38,12 @@ in
           "battery"
         ];
 
-        "ext/workspaces" = {
-          format = "{icon}";
-          ignore-hidden = false;
-          on-click = "activate";
-          on-click-right = "deactivate";
-          sort-by-id = true;
+        "mango/workspaces" = {
+          "format" = "{icon}";
+          "hide-empty" = false;
+          "on-click" = "activate";
+          "on-click-right" = "toggle";
+          "overview-label" = "OVERVIEW";
         };
 
         "clock" = {
@@ -68,8 +69,8 @@ in
           format = "{used}";
         };
 
-        "dwl/window" = {
-          format = "[{layout}] {app_id}";
+        "mango/window" = {
+          format = "{}";
         };
       }
     ];

@@ -58,6 +58,7 @@ in
         "SUPER,5,view,5"
 
         "SUPER+SHIFT,n,switch_layout"
+        "SUPER+SHIFT,s,switch_layout,scroller"
 
         "SUPER+SHIFT,1,tagsilent,1"
         "SUPER+SHIFT,2,tagsilent,2"
@@ -86,7 +87,7 @@ in
         "SUPER,m,toggle_named_scratchpad,none,btop-scratch,ghostty --title=btop-scratch -e btop"
         "SUPER,slash,toggle_named_scratchpad,none,yazi-scratch,ghostty --title=yazi-scratch -e yazi"
         "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'tmux new-session -A -s notes -c \"$HOME/pkm\" nvim'"
-        "SUPER+SHIFT,t,toggle_named_scratchpad,none,SillyTavern*, firefox --private-window 192.168.4.28:8000"
+        "SUPER+SHIFT,t,toggle_named_scratchpad,none,.*SillyTavern.*, firefox --private-window 192.168.4.28:8000"
       ];
       mousebind = [
         "SUPER,btn_left,moveresize,curmove"
@@ -98,7 +99,7 @@ in
         "isnamedscratchpad:1,width:1000,height:700,title:term-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
-        "isnamedscratchpad:1,width:400,height:600,title:SillyTavern*"
+        "isnamedscratchpad:1,width:400,height:600,title:.*SillyTavern.*"
         "monitor:model:AW3225QF,appid:starcitizen.exe"
         "noblur:1,focused_opacity:1,unfocused_opacity:1,title:.*YouTube.*"
         "unfocused_opacity:1.0,appid:firefox"
@@ -137,10 +138,12 @@ in
       ];
 
       tagrule = [
-        "id:1,layout_name:right_tile"
-        "id:2,layout_name:vertical_scroller"
+        "id:1,layout_name:scroller"
+        "id:2,layout_name:dwindle"
         "id:3,layout_name:right_tile"
         "id:4,layout_name:right_tile"
+        "id:1,monitor_model:AW3225QF, layout_name:right_tile"
+        "id:1,monitor_model:AW3225QF, layout_name:scroller"
         "id:1,monitor_model:27GN950, layout_name:dwindle"
         "id:2,monitor_model:27GN950, layout_name:dwindle"
       ];

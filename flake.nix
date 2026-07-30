@@ -18,6 +18,10 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    waybar-git = {
+      url = "github:Alexays/Waybar?rev=30610d3b68f109e950d924bc7d9c42b8cbbc5df8";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -34,6 +38,7 @@
       home-manager,
       mangowm,
       stylix,
+      waybar-git,
       firefox-addons,
       nixos-hardware,
       nix-citizen,
@@ -46,6 +51,7 @@
       nixosConfigurations = {
         t14 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
           modules = [
             # Import the previous configuration.nix we used,
             # so the old configuration file still takes effect
