@@ -18,9 +18,8 @@ in
     settings = [
       {
         modules-left = [
-          "mango/workspaces"
-          "mango/window"
-          "mango/layout"
+          "ext/workspaces"
+          "dwl/window"
         ];
 
         modules-center = [
