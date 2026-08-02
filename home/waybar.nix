@@ -12,6 +12,10 @@ in
     jq
   ];
 
+  stylix.targets.waybar = {
+    enable = true;
+  };
+
   programs.waybar = {
     enable = true;
     package = inputs.waybar-git.packages.${pkgs.system}.default;
@@ -75,6 +79,10 @@ in
       }
     ];
     style = ''
+      * {
+        font-size: 14px;
+        font-weight: 600;
+      }
       #workspaces button.active {
           color: #${c.base0B};
           border-radius: 0px;
