@@ -1,5 +1,5 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
-    sqlite3
+    sqlite
   ];
 }
