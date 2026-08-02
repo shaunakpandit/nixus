@@ -13,7 +13,6 @@
   xdg.configFile."chess-tui/config.toml".text = ''
     # Put your existing chess-tui configuration here.
 
-    [engine]
-    path = "${pkgs.stockfish}/bin/stockfish"
+    engine_path = "${pkgs.stockfish}/bin/stockfish"
   '';
 }

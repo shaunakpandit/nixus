@@ -57,7 +57,6 @@ in
     enableCompletion = true;
     initExtra = ''
       source <(fzf --zsh)
-      fastfetch
     '';
     shellAliases = {
       rb = "${config.var.rebuildCommand}";

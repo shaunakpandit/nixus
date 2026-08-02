@@ -10,6 +10,7 @@ in
 {
   imports = [
     ../../home/nvim.nix
+    ../../home/dev.nix
     ../../home/shell.nix
     ../../home/mango
     ../../home/utils.nix

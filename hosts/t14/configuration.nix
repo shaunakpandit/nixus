@@ -58,6 +58,7 @@
     shell = pkgs.zsh;
     packages = with pkgs; [
       thunar
+      plexamp
       #  thunderbird
     ];
   };
