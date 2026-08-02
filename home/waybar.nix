@@ -14,6 +14,7 @@ in
 
   stylix.targets.waybar = {
     enable = true;
+    fonts.enable = true;
   };
 
   programs.waybar = {
@@ -81,7 +82,6 @@ in
     style = ''
       * {
         font-size: 14px;
-        font-weight: 600;
       }
       #workspaces button.active {
           color: #${c.base0B};
