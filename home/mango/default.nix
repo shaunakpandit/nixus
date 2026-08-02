@@ -162,7 +162,7 @@ in
 
     autostart_sh = ''
       waybar &
-      swaybg -i ~/dev/nixus/walls/dome.jpeg &
+      swaybg -i ~/dev/nixus/walls/roof.jpeg &
       wl-paste --type text --watch cliphist store & 
     '';
   };
