@@ -4,6 +4,7 @@
   ...
 }:
 {
+  # minecraft
   programs.prismlauncher = {
     enable = true;
   };
