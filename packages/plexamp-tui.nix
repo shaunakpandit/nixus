@@ -12,10 +12,10 @@ buildGoModule rec {
     owner = "spiercey";
     repo = "plexamp-tui";
     rev = "35b7cbd4d79581e402898f4a4d438faee7395977";
-    hash = lib.fakeHash;
+    hash = "sha256-6NxcrfWlNenaCLP8ODsX+u3iXs03cgOseKXHt04AN1M=";
   };
 
-  vendorHash = lib.fakeHash;
+  vendorHash = "sha256-mcaVBbeDbgWDd6+S5t9BhqsVHWeRGDZqZYeRQ0eYwEE=";
 
   # The Go main package is at the repository root.
   subPackages = [ "." ];

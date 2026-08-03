@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 let
-  plexamp-tui = pkgs.callPackage ./packages/plexamp-tui.nix { };
+  plexamp-tui = pkgs.callPackage ../../packages/plexamp-tui.nix { };
 in
 {
   imports = [
@@ -20,10 +20,6 @@ in
     ../../system/mango.nix
     ../../system/gaming
   ];
-  environment.systemPackages = with pkgs; [
-    plexamp-tui
-  ];
-
   nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
   nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
   # TODO: set as 'pkgs.linuxPackages_latest;' on first build
@@ -95,6 +91,7 @@ in
     wev
     tree-sitter
     mysql84
+    plexamp-tui
   ];
 
   fonts.packages = with pkgs; [
