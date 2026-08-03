@@ -3,7 +3,9 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
+let
+  plexamp-tui = pkgs.callPackage ./packages/plexamp-tui.nix { };
+in
 {
   imports = [
     # Include the results of the hardware scan.
@@ -17,6 +19,9 @@
     ../../system/laptop.nix
     ../../system/mango.nix
     ../../system/gaming
+  ];
+  environment.systemPackages = with pkgs; [
+    plexamp-tui
   ];
 
   nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
