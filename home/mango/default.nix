@@ -71,6 +71,9 @@ in
         "SUPER+SHIFT,k,exchange_client,up"
         "SUPER+SHIFT,l,exchange_client,right"
 
+        "SUPER,left,resizewin,-10,0"
+        "SUPER,right,resizewin,10,0"
+
         "NONE,XF86MonBrightnessUp,spawn,brightnessctl s +2%"
         "SHIFT,XF86MonBrightnessUp,spawn,brightnessctl s 100%"
         "NONE,XF86MonBrightnessDown,spawn,brightnessctl s 2%-"
@@ -120,8 +123,9 @@ in
 
       borderpx = 2;
       blur = 1;
-      focused_opacity = 0.92;
-      unfocused_opacity = 0.87;
+      blur_layer = 1;
+      focused_opacity = 0.85;
+      unfocused_opacity = 0.80;
 
       # cursor_size = config.var.cursorSize;
       # cursor_theme = "phingers-cursors-dark";
