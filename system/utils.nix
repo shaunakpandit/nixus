@@ -6,7 +6,8 @@
 }:
 {
   services.rsync.enable = true;
-  environment.systemPackages = [
-    pkgs.unzip
+  environment.systemPackages = with pkgs; [
+    unzip
+    unrar
   ];
 }
