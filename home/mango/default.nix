@@ -153,7 +153,7 @@ in
         "id:3,layout_name:right_tile"
         "id:4,layout_name:right_tile"
         "id:1,monitor_model:AW3225QF, layout_name:right_tile"
-        "id:1,monitor_model:AW3225QF, layout_name:scroller"
+        "id:2,monitor_model:AW3225QF, layout_name:scroller"
         "id:1,monitor_model:27GN950, layout_name:dwindle"
         "id:2,monitor_model:27GN950, layout_name:dwindle"
       ];
