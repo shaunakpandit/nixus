@@ -19,7 +19,7 @@
       # darkreader: eimadpbcbfnmbkopoojfekhnkhdbieeh
       {
         id = "eimadpbcbfnmbkopoojfekhnkhdbieeh";
-        hash = "sha256-jAhpgyVucHif6fJ2VUJoOtPAcHUh7BdAEMr9JpdocBY=";
+        hash = "sha256-ncsb1tytQ4kt3AKP9l+YLfPtuhNammRF5PpxZx43qhM=";
       }
 
       # vimium: dbepggeogbaibhgnhhndojpepiihcmeb
@@ -30,7 +30,7 @@
       # protonPass: ghmbeldphafepmbegfdlkpapadhbakde
       {
         id = "ghmbeldphafepmbegfdlkpapadhbakde";
-        hash = "sha256-Xfm9bbdufzfHWhmtYThWL+n2RfVavr3IjxxOTY0P4Ug=";
+        hash = "sha256-LMVNciGP4JCB6OOCYa4PFqylHGJyKCj0ajMQn4jHxnk=";
       }
     ];
 
