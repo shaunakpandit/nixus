@@ -141,7 +141,7 @@ in
 
       new_is_master = 0;
 
-      allow_tearing = 2;
+      allow_tearing = 1;
       monitorrule = [
         "model:27GN950, width:3840, height:2160, refresh:144, hdr:1, x:0, y:0, rr:3, vrr:1a"
         "model:AW3225QF, width:3840, height:2160, refresh:239.99, hdr:1, vrr:1, x:2160, y:50"
@@ -172,7 +172,9 @@ in
 
     autostart_sh = ''
       waybar &
-      swaybg -i ~/dev/nixus/walls/roof.jpeg &
+      swaybg \
+        -o DP-4 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
+        -o DP-6 -i "$HOME/dev/nixus/walls/dome.jpeg" -m fill &
       wl-paste --type text --watch cliphist store & 
     '';
   };
