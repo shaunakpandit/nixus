@@ -18,7 +18,7 @@ in
         "SUPER+ALT,h,spawn,systemctl suspend"
         "SUPER,F1,spawn,wlr-randr --off"
         "SUPER,F2,spawn,wlr-randr --on"
-        "SUPER,o,toggleoverview"
+        "SUPER,o,togglejump"
 
         "SUPER,i,toggle_scratchpad"
         "SUPER,s,minimized"

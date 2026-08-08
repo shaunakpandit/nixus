@@ -44,4 +44,7 @@ if vim.env.MUSIC_LEAGUE_DB_URL and vim.env.MUSIC_LEAGUE_DB_URL ~= "" then
     })
 end
 
+vim.g.db_ui_save_location = "~/dev/queries"
+
+
 vim.keymap.set("n", "<leader>db", "<cmd>DBUIToggle<cr>", { desc = "DB connect" })
