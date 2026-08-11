@@ -173,6 +173,7 @@ in
     autostart_sh = ''
       waybar &
       swaybg \
+        -o eDP-1 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
         -o DP-4 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
         -o DP-6 -i "$HOME/dev/nixus/walls/dome.jpeg" -m fill &
       wl-paste --type text --watch cliphist store & 
