@@ -34,8 +34,8 @@
       };
     };
     cursor = {
-      package = pkgs.phinger-cursors;
-      name = "phingers-cursors-dark";
+      package = pkgs.material-cursors;
+      name = "material-dark-cursors";
       size = 42;
     };
 

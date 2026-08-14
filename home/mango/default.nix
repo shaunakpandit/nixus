@@ -147,7 +147,7 @@ in
       focused_opacity = 0.85;
       unfocused_opacity = 0.80;
       cursor_size = config.var.cursorSize;
-      cursor_theme = "phingers-cursors-dark";
+      cursor_theme = "material-dark-cursors";
       bordercolor = "0x${c.base03}ff";
       focuscolor = "0x${c.base0B}ff";
       urgentcolor = "0x${c.base08}ff";
