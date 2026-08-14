@@ -113,35 +113,45 @@ in
         "unfocused_opacity:1.0,appid:firefox"
       ];
 
+      # overview
       enable_hotarea = 0;
       overviewgappo = 5;
 
+      # screen behavior
+      allow_tearing = 1;
+
+      # layout rules
+      new_is_master = 0;
+
+      # scrolling layout rules
+      scroller_structs = 5;
+      scroller_default_proportion = 0.5;
+
+      # key repeat rates
       repeat_rate = 70;
       repeat_delay = 200;
 
+      # trackpad/nub feel
       trackpad_natural_scrolling = 1;
       mouse_accel_profile = 1;
       mouse_accel_speed = 0.2;
 
+      # remap ctrl and tab keys
       xkb_rules_layout = "us";
       xkb_rules_options = "${config.var.remap}";
 
+      # visual styles
       borderpx = 2;
       blur = 1;
       blur_layer = 1;
       focused_opacity = 0.85;
       unfocused_opacity = 0.80;
-
-      # cursor_size = config.var.cursorSize;
-      # cursor_theme = "phingers-cursors-dark";
-
+      cursor_size = config.var.cursorSize;
+      cursor_theme = "phingers-cursors-dark";
       bordercolor = "0x${c.base03}ff";
       focuscolor = "0x${c.base0B}ff";
       urgentcolor = "0x${c.base08}ff";
 
-      new_is_master = 0;
-
-      allow_tearing = 1;
       monitorrule = [
         "model:27GN950, width:3840, height:2160, refresh:144, hdr:1, x:0, y:0, rr:3, vrr:1a"
         "model:AW3225QF, width:3840, height:2160, refresh:239.99, hdr:1, vrr:1, x:2160, y:50"
