@@ -149,6 +149,7 @@ in
       cursor_size = config.var.cursorSize;
       cursor_theme = "material-dark-cursors";
       bordercolor = "0x${c.base03}ff";
+      maximizescreencolor = "0x${c.base03}ff";
       focuscolor = "0x${c.base0B}ff";
       urgentcolor = "0x${c.base08}ff";
 
