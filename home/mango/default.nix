@@ -63,7 +63,7 @@ in
         "SUPER,5,view,5"
 
         "SUPER+SHIFT,n,switch_layout"
-        "SUPER+SHIFT,s,switch_layout,scroller"
+        # "SUPER+SHIFT,s,switch_layout,scroller"
 
         "SUPER+SHIFT,1,tagsilent,1"
         "SUPER+SHIFT,2,tagsilent,2"
