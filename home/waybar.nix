@@ -62,15 +62,14 @@ in
 
         "memory" = {
           interval = 1;
-          max-length = 3;
-
-          format = "{used}GB ";
+          max-length = 10;
+          format = "{used:.2f}GB ";
         };
 
         "network" = {
           interval = 1;
-          format = "{bandwidthTotalBytes} {ipaddr}";
-          format-wifi = "{essid} ({signalStrength}%) ";
+          format = "{essid}   {bandwidthTotalBytes} {ipaddr}";
+          # format-wifi = "{essid} ({signalStrength}%) ";
         };
 
         "disk" = {
