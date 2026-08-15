@@ -14,6 +14,7 @@ in
     ../../home/shell.nix
     ../../home/mango
     ../../home/utils.nix
+    ../../home/helium.nix
     ../../home/firefox.nix
     ../../home/waybar.nix
     ../../home/fuzzel.nix

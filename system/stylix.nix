@@ -34,9 +34,9 @@
       };
     };
     cursor = {
-      package = pkgs.material-cursors;
-      name = "material-dark-cursors";
-      size = 42;
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+      size = 24;
     };
 
     targets = {

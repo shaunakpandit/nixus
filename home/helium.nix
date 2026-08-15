@@ -28,10 +28,10 @@
         hash = "sha256-MZjCaqcZvkYt6lhQUPvtm4uAYo1X6oihE7q/UzTFUXw=";
       }
       # protonPass: ghmbeldphafepmbegfdlkpapadhbakde
-      {
-        id = "ghmbeldphafepmbegfdlkpapadhbakde";
-        hash = "sha256-LMVNciGP4JCB6OOCYa4PFqylHGJyKCj0ajMQn4jHxnk=";
-      }
+      # {
+      #   id = "ghmbeldphafepmbegfdlkpapadhbakde";
+      #   hash = "sha256-u9tEK7ydEjJlC87xiuWG1y2SnD64vEQVBJBUxMrJmRY=";
+      # }
     ];
 
     # These flags get added to the wrapper
@@ -67,6 +67,23 @@
     preferences = {
       browser.show_home_button = true;
       bookmark_bar.show_on_all_tabs = true;
+      # Chromium's internal representation of "Use GTK/System theme".
+      # extensions.theme = {
+      #   id = "system";
+      #   use_system = true;
+      # };
+    };
+    extraPolicies = {
+      # 0 = system, 1 = light, 2 = dark.
+      # Check chrome://policy because support depends on Helium's
+      # Chromium version.
+      # BrowserColorScheme = 2;
+      # ExtensionSettings = {
+      #   "ghmbeldphafepmbegfdlkpapadhbakde" = {
+      #     installation_mode = "force_installed";
+      #     update_url = "https://clients2.google.com/service/update2/crx";
+      #   };
+      # };
     };
   };
 }
