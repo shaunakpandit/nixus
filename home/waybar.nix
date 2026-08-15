@@ -29,8 +29,8 @@ in
         ];
 
         modules-center = [
-          "cpu"
           "clock"
+          "cpu"
           "memory"
         ];
 
@@ -57,17 +57,20 @@ in
 
         "cpu" = {
           interval = 1;
-          format = "cpu {usage}%";
+          format = "{usage}% ";
         };
 
         "memory" = {
           interval = 1;
-          format = "{used} GB ram";
+          max-length = 3;
+
+          format = "{used}GB ";
         };
 
         "network" = {
           interval = 1;
           format = "{bandwidthTotalBytes} {ipaddr}";
+          format-wifi = "{essid} ({signalStrength}%) ";
         };
 
         "disk" = {
