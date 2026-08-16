@@ -24,8 +24,8 @@ in
       {
         modules-left = [
           "mango/workspaces"
-          # "mango/window"
           "mango/layout"
+          "mango/window"
         ];
 
         modules-center = [
@@ -43,8 +43,34 @@ in
           "battery"
         ];
 
+        # "mango/workspaces" = {
+        #   "format" = "{icon}";
+        #   "format-icons" = {
+        #     "1" = "一";
+        #     "2" = "二";
+        #     "active" = "";
+        #     "default" = "";
+        #     "urgent" = "";
+        #     "empty" = "";
+        #   };
+        #   "on-click" = "activate";
+        #   "on-click-right" = "toggle";
+        #   "overview-label" = "";
+        # };
+
+        "mango/window" = {
+          "format" = " {title}";
+          "rewrite" = {
+            ".*" = "";
+            "(.*) - Mozilla Firefox" = "🌎 $1";
+            "(.*) - zsh" = "> [$1]";
+          };
+          "icon" = true;
+          "icon-size" = 20;
+        };
+
         "mango/workspaces" = {
-          "format" = "{icon}";
+          "format" = "{value}";
           "hide-empty" = false;
           "on-click" = "activate";
           "on-click-right" = "toggle";
@@ -74,10 +100,6 @@ in
 
         "disk" = {
           format = "{used}";
-        };
-
-        "mango/window" = {
-          format = "{}";
         };
       }
     ];
