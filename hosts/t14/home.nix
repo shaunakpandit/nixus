@@ -18,6 +18,7 @@ in
     ../../home/firefox.nix
     ../../home/waybar.nix
     ../../home/fuzzel.nix
+    ../../home/feh.nix
     ../../home/sioyek.nix
     ../../home/games/chess.nix
     ./variables.nix

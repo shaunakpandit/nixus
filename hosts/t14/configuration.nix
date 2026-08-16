@@ -58,7 +58,7 @@ in
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [
-      thunar
+      pkgs.kdePackages.dolphin
       plexamp
       #  thunderbird
     ];
