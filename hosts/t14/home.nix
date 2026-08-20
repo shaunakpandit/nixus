@@ -19,6 +19,7 @@ in
     ../../home/waybar.nix
     ../../home/fuzzel.nix
     ../../home/feh.nix
+    ../../home/tradingview.nix
     ../../home/sioyek.nix
     ../../home/games/chess.nix
     ./variables.nix
