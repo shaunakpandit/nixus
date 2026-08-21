@@ -8,12 +8,12 @@ in
   ];
 
   xdg.configFile."tmux" = {
-    source = ../dots/tmux;
+    source = ../../dots/tmux;
     recursive = true;
   };
 
   xdg.configFile."ghostty" = {
-    source = ../dots/ghostty;
+    source = ../../dots/ghostty;
     recursive = true;
   };
 
