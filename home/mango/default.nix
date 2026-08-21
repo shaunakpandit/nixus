@@ -25,9 +25,9 @@ in
         "SUPER,F2,spawn,wlr-randr --on"
         "SUPER,o,togglejump"
 
-        "SUPER,i,toggle_scratchpad"
-        "SUPER,s,minimized"
-        "SUPER+SHIFT,s,restore_minimized"
+        # "SUPER,i,toggle_scratchpad"
+        # "SUPER,s,minimized"
+        # "SUPER+SHIFT,s,restore_minimized"
 
         "SUPER+SHIFT,F,togglefullscreen"
         "SUPER,f,togglemaximizescreen"
@@ -89,13 +89,14 @@ in
         "NONE,XF86AudioLowerVolume,spawn,wpctl set-volume @DEFAULT_SINK@ 5%-"
         "NONE,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SINK@ toggle"
         "SHIFT,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_SOURCE@ toggle"
-        "SUPER,p,spawn,playerctl play-pause"
+        "SUPER+SHIFT,p,spawn,playerctl play-pause"
 
         "SUPER+SHIFT,Return,toggle_named_scratchpad,none,term-scratch,ghostty --title=term-scratch -e sh -lc 'tmux new-session -A -s temp -n scratch'"
         "SUPER,m,toggle_named_scratchpad,none,btop-scratch,ghostty --title=btop-scratch -e btop"
         "SUPER,slash,toggle_named_scratchpad,none,yazi-scratch,ghostty --title=yazi-scratch -e yazi"
+        "SUPER,p,toggle_named_scratchpad,none,cliamp-scratch,ghostty --title=cliamp-scratch -e cliamp"
         "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'tmux new-session -A -s notes -c \"$HOME/pkm\" nvim'"
-        "SUPER+SHIFT,p,toggle_named_scratchpad,none,.*SillyTavern.*, firefox --private-window 192.168.4.28:8000"
+        "SUPER+SHIFT,s,toggle_named_scratchpad,none,.*yTaver.*, firefox --private-window 192.168.4.28:8000"
       ];
       mousebind = [
         "SUPER,btn_left,moveresize,curmove"
@@ -104,10 +105,11 @@ in
 
       windowrule = [
         "isnamedscratchpad:1,width:1000,height:700,title:yazi-scratch"
+        "isnamedscratchpad:1,width:1000,height:700,title:cliamp-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:term-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
-        "isnamedscratchpad:1,width:400,height:600,title:.*SillyTavern.*"
+        "isnamedscratchpad:1,width:400,height:600,title:.*yTaver.*"
         "monitor:model:AW3225QF,appid:starcitizen.exe"
         "unfocused_opacity:1.0,title:.*YouTube.*"
       ];
