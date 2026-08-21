@@ -13,6 +13,7 @@ in
     ../../home/helium.nix
     ../../home/firefox.nix
     ../../home/waybar.nix
+    ../../home/easyeffects.nix
     ../../home/fuzzel.nix
     ../../home/feh.nix
     ../../home/tradingview.nix
