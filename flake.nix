@@ -136,12 +136,12 @@
           ];
         };
 
-        s1080 = nixpkgs.lib.nixosSystem {
+        thoth = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             # Import the previous configuration.nix we used,
             # so the old configuration file still takes effect
-            ./hosts/s1080/configuration.nix
+            ./hosts/thoth/configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -150,7 +150,7 @@
               home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.users.void = {
                 imports = [
-                  ./hosts/s1080/home.nix
+                  ./hosts/thoth/home.nix
                 ];
               };
             }

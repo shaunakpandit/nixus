@@ -9,11 +9,7 @@ let
 in
 {
   imports = [
-    ../../home/nvim.nix
-    ../../home/dev.nix
-    ../../home/shell.nix
     ../../home/mango
-    ../../home/utils.nix
     ../../home/helium.nix
     ../../home/firefox.nix
     ../../home/waybar.nix
@@ -22,6 +18,11 @@ in
     ../../home/tradingview.nix
     ../../home/sioyek.nix
     ../../home/games/chess.nix
+    ../../home/shell/shell.nix
+    ../../home/shell/utils.nix
+    ../../home/shell/cliamp.nix
+    ../../home/shell/dev.nix
+    ../../home/shell/nvim.nix
     ./variables.nix
   ];
 

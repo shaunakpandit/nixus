@@ -9,13 +9,13 @@ let
 in
 {
   imports = [
-    ../../home/nvim.nix
-    ../../home/shell.nix
-    ../../home/utils.nix
+    ../../home/shell/nvim.nix
+    ../../home/shell/shell.nix
+    ../../home/shell/utils.nix
   ];
 
-  home.username = "void";
-  home.homeDirectory = "/home/void";
+  home.username = "hugh";
+  home.homeDirectory = "/home/hugh";
 
   # to add binaries to path
   # home.sessionPath = [

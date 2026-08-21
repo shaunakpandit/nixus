@@ -12,7 +12,7 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "s1080";
+  networking.hostName = "thoth";
   networking.networkmanager.enable = true;
 
   services.printing.enable = true;
@@ -25,7 +25,7 @@
 
   users.users.void = {
     isNormalUser = true;
-    description = "void";
+    description = "hugh";
     extraGroups = [
       "networkmanager"
       "wheel"
