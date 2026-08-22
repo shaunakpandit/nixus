@@ -2,7 +2,7 @@
 provider = "plex"
 
 # Default volume in dB (range: volume_min to 6)
-volume = -4
+volume = 0
 
 # Minimum volume floor in dB (range: -90 to 0, default: -50)
 # Controls how low the volume control can go.
@@ -26,13 +26,14 @@ seek_large_step_sec = 30
 # EQ preset: "Flat", "Rock", "Pop", "Jazz", "Classical",
 #             "Bass Boost", "Treble Boost", "Vocal", "Electronic", "Acoustic"
 # Leave empty or "Custom" to use manual eq values below
-eq_preset = "Custom"
+eq_preset = "Flat"
 
 # 10-band EQ gains in dB (range: -12 to 12)
 # Bands: 70Hz, 180Hz, 320Hz, 600Hz, 1kHz, 3kHz, 6kHz, 12kHz, 14kHz, 16kHz
 # Only used when eq_preset is "Custom" or empty
 # ie200 senheisser short nozzle from crinacle plexamp prefix
 # converted to this wackass band range
+# DONT USE: EQ IS DONE BY MASTER WITH EASYAMP
 eq = [1.1, -0.9, -0.6, 0.5, 0.2, 1.7, 1.9, -6.4, -8.6, -10.6]
 
 # Visualizer mode (leave empty for default Bars)
