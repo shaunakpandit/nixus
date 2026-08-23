@@ -39,8 +39,8 @@ eq = [0,0,0,0,0,0,0,0,0,0]
 
 # Visualizer mode (leave empty for default Bars)
 # Options: Bars, BarsDot, Rain, BarsOutline, Bricks, Columns, ClassicPeak, Wave, Scatter, Flame, Retro, Pulse, Matrix, Binary, Sakura, Firework, Bubbles, Logo, Terrain, Scope, Heartbeat, Butterfly, Ascii, Firefly, Mosaic, Sand, Geyser, ClassicLED, Stereo, None
-# cool ones: Stereo, Pulse, Scope, Heartbeat, ClassicLED
-visualizer = "Pulse"
+# cool ones: Stereo, Pulse, Scope, Heartbeat, ClassicLED, Wave
+visualizer = "Wave"
 
 # Visualizer volume linking (default: true)
 # When true, bar height follows the current volume level (classic behavior).
