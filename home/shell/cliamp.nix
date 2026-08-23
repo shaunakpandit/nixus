@@ -7,4 +7,8 @@
     source = ../../dots/cliamp;
     recursive = true;
   };
+
+  programs.cava = {
+    enable = true;
+  };
 }
