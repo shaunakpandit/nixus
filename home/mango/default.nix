@@ -95,7 +95,7 @@ in
         "SUPER,m,toggle_named_scratchpad,none,btop-scratch,ghostty --title=btop-scratch -e btop"
         "SUPER,slash,toggle_named_scratchpad,none,yazi-scratch,ghostty --title=yazi-scratch -e yazi"
         "SUPER,p,toggle_named_scratchpad,none,cliamp-scratch,ghostty --title=cliamp-scratch -e cliamp"
-        "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'tmux new-session -A -s notes -c \"$HOME/pkm\" nvim'"
+        "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'tmux new-session -A -s notes -c \"$HOME/notes\" nvim'"
         "SUPER+SHIFT,s,toggle_named_scratchpad,none,.*yTaver.*, firefox --private-window 192.168.4.28:8000"
       ];
       mousebind = [
