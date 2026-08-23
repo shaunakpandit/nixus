@@ -149,10 +149,15 @@ in
       unfocused_opacity = 0.80;
       cursor_size = config.stylix.cursor.size;
       cursor_theme = config.stylix.cursor.name;
-      bordercolor = "0x${c.base03}ff";
-      maximizescreencolor = "0x${c.base03}ff";
+      bordercolor = "0x${c.base00}ff";
+      maximizescreencolor = "0x${c.base00}ff";
       focuscolor = "0x${c.base0B}ff";
       urgentcolor = "0x${c.base08}ff";
+
+      animation_duration_open = 500;
+      animation_curve = {
+        open = "0.175, 0.885, 0.2, 1.215";
+      };
 
       monitorrule = [
         "model:27GN950, width:3840, height:2160, refresh:144, hdr:1, x:0, y:0, rr:3, vrr:1a"
