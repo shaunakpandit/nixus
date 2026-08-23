@@ -2,6 +2,13 @@
 {
   programs.newsboat = {
     enable = true;
+    extraConfig = "
+       color title default black 
+       color info default black
+       color hint-key white black
+       bind k article,help up
+       bind j article,help down
+    ";
     urls = [
       {
         tags = [

@@ -13,14 +13,15 @@ in
     settings = {
       main = {
         icons-enabled = true;
-        anchor = "center";
-        lines = 7;
+        anchor = "bottom";
+        lines = 10;
         horizontal-pad = 12;
         vertical-pad = 4;
+        width = 50;
         prompt = "\"run: \"";
       };
       border = {
-        width = 1;
+        width = 0;
         radius = 0;
       };
       key-bindings = {

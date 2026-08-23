@@ -22,6 +22,9 @@ in
     package = inputs.waybar-git.packages.${pkgs.system}.default;
     settings = [
       {
+        position = "bottom";
+        height = 24;
+
         modules-left = [
           "mango/workspaces"
           "mango/layout"
