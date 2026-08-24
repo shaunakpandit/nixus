@@ -25,7 +25,7 @@ require("plugins.blackmetal")
 -- require("plugins.vague")
 
 -- MANAGED PLUGINS
-require("plugins.mason")
+-- require("plugins.mason")
 require("plugins.treesitter")
 require("plugins.blink")
 require("plugins.fff")

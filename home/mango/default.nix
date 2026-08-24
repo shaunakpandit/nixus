@@ -110,6 +110,9 @@ in
         "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
         "isnamedscratchpad:1,width:400,height:600,title:.*yTaver.*"
+        "monitor:eDP-1,title:newsboat-2,isfloating:1,tags:2,offsetx:28,offsety:19,width:813,height:966"
+        "monitor:eDP-1,title:btop-2,isfloating:1,tags:2,offsetx:886,offsety:22,width:980,height:568"
+        "monitor:eDP-1,title:cava-2,isfloating:1,tags:2,offsetx:1018,offsety:676,width:692,height:273"
         "monitor:model:AW3225QF,appid:starcitizen.exe"
         "unfocused_opacity:1.0,title:.*YouTube.*"
       ];
@@ -127,6 +130,7 @@ in
       # scrolling layout rules
       scroller_structs = 5;
       scroller_default_proportion = 0.5;
+      scroller_default_proportion_single = 1.0;
 
       # key repeat rates
       repeat_rate = 70;
@@ -188,12 +192,15 @@ in
     };
 
     autostart_sh = ''
-      waybar &
-      swaybg \
-        -o eDP-1 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
-        -o DP-4 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
-        -o DP-6 -i "$HOME/dev/nixus/walls/dome.jpeg" -m fill &
-      wl-paste --type text --watch cliphist store & 
+        waybar &
+        swaybg \
+          -o eDP-1 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
+          -o DP-4 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
+          -o DP-6 -i "$HOME/dev/nixus/walls/dome.jpeg" -m fill &
+        wl-paste --type text --watch cliphist store & 
+      ghostty --title=cava-2 -e cava &
+      ghostty --title=btop-2 -e btop &
+      ghostty --title=newsboat-2 -e newsboat &
     '';
   };
 }
