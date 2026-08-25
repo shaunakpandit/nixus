@@ -9,6 +9,7 @@ require("techbase").setup({
 	hl_overrides = {},
 })
 
+-- THEME_UPDATE
 -- "sw1comm"
 -- "techbase"
 vim.cmd.colorscheme("sw1comm")

@@ -26,7 +26,9 @@ in
 
       # ANSI normal cyan and bright cyan.
       palette = lib.mkForce [
-        "6=${cyan}"
+        # THEME_UPDATE
+        # cyan override only needed for blackmetal immortal update
+        # "6=${cyan}"
         # "14=${cyan}"
       ];
       # hacker https://brand.hackernoon.com/visual-assets/color-palettes
