@@ -78,7 +78,7 @@ in
     # to update color scheme, search for THEME_UPDATE
     # black-metal-immortal
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/black-metal-immortal.yaml";
-    base16Scheme = techbaseLite;
+    base16Scheme = techbase;
     image = ../walls/solar.png;
     fonts = {
       serif = zed;

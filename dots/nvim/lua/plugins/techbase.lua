@@ -12,4 +12,4 @@ require("techbase").setup({
 -- THEME_UPDATE
 -- "sw1comm"
 -- "techbase"
-vim.cmd.colorscheme("sw1comm")
+vim.cmd.colorscheme("techbase")
