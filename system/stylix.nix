@@ -76,9 +76,8 @@ in
     # linke: https://github.com/tinted-theming/schemes/blob/spec-0.11/base16/black-metal-immortal.yaml
 
     # to update color scheme, search for THEME_UPDATE
-    # black-metal-immortal
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/black-metal-immortal.yaml";
-    base16Scheme = techbaseLite;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/black-metal-immortal.yaml";
+    # base16Scheme = techbaseLite;
     image = ../walls/solar.png;
     fonts = {
       serif = zed;
