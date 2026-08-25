@@ -22,6 +22,8 @@ in
       window-padding-x = 12;
       window-padding-y = 4; # top,bottom
       window-padding-balance = true;
+      # ensures that app within ghostty owns background color
+      window-padding-color = "extend";
       # window-step-resize = true;
 
       # ANSI normal cyan and bright cyan.
