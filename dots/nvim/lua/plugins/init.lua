@@ -21,7 +21,7 @@ require("gitsigns").setup({ signcolumn = true })
 require("nvim-autopairs").setup()
 
 -- THEMES
--- require("plugins.blackmetal")
+require("plugins.blackmetal")
 -- require("plugins.vague")
 
 -- MANAGED PLUGINS

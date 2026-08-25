@@ -1,4 +1,13 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+let
+  # Map ANSI cyan to the active Stylix base0B color.
+  cyan = config.lib.stylix.colors.withHashtag.base0B;
+in
 {
   programs.ghostty = {
     enable = true;
@@ -11,7 +20,22 @@
       macos-titlebar-style = "hidden";
 
       window-padding-x = 12;
-      window-padding-y = "12,4";
+      window-padding-y = 4; # top,bottom
+      window-padding-balance = true;
+      # window-step-resize = true;
+
+      # ANSI normal cyan and bright cyan.
+      palette = lib.mkForce [
+        "6=${cyan}"
+        # "14=${cyan}"
+      ];
+      # hacker https://brand.hackernoon.com/visual-assets/color-palettes
+      # green:
+      # cursor-color = lib.mkForce "#00ED8A";
+      # cursor-text = lib.mkForce "#000000";
+      # pink:
+      cursor-color = lib.mkForce "#F274B1";
+      cursor-text = lib.mkForce "#000000";
     };
   };
 
@@ -20,15 +44,6 @@
     fonts.enable = true;
     colors = {
       enable = true;
-      override = {
-        # hacker https://brand.hackernoon.com/visual-assets/color-palettes
-        # green:
-        # cursor-color = "#00ED8A";
-        # cursor-text = "#000000";
-        # pink:
-        cursor-color = "#F274B1";
-        cursor-text = "#000000";
-      };
     };
   };
 }

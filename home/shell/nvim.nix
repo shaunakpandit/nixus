@@ -68,6 +68,7 @@
       nixpkgs-fmt
     ];
   };
+
   stylix.targets.neovim = {
     enable = true;
     colors.enable = true;
