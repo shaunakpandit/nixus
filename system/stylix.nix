@@ -2,6 +2,24 @@
   pkgs,
   ...
 }:
+let
+  lilex = {
+    package = pkgs.nerd-fonts.lilex;
+    name = "Lilex Nerd Font";
+  };
+  zed = {
+    package = pkgs.nerd-fonts.zed-mono;
+    name = "ZedMono Nerd Font";
+  };
+  iosevka = {
+    package = pkgs.nerd-fonts.iosevka;
+    name = "Iosevka Nerd Font";
+  };
+  space = {
+    package = pkgs.nerd-fonts.space-mono;
+    name = "SpaceMono Nerd Font";
+  };
+in
 {
   # docs: https://nix-community.github.io/stylix/
   stylix = {
@@ -13,20 +31,11 @@
     base16Scheme = "${pkgs.base16-schemes}/share/themes/black-metal-immortal.yaml";
     image = ../walls/solar.png;
     fonts = {
-      serif = {
-        package = pkgs.nerd-fonts.lilex;
-        name = "Lilex Nerd Font";
-      };
+      serif = zed;
 
-      sansSerif = {
-        package = pkgs.nerd-fonts.lilex;
-        name = "Lilex Nerd Font";
-      };
+      sansSerif = zed;
 
-      monospace = {
-        package = pkgs.nerd-fonts.lilex;
-        name = "Lilex Nerd Font";
-      };
+      monospace = zed;
 
       emoji = {
         package = pkgs.noto-fonts-color-emoji;

@@ -12,10 +12,10 @@ in
     recursive = true;
   };
 
-  xdg.configFile."ghostty" = {
-    source = ../../dots/ghostty;
-    recursive = true;
-  };
+  # xdg.configFile."ghostty" = {
+  #   source = ../../dots/ghostty;
+  #   recursive = true;
+  # };
 
   programs.fastfetch = {
     enable = true;

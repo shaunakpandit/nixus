@@ -10,6 +10,7 @@ in
 {
   imports = [
     ../../home/mango
+    ../../home/ghostty.nix
     ../../home/helium.nix
     ../../home/firefox.nix
     ../../home/waybar.nix

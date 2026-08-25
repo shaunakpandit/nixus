@@ -11,6 +11,7 @@ in
   imports = [
     ./variables.nix
     ../../home/mango
+    ../../home/ghostty.nix
     ../../home/firefox.nix
     ../../home/helium.nix
     ../../home/waybar.nix

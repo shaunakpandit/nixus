@@ -41,7 +41,6 @@
   environment.pathsToLink = [ "/share/zsh" ];
 
   environment.systemPackages = with pkgs; [
-    ghostty
     fd
     bc
     gcc
