@@ -93,6 +93,17 @@ keymap.set("n", "fn", "<cmd>lua vim.lsp.buf.rename()<CR>", { noremap = true, sil
 keymap.set("n", "<Leader>fo", ":lua vim.lsp.buf.format()<CR>", { silent = true }) -- Format the current buffer using LSP
 keymap.set("n", "<Leader>ca", ":lua vim.lsp.buf.code_action()<CR>", { silent = true }) -- open code action picker
 
+-- QUICKFIX
+vim.keymap.set("n", "cz", function()
+	vim.diagnostic.setqflist({
+		open = true,
+		bufnr = 0, -- current buffer only
+		-- severity = vim.diagnostic.severity.ERROR,
+	})
+end, { desc = "Current buffer diagnostics -> quickfix" })
+keymap.set("n", "cj", ":cn<CR>zz", { noremap = true, silent = true }) -- next quickfix item and center screen
+keymap.set("n", "ck", ":cp<CR>zz", { noremap = true, silent = true }) -- next quickfix item and center screen
+
 -- Highlight keymaps
 keymap.set("n", "fh", "*N", { silent = true }) -- highlight word undercursor
 
