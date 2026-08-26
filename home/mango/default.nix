@@ -164,6 +164,7 @@ in
       };
 
       monitorrule = [
+        "name:eDP-1, scale:1"
         "model:27GN950, width:3840, height:2160, refresh:144, hdr:1, x:0, y:0, rr:3, vrr:1a"
         "model:AW3225QF, width:3840, height:2160, refresh:239.99, hdr:1, vrr:1, x:2160, y:50"
       ];

@@ -11,7 +11,8 @@ require("conform").setup({
 		typescript = { "dprint" },
 		typescriptreact = { "dprint" },
 		php = {},
-        nix = {"nixfmt", "nixpkgs-fmt"},
+		nix = { "nixfmt", "nixpkgs-fmt" },
+		python = { "ruff_format" },
 		-- You can also customize some of the format options for the filetype
 		-- You can use a function here to determine the formatters dynamically
 		-- Use the "*" filetype to run formatters on all filetypes.

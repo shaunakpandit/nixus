@@ -66,6 +66,10 @@
       nil
       nixfmt-rs
       nixpkgs-fmt
+
+      # python
+      basedpyright
+      ruff
     ];
   };
 

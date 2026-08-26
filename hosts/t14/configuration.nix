@@ -12,6 +12,7 @@
     ../../system/audio.nix
     ../../system/boot.nix
     ../../system/locale.nix
+    ../../system/utils.nix
     ../../system/laptop.nix
     ../../system/mango.nix
     ../../system/gaming

@@ -14,4 +14,8 @@
     # Image modification
     gowall
   ];
+
+  programs.kdeconnect = {
+    enable = true;
+  };
 }

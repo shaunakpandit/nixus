@@ -10,6 +10,7 @@ vim.lsp.enable({
 	"roslyn_ls",
 	"cssls",
 	"nil_ls",
-    "superhtml",
+	"superhtml",
+	"basedpyright",
 })
 vim.diagnostic.config({ virtual_text = true })
