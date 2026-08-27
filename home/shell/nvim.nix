@@ -36,6 +36,11 @@
     withPython3 = true;
     withRuby = true;
 
+    plugins = with pkgs.vimPlugins; [
+      # for c-j c-k recognition within devenv
+      vim-tmux-navigator
+    ];
+
     extraPackages = with pkgs; [
       # TypeScript / JavaScript / PHP
       vtsls
