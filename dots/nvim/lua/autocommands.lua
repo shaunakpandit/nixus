@@ -195,3 +195,41 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 	end,
 })
+
+-- handle owning pane when within tmux
+-- SUFACE_NVIM_IN_SHELL
+if vim.env.TMUX and vim.env.TMUX_PANE then
+	local pane = vim.env.TMUX_PANE
+
+	local function mark_nvim(active)
+		vim.fn.system({
+			"tmux",
+			"set-option",
+			"-p",
+			"-t",
+			pane,
+			"@nvim_active",
+			active and "1" or "0",
+		})
+	end
+
+	mark_nvim(true)
+
+	vim.api.nvim_create_autocmd("VimLeavePre", {
+		callback = function()
+			mark_nvim(false)
+		end,
+	})
+
+	vim.api.nvim_create_autocmd("VimSuspend", {
+		callback = function()
+			mark_nvim(false)
+		end,
+	})
+
+	vim.api.nvim_create_autocmd("VimResume", {
+		callback = function()
+			mark_nvim(true)
+		end,
+	})
+end

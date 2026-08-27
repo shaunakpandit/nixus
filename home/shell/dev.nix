@@ -2,7 +2,10 @@
 {
   home.packages = with pkgs; [
     sqlite
-    devenv
     python3
   ];
+  programs.devenv = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 }
