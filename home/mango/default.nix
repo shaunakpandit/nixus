@@ -110,9 +110,9 @@ in
         "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
         "isnamedscratchpad:1,width:400,height:600,title:.*yTaver.*"
-        "monitor:eDP-1,title:newsboat-2,isfloating:1,tags:2,offsetx:-90,offsety:85,width:813,height:966"
-        "monitor:eDP-1,title:btop-2,isfloating:1,tags:2,offsetx:0,offsety:82,width:980,height:568"
-        "monitor:eDP-1,title:cava-2,isfloating:1,tags:2,offsetx:5,offsety:-30,width:692,height:273"
+        "monitor:eDP-1,title:newsboat-2,isfloating:1,tags:2,offsetx:-95,offsety:75,width:813,height:966"
+        "monitor:eDP-1,title:btop-2,isfloating:1,tags:2,offsetx:90,offsety:-80,width:980,height:568"
+        "monitor:eDP-1,title:cava-2,isfloating:1,tags:2,offsetx:75,offsety:80,width:692,height:273"
         "monitor:model:AW3225QF,appid:starcitizen.exe"
         "unfocused_opacity:1.0,title:.*YouTube.*"
       ];
@@ -197,7 +197,7 @@ in
     autostart_sh = ''
         waybar &
         swaybg \
-          -o eDP-1 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
+          -o eDP-1 -i "$HOME/dev/nixus/walls/shiri2.jpg" -m fit \
           -o DP-4 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
           -o DP-6 -i "$HOME/dev/nixus/walls/dome.jpeg" -m fill &
         wl-paste --type text --watch cliphist store & 
