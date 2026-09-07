@@ -126,11 +126,13 @@ in
 
       # layout rules
       new_is_master = 0;
-
       # scrolling layout rules
       scroller_structs = 5;
       scroller_default_proportion = 0.5;
       scroller_default_proportion_single = 1.0;
+
+      # share scratchpads across monitors
+      scratchpad_cross_monitor = 1;
 
       # key repeat rates
       repeat_rate = 70;
@@ -174,8 +176,8 @@ in
         "id:2,layout_name:dwindle"
         "id:3,layout_name:right_tile"
         "id:4,layout_name:right_tile"
-        "id:1,monitor_model:AW3225QF, layout_name:right_tile"
-        "id:2,monitor_model:AW3225QF, layout_name:scroller"
+        # "id:1,monitor_model:AW3225QF, layout_name:right_tile"
+        # "id:2,monitor_model:AW3225QF, layout_name:scroller"
         "id:1,monitor_model:27GN950, layout_name:dwindle"
         "id:2,monitor_model:27GN950, layout_name:dwindle"
       ];

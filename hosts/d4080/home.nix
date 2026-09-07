@@ -12,11 +12,13 @@ in
     ./variables.nix
     ../../home/mango
     ../../home/ghostty.nix
+    ../../home/discord.nix
     ../../home/firefox.nix
     ../../home/helium.nix
     ../../home/waybar.nix
     ../../home/fuzzel.nix
     ../../home/sioyek.nix
+    ../../home/easyeffects.nix
     ../../home/shell/shell.nix
     ../../home/shell/utils.nix
     ../../home/shell/cliamp.nix
