@@ -67,6 +67,7 @@ in
       vim = "nvim";
       tm = "tmux new -A -s code -n code ';' neww -d -S -t code: -n term";
       tmm = "tmux new -A -s gen -n gen ';' neww -d -S -t gen: -n shell";
+      tmn = "tmux new -A -s notes -n notes";
       c = "clear";
       ".." = "cd ..";
       zs = "source ~/.zshrc";
