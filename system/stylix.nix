@@ -92,8 +92,9 @@ in
       };
     };
     cursor = {
+      # see: https://github.com/ful1e5/Bibata_Cursor
       package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Classic";
+      name = "Bibata-Modern-Ice";
       size = 24;
     };
 
