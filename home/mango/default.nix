@@ -198,8 +198,8 @@ in
         waybar &
         swaybg \
           -o eDP-1 -i "$HOME/dev/nixus/walls/shiri2.JPG" -m stretch \
-          -o DP-4 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
-          -o DP-6 -i "$HOME/dev/nixus/walls/dome.jpeg" -m fill &
+          -o DP-4 -i "$HOME/dev/nixus/walls/glass.jpeg" -m fit \
+          -o DP-6 -i "$HOME/dev/nixus/walls/glass.jpeg" -m fill &
         wl-paste --type text --watch cliphist store & 
       ghostty --title=cava-2 -e cava &
       ghostty --title=btop-2 -e btop &
