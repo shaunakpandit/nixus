@@ -16,6 +16,7 @@ in
     ../../home/waybar.nix
     ../../home/easyeffects.nix
     ../../home/fuzzel.nix
+    ../../home/iptvnator.nix
     ../../home/feh.nix
     ../../home/tradingview.nix
     ../../home/sioyek.nix
