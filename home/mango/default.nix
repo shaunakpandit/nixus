@@ -121,8 +121,10 @@ in
       enable_hotarea = 0;
       overviewgappo = 5;
 
-      # screen behavior
+      # see https://mangowm.github.io/docs/configuration/monitors#tearing-game-mode
       allow_tearing = 1;
+      # see https://mangowm.github.io/docs/configuration/monitors#hdr
+      hdr_depth = 2;
 
       # layout rules
       new_is_master = 0;
@@ -167,8 +169,8 @@ in
 
       monitorrule = [
         "name:eDP-1, scale:1"
-        "model:27GN950, width:3840, height:2160, refresh:144, hdr:1, x:0, y:0, rr:3, vrr:1a"
-        "model:AW3225QF, width:3840, height:2160, refresh:239.99, hdr:1, vrr:1, x:2160, y:50"
+        "model:27GN950, width:3840, height:2160, refresh:144, hdr:1, x:0, y:0, rr:3, vrr:1"
+        "model:AW3225QF, width:3840, height:2160, refresh:239.99, hdr:1, vrr:1, x:2160, y:0"
       ];
 
       tagrule = [
@@ -198,8 +200,8 @@ in
         waybar &
         swaybg \
           -o eDP-1 -i "$HOME/dev/nixus/walls/shiri2.JPG" -m stretch \
-          -o DP-4 -i "$HOME/dev/nixus/walls/roof.jpeg" -m fill \
-          -o DP-6 -i "$HOME/dev/nixus/walls/dome.jpeg" -m fill &
+          -o DP-4 -i "$HOME/dev/nixus/walls/glass.jpeg" -m fit \
+          -o DP-6 -i "$HOME/dev/nixus/walls/glass.jpeg" -m fill &
         wl-paste --type text --watch cliphist store & 
       ghostty --title=cava-2 -e cava &
       ghostty --title=btop-2 -e btop &
