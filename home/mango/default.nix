@@ -115,6 +115,7 @@ in
         "monitor:eDP-1,title:cava-2,isfloating:1,tags:2,offsetx:73,offsety:80,width:692,height:273"
         "monitor:model:AW3225QF,appid:starcitizen.exe"
         "unfocused_opacity:1.0,title:.*YouTube.*"
+        "monitor:model:AW3225QF,vrr_only_fullscreen:1"
       ];
 
       # overview
@@ -167,10 +168,14 @@ in
         open = "0.175, 0.885, 0.2, 1.215";
       };
 
+      # see https://mangowm.github.io/docs/configuration/miscellaneous#system--hardware
+      # ignore scale in games
+      xwayland_ignore_scale = 1;
+
       monitorrule = [
         "name:eDP-1, scale:1"
         "model:27GN950, width:3840, height:2160, refresh:144, hdr:1, x:0, y:0, rr:3, vrr:1"
-        "model:AW3225QF, width:3840, height:2160, refresh:239.99, hdr:1, vrr:1, x:2160, y:0"
+        "model:AW3225QF, width:3840, height:2160, scale: 1.25, refresh:239.99, hdr:1, vrr:0, x:2160, y:0"
       ];
 
       tagrule = [

@@ -17,6 +17,7 @@ in
     ../../home/helium.nix
     ../../home/waybar.nix
     ../../home/fuzzel.nix
+    ../../home/iptvnator.nix
     ../../home/feh.nix
     ../../home/sioyek.nix
     ../../home/easyeffects.nix
