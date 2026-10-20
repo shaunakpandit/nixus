@@ -10,6 +10,7 @@
     ../../system/locale.nix
     ../../system/utils.nix
     ../../system/nvidia.nix
+    ../../system/virtualisation.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
