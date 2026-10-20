@@ -11,6 +11,7 @@ in
   imports = [
     ../../home/shell/nvim.nix
     ../../home/shell/shell.nix
+    ../../home/shell/dev.nix
     ../../home/shell/utils.nix
   ];
 

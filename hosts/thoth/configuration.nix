@@ -8,6 +8,8 @@
     ../../system/audio.nix
     ../../system/boot.nix
     ../../system/locale.nix
+    ../../system/utils.nix
+    ../../system/nvidia.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -23,7 +25,7 @@
     "flakes"
   ];
 
-  users.users.void = {
+  users.users.hugh = {
     isNormalUser = true;
     description = "hugh";
     extraGroups = [
@@ -62,9 +64,9 @@
     mysql84
   ];
 
-  fonts.packages = with pkgs; [
-    nerd-fonts.lilex
-  ];
+  # fonts.packages = with pkgs; [
+  #   nerd-fonts.lilex
+  # ];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
