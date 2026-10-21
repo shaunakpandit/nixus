@@ -82,6 +82,7 @@
   networking.firewall.allowedTCPPorts = [
     8000 # portainer
     9443 # portainer
+    3000 # webui
   ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
