@@ -12,6 +12,8 @@
     ../../system/utils.nix
     ../../system/nvidia.nix
     ../../system/virtualisation.nix
+    ../../containers/portainer.nix
+    ../../containers/openwebui.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
