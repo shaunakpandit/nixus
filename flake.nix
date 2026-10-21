@@ -138,6 +138,7 @@
 
         thoth = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
           modules = [
             # Import the previous configuration.nix we used,
             # so the old configuration file still takes effect
@@ -148,7 +149,7 @@
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.void = {
+              home-manager.users.hugh = {
                 imports = [
                   ./hosts/thoth/home.nix
                 ];
