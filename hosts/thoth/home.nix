@@ -13,6 +13,7 @@ in
     ../../home/shell/shell.nix
     ../../home/shell/dev.nix
     ../../home/shell/utils.nix
+    ./variables.nix
   ];
 
   home.username = "hugh";
