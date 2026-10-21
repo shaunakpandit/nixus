@@ -43,6 +43,9 @@
   # see: https://home-manager-options.extranix.com/?query=programs&release=master
   environment.pathsToLink = [ "/share/zsh" ];
 
+  # for sshing with x256 color terminals
+  environment.enableAllTerminfo = true;
+
   environment.systemPackages = with pkgs; [
     fd
     bc
