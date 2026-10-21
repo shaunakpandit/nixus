@@ -115,6 +115,7 @@ in
         "monitor:eDP-1,title:cava-2,isfloating:1,tags:2,offsetx:73,offsety:80,width:692,height:273"
         "monitor:model:AW3225QF,appid:starcitizen.exe"
         "unfocused_opacity:1.0,title:.*YouTube.*"
+        "unfocused_opacity:1.0,appid:iptvnator"
         "monitor:model:AW3225QF,vrr_only_fullscreen:1"
       ];
 
