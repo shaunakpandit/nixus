@@ -2,6 +2,10 @@ local vim = vim
 
 vim.pack.add({ "https://github.com/dmtrKovalenko/fff.nvim" })
 
+-- NOTE: sometimes this can break with a blob instead of string error. This can be due to a corrupted nvim stat
+-- see: https://github.com/LazyVim/LazyVim/issues/7025#issuecomment-3952225328
+-- shows how wipe current nvim plugin installations and will prompt for fresh installs
+
 vim.api.nvim_create_autocmd("PackChanged", {
 	callback = function(event)
 		if event.data.updated then
