@@ -17,6 +17,7 @@
     ../../system/boot.nix
     ../../system/locale.nix
     ../../system/utils.nix
+    ../../system/fail2ban.nix
     ../../system/nvidia.nix
     ../../system/mango.nix
     ../../system/gaming/starcitizen.nix
@@ -88,9 +89,6 @@
   fonts.packages = with pkgs; [
     nerd-fonts.lilex
   ];
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
