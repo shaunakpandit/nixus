@@ -13,7 +13,7 @@
     ../../system/fail2ban.nix
     ../../system/nvidiaLegacy.nix
     ../../system/virtualisation.nix
-    ../../containers/portainer.nix
+    # ../../containers/portainer.nix
     ../../containers/openwebui.nix
   ];
 
