@@ -19,7 +19,8 @@
       ];
 
       extraOptions = [
-        "--restart=unless-stopped"
+        # no need to specify as nixos will auto start on startp according to virtualisation config
+        # "--restart=unless-stopped"
       ];
     };
   };

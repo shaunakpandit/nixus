@@ -10,13 +10,17 @@
     docker = {
       enable = true;
       enableOnBoot = true;
-      rootless = {
-        enable = true;
-      };
+      # rootless = {
+      #   enable = true;
+      #   # allow user to query rootless socket
+      #   setSocketVariable = true;
+      # };
       autoPrune = {
         enable = true;
         dates = "weekly";
       };
+      # for nvidia support
+      # daemon.settings.features.cdi = true;
     };
   };
 }
