@@ -10,6 +10,7 @@
     ../../system/boot.nix
     ../../system/locale.nix
     ../../system/utils.nix
+    ../../system/fail2ban.nix
     ../../system/nvidiaLegacy.nix
     ../../system/virtualisation.nix
     ../../containers/portainer.nix
@@ -76,9 +77,6 @@
   # fonts.packages = with pkgs; [
   #   nerd-fonts.lilex
   # ];
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
