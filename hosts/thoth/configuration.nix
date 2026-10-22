@@ -10,7 +10,7 @@
     ../../system/boot.nix
     ../../system/locale.nix
     ../../system/utils.nix
-    ../../system/nvidia.nix
+    ../../system/nvidiaLegacy.nix
     ../../system/virtualisation.nix
     ../../containers/portainer.nix
     ../../containers/openwebui.nix
