@@ -70,6 +70,7 @@
     wev
     tree-sitter
     mysql84
+    docker-compose
   ];
 
   # fonts.packages = with pkgs; [
