@@ -7,12 +7,17 @@ let
 
   configDir = "/var/lib/plex/config";
   transcodeDir = "/var/lib/plex/transcode";
-  mediaDir = "/mnt/media";
+  mediaDir = "/mnt/media/library";
 in
 {
   systemd.tmpfiles.rules = [
     "d ${configDir} 0750 ${plexUid} ${plexGid} -"
     "d ${transcodeDir} 0750 ${plexUid} ${plexGid} -"
+
+    # User-managed media; Plex only needs to read it.
+    "d ${mediaDir} 0755 hugh users -"
+    "d ${mediaDir}/music 0755 hugh users -"
+    "d ${mediaDir}/music/flac 0755 hugh users -"
   ];
 
   virtualisation.oci-containers.containers.plex = {
