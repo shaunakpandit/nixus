@@ -15,6 +15,7 @@
     ../../system/virtualisation.nix
     # ../../containers/portainer.nix
     ../../containers/openwebui.nix
+    ../../containers/plex.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -79,11 +80,22 @@
   # ];
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [
-    8000 # portainer
-    9443 # portainer
-    3000 # webui
-  ];
+  networking.firewall = {
+    allowedTCPPorts = [
+      8000 # portainer
+      9443 # portainer
+      3000 # webui
+      32400 # plex
+    ];
+
+    # Optional: local network discovery for plex
+    allowedUDPPorts = [
+      32410
+      32412
+      32413
+      32414
+    ];
+  };
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
