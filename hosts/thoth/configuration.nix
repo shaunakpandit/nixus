@@ -11,6 +11,7 @@
     ../../system/locale.nix
     ../../system/utils.nix
     ../../system/fail2ban.nix
+    ../../system/tailscale.nix
     ../../system/nvidiaLegacy.nix
     ../../system/virtualisation.nix
     # ../../containers/portainer.nix
