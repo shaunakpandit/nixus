@@ -25,9 +25,6 @@ in
 
       PLEX_UID = plexUid;
       PLEX_GID = plexGid;
-
-      NVIDIA_VISIBLE_DEVICES = "all";
-      NVIDIA_DRIVER_CAPABILITIES = "compute,video,utility";
     };
 
     # Keep the claim token outside the world-readable Nix store.
@@ -43,7 +40,7 @@ in
 
     extraOptions = [
       "--network=host"
-      "--gpus=all"
+      "--device=nvidia.com/gpu=all"
     ];
   };
 
