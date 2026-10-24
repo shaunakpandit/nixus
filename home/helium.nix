@@ -19,7 +19,7 @@
       # darkreader: eimadpbcbfnmbkopoojfekhnkhdbieeh
       {
         id = "eimadpbcbfnmbkopoojfekhnkhdbieeh";
-        hash = "sha256-hPyoKRkZ9of85y7XLHFpel8gOvbsQB52eOjrRFQARr0=";
+        hash = "sha256-7jjyDR1QeJ9LSCyaGl2tq1mbhoL9Kn37feIfroVhuRg=";
       }
 
       # vimium: dbepggeogbaibhgnhhndojpepiihcmeb
