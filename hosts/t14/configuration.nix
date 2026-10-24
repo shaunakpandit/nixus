@@ -88,6 +88,7 @@
     wev
     tree-sitter
     mysql84
+    compose2nix
   ];
 
   # fonts.packages = with pkgs; [

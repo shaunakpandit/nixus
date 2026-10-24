@@ -74,6 +74,7 @@
     tree-sitter
     mysql84
     docker-compose
+    compose2nix
   ];
 
   # fonts.packages = with pkgs; [
@@ -87,6 +88,7 @@
       9443 # portainer
       3000 # webui
       32400 # plex
+      6060 # grimmory
     ];
 
     # Optional: local network discovery for plex
