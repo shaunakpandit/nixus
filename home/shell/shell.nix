@@ -55,7 +55,7 @@ in
       enable = true;
     };
     enableCompletion = true;
-    initExtra = ''
+    shellInit = ''
       source <(fzf --zsh)
     '';
     shellAliases = {
@@ -118,9 +118,11 @@ in
 
   programs.git = {
     enable = true;
-    userName = "shaunakpandit";
-    userEmail = "shaunakdpandit@gmail.com";
     settings = {
+      user = {
+        email = "shaunakdpandit@gmail.com";
+        name = "shaunakpandit";
+      };
       pull = {
         rebase = false;
       };
