@@ -104,24 +104,24 @@ in
       ];
 
       window_rule = [
-        "isnamedscratchpad:1,width:1000,height:700,title:yazi-scratch"
-        "isnamedscratchpad:1,width:1000,height:700,title:cliamp-scratch"
-        "isnamedscratchpad:1,width:1000,height:700,title:term-scratch"
-        "isnamedscratchpad:1,width:1000,height:700,title:btop-scratch"
-        "isnamedscratchpad:1,width:1000,height:700,title:notes-scratch"
-        "isnamedscratchpad:1,width:400,height:600,title:.*yTaver.*"
-        "monitor:eDP-1,title:newsboat-2,isfloating:1,tags:2,offsetx:-95,offsety:78,width:813,height:966"
-        "monitor:eDP-1,title:btop-2,isfloating:1,tags:2,offsetx:90,offsety:-80,width:980,height:568"
-        "monitor:eDP-1,title:cava-2,isfloating:1,tags:2,offsetx:73,offsety:80,width:692,height:273"
-        "monitor:model:AW3225QF,appid:starcitizen.exe"
+        "is_named_scratchpad:1,width:1000,height:700,title:yazi-scratch"
+        "is_named_scratchpad:1,width:1000,height:700,title:cliamp-scratch"
+        "is_named_scratchpad:1,width:1000,height:700,title:term-scratch"
+        "is_named_scratchpad:1,width:1000,height:700,title:btop-scratch"
+        "is_named_scratchpad:1,width:1000,height:700,title:notes-scratch"
+        "is_named_scratchpad:1,width:400,height:600,title:.*yTaver.*"
+        "monitor:eDP-1,title:newsboat-2,is_floating:1,tags:2,offset_x:-95,offset_y:78,width:813,height:966"
+        "monitor:eDP-1,title:btop-2,is_floating:1,tags:2,offset_x:90,offset_y:-80,width:980,height:568"
+        "monitor:eDP-1,title:cava-2,is_floating:1,tags:2,offset_x:73,offset_y:80,width:692,height:273"
+        "monitor:model:AW3225QF,app_id:starcitizen.exe"
         "unfocused_opacity:1.0,title:.*YouTube.*"
-        "unfocused_opacity:1.0,appid:iptvnator"
+        "unfocused_opacity:1.0,app_id:iptvnator"
         "monitor:model:AW3225QF,vrr_only_fullscreen:1"
       ];
 
       # overview
       enable_hotarea = 0;
-      overviewgappo = 5;
+      overview_gap_outer = 5;
 
       # see https://mangowm.github.io/docs/configuration/monitors#tearing-game-mode
       allow_tearing = 1;
@@ -152,17 +152,17 @@ in
       xkb_rules_options = "${config.var.remap}";
 
       # visual styles
-      borderpx = 2;
+      border_px = 2;
       blur = 1;
       blur_layer = 1;
       focused_opacity = 0.85;
       unfocused_opacity = 0.80;
       cursor_size = config.stylix.cursor.size;
       cursor_theme = config.stylix.cursor.name;
-      bordercolor = "0x${c.base00}ff";
-      maximizescreencolor = "0x${c.base00}ff";
-      focuscolor = "0x${c.base0B}ff";
-      urgentcolor = "0x${c.base08}ff";
+      border_color = "0x${c.base00}ff";
+      maximized_screen_color = "0x${c.base00}ff";
+      focus_color = "0x${c.base0B}ff";
+      urgent_color = "0x${c.base08}ff";
 
       animation_duration_open = 500;
       animation_curve = {
