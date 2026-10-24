@@ -103,7 +103,7 @@ in
         "SUPER,btn_right,moveresize,curresize"
       ];
 
-      windowrule = [
+      window_rule = [
         "isnamedscratchpad:1,width:1000,height:700,title:yazi-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:cliamp-scratch"
         "isnamedscratchpad:1,width:1000,height:700,title:term-scratch"
@@ -173,13 +173,13 @@ in
       # ignore scale in games
       xwayland_ignore_scale = 1;
 
-      monitorrule = [
+      monitor_rule = [
         "name:eDP-1, scale:1"
         "model:27GN950, width:3840, height:2160, refresh:144, hdr:1, x:0, y:0, rr:3, vrr:1"
         "model:AW3225QF, width:3840, height:2160, scale: 1.25, refresh:239.99, hdr:1, vrr:0, x:2160, y:0"
       ];
 
-      tagrule = [
+      tag_rule = [
         "id:1,layout_name:scroller"
         "id:2,layout_name:dwindle"
         "id:3,layout_name:right_tile"
