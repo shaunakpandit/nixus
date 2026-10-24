@@ -55,7 +55,7 @@ in
       enable = true;
     };
     enableCompletion = true;
-    shellInit = ''
+    initContent = ''
       source <(fzf --zsh)
     '';
     shellAliases = {
