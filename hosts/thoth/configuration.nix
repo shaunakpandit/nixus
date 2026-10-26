@@ -87,17 +87,32 @@
     allowedTCPPorts = [
       8000 # portainer
       9443 # portainer
+
       3000 # webui
+
       32400 # plex
+
       6060 # grimmory
+
+      8443 # Crafty Controller; web page
+      8123 # Crafty Controller; Optional map web server, e.g. Dynmap
     ];
 
+    allowedTCPPortRanges = [
+      {
+        # for crafy controller
+        from = 25500;
+        to = 25600;
+      }
+    ];
     # Optional: local network discovery for plex
     allowedUDPPorts = [
-      32410
-      32412
-      32413
-      32414
+      32410 # plex
+      32412 # plex
+      32413 # plex
+      32414 # plex
+
+      19132 # Craftcontroller; Bedrock
     ];
   };
   # networking.firewall.allowedUDPPorts = [ ... ];
