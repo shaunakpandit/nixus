@@ -17,6 +17,7 @@
     # ../../containers/portainer.nix
     ../../containers/openwebui.nix
     ../../containers/plex.nix
+    ../../containers/grimmory.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
