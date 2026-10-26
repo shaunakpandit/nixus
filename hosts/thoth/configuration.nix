@@ -18,6 +18,7 @@
     ../../containers/openwebui.nix
     ../../containers/plex.nix
     ../../containers/grimmory.nix
+    ../../containers/craftycontroller.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
