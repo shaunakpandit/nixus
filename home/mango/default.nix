@@ -6,6 +6,10 @@ in
   home.packages = with pkgs; [
   ];
 
+  home.sessionVariables = {
+    WLR_RENDERER = "vulkan";
+  };
+
   # see https://github.com/mangowm/mango/blob/586ee8e6991e67cc1e76a84804bce7c861e0c9bb/nix/hm-modules.nix
   # for definition
   wayland.windowManager.mango = {
