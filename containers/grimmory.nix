@@ -14,9 +14,9 @@
   virtualisation.oci-containers.containers."grimmory" = {
     image = "grimmory/grimmory:latest";
     environment = {
-      "DATABASE_PASSWORD" = "mariagrim123";
-      "DATABASE_URL" = "jdbc:mariadb://mariadb:3306/grimmory";
-      "DATABASE_USERNAME" = "grimmory";
+      "DATABASE_URL" = "jdbc:mariadb://mariadb:3306/booklore";
+      "DATABASE_USERNAME" = "booklore";
+      "DATABASE_PASSWORD" = "password123";
       "GROUP_ID" = "100";
       "SERVER_PORT" = "6060";
       "TZ" = "Etc/UTC";
