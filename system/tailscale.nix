@@ -11,8 +11,12 @@
     # Secret supplied outside the Nix store.
     authKeyFile = "/etc/tailscale/authkey";
 
+    # Enable forwarding support for subnet routing.
+    useRoutingFeatures = "server";
+
     extraUpFlags = [
       "--accept-dns=false"
+      "--advertise-routes=192.168.4.28/32"
     ];
   };
 
