@@ -13,7 +13,7 @@
 
       volumes = [
         # "ollama:/root/.ollama"
-        "/home/hugh/open-webui:/app/backend/data "
+        "/home/hugh/open-webui:/app/backend/data"
       ];
 
       extraOptions = [
