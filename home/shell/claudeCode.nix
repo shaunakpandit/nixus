@@ -26,13 +26,15 @@ in
       paths = [ pkgs.claude-code ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
       # The formatters otherwise only exist on nvim's PATH (extraPackages),
-      # so expose them to Claude's shell too.
+      # so expose them to Claude's shell too. ripgrep is pinned here because
+      # this Claude Code build has no Grep/Glob tools and searches via Bash.
       postBuild = ''
         wrapProgram $out/bin/claude \
           --prefix PATH : ${
             lib.makeBinPath [
               pkgs.nixfmt-rs
               pkgs.nixpkgs-fmt
+              pkgs.ripgrep
             ]
           } \
           --run 'export ANTHROPIC_AUTH_TOKEN="$(cat ${keyFile})"'
@@ -86,6 +88,17 @@ in
           "Bash(nixos-option:*)"
           "Bash(nixfmt:*)"
           "Bash(nixpkgs-fmt:*)"
+
+          # Read-only inspection. These stay inside the bash sandbox (writes
+          # limited to the repo, network proxied), which is the backstop for
+          # exec-style flags such as `rg --pre`.
+          "Bash(cat:*)"
+          "Bash(head:*)"
+          "Bash(tail:*)"
+          "Bash(ls:*)"
+          "Bash(wc:*)"
+          "Bash(grep:*)"
+          "Bash(rg:*)"
         ];
         # Not reachable via the allow list anyway; listed so they stay blocked
         # even if defaultMode is relaxed. Activation and imperative state
@@ -105,6 +118,8 @@ in
           "Bash(nix store delete:*)"
           "Bash(nix store gc:*)"
           "Bash(nix-collect-garbage:*)"
+          # cat/rg can read outside the repo, so keep the API key out of reach.
+          "Read(~/.config/openrouter/**)"
           "WebFetch"
           "Agent"
           "Task"
@@ -115,6 +130,8 @@ in
         enabled = true;
         autoAllowBashIfSandboxed = false;
         allowUnsandboxedCommands = false;
+        # The sandbox allows reads almost everywhere by default.
+        filesystem.denyRead = [ (builtins.dirOf keyFile) ];
         # The sandbox blocks the nix-daemon socket and writes to ~/.cache/nix,
         # so nix can't evaluate or build inside it. Builds still run in nix's
         # own sandbox, and only the subcommands allowed above can run.
