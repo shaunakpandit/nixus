@@ -12,6 +12,10 @@ in
     enable = true;
 
     # Wrap claude so the key is read from the file at launch time.
+    # setup apiey file:
+    # mkdir -p ~/.config/openrouter
+    # printf '%s' 'sk-or-v1-...' > ~/.config/openrouter/api_key
+    # chmod 600 ~/.config/openrouter/api_key
     package = pkgs.symlinkJoin {
       name = "claude-code-openrouter";
       paths = [ pkgs.claude-code ];
