@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   # Lives outside the repo; never enters git or the Nix store.
   keyFile = "${config.home.homeDirectory}/.config/openrouter/api_key";
@@ -20,8 +25,16 @@ in
       name = "claude-code-openrouter";
       paths = [ pkgs.claude-code ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
+      # The formatters otherwise only exist on nvim's PATH (extraPackages),
+      # so expose them to Claude's shell too.
       postBuild = ''
         wrapProgram $out/bin/claude \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              pkgs.nixfmt-rs
+              pkgs.nixpkgs-fmt
+            ]
+          } \
           --run 'export ANTHROPIC_AUTH_TOKEN="$(cat ${keyFile})"'
       '';
     };
@@ -52,9 +65,46 @@ in
           "Glob"
           "Grep"
           "WebSearch"
+
+          # Evaluate, build, format, and inspect. With defaultMode = "dontAsk",
+          # any shell command not listed here is refused.
+          "Bash(nix flake check:*)"
+          "Bash(nix flake show:*)"
+          "Bash(nix flake metadata:*)"
+          "Bash(nix flake prefetch:*)"
+          "Bash(nix eval:*)"
+          "Bash(nix build:*)"
+          "Bash(nix search:*)"
+          "Bash(nix path-info:*)"
+          "Bash(nix why-depends:*)"
+          "Bash(nix derivation show:*)"
+          "Bash(nix log:*)"
+          "Bash(nix hash:*)"
+          "Bash(nix store prefetch-file:*)"
+          "Bash(nix-prefetch-url:*)"
+          "Bash(nix-instantiate:*)"
+          "Bash(nixos-option:*)"
+          "Bash(nixfmt:*)"
+          "Bash(nixpkgs-fmt:*)"
         ];
+        # Not reachable via the allow list anyway; listed so they stay blocked
+        # even if defaultMode is relaxed. Activation and imperative state
+        # changes are the user's job.
         deny = [
-          "Bash"
+          "Bash(nixos-rebuild:*)"
+          "Bash(home-manager:*)"
+          "Bash(sudo:*)"
+          "Bash(nix flake update:*)"
+          "Bash(nix flake lock:*)"
+          "Bash(nix-env:*)"
+          "Bash(nix profile:*)"
+          "Bash(nix run:*)"
+          "Bash(nix shell:*)"
+          "Bash(nix develop:*)"
+          "Bash(nix-shell:*)"
+          "Bash(nix store delete:*)"
+          "Bash(nix store gc:*)"
+          "Bash(nix-collect-garbage:*)"
           "WebFetch"
           "Agent"
           "Task"
@@ -65,6 +115,15 @@ in
         enabled = true;
         autoAllowBashIfSandboxed = false;
         allowUnsandboxedCommands = false;
+        # The sandbox blocks the nix-daemon socket and writes to ~/.cache/nix,
+        # so nix can't evaluate or build inside it. Builds still run in nix's
+        # own sandbox, and only the subcommands allowed above can run.
+        excludedCommands = [
+          "nix"
+          "nix-instantiate"
+          "nix-prefetch-url"
+          "nixos-option"
+        ];
       };
 
       enableAllProjectMcpServers = false;
