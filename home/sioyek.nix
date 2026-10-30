@@ -1,11 +1,5 @@
 { config, lib, ... }:
 {
-  programs.sioyek = {
-    enable = true;
-    config = {
-      startup_commands = [
-        "toggle_dark_mode"
-      ];
-    };
-  };
+  # Stylix adds toggle_custom_color; toggle_dark_mode would fight it.
+  programs.sioyek.enable = true;
 }

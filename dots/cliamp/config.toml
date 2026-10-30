@@ -56,7 +56,8 @@ low_power = false
 compact = false
 
 # UI theme name (see available themes in ~/.config/cliamp/themes/)
-# theme = "Tokyo Night"
+# Stylix is generated from the stylix palette in home/shell/cliamp.nix
+theme = "Stylix"
 
 # Log level: "debug", "info", "warn", or "error" (default "info")
 # Logs are written to ~/.config/cliamp/cliamp.log
