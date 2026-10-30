@@ -65,7 +65,7 @@ in
           "format" = " {title}";
           "rewrite" = {
             ".*" = "";
-            "(.*) - Mozilla Firefox" = "🌎 $1";
+            "(.*) — LibreWolf" = "🌎 $1";
             "(.*) - zsh" = "> [$1]";
           };
           "icon" = true;

@@ -44,8 +44,8 @@ in
         "SUPER+SHIFT,e,spawn_shell,fuzzel -d --lines=0 --prompt=\"nix: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\""
 
         "SUPER,Return,spawn,ghostty"
-        "SUPER,b,spawn,firefox"
-        "SUPER+SHIFT,b,spawn,firefox --private-window"
+        "SUPER,b,spawn,librewolf"
+        "SUPER+SHIFT,b,spawn,librewolf --private-window"
         "SUPER+SHIFT,m,spawn,ghostty -e btop"
 
         "SUPER+CTRL,h,scroller_stack,left"
@@ -99,7 +99,7 @@ in
         "SUPER,slash,toggle_named_scratchpad,none,yazi-scratch,ghostty --title=yazi-scratch -e yazi"
         "SUPER,p,toggle_named_scratchpad,none,cliamp-scratch,ghostty --title=cliamp-scratch -e cliamp"
         "SUPER,n,toggle_named_scratchpad,none,notes-scratch,ghostty --title=notes-scratch -e sh -lc 'tmux new-session -A -s notes -c \"$HOME/notes\" nvim'"
-        "SUPER+SHIFT,s,toggle_named_scratchpad,none,.*yTaver.*, firefox --private-window 192.168.4.28:8000"
+        "SUPER+SHIFT,s,toggle_named_scratchpad,none,.*yTaver.*, librewolf --private-window 192.168.4.28:8000"
       ];
       mousebind = [
         "SUPER,btn_left,moveresize,curmove"

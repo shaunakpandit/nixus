@@ -12,7 +12,7 @@ in
     ../../home/mango
     ../../home/ghostty.nix
     ../../home/helium.nix
-    ../../home/firefox.nix
+    ../../home/librewolf.nix
     ../../home/waybar.nix
     ../../home/easyeffects.nix
     ../../home/fuzzel.nix
