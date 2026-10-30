@@ -86,7 +86,8 @@ Make the edits, format and evaluate them, then ask the user to run the rebuild.
 
 - Put shared behavior in `system/`, `home/`, or `containers/`. Host directories contain only what is genuinely specific to that machine.
 - Format with `nixfmt-rs` / `nixpkgs-fmt` (see Commands) and match the style of the surrounding file.
-- Comment the *why*, not the *what*, especially for workarounds.
+- Keep code concise and simple to read. Prefer the shortest clear expression, and avoid needless abstraction, indirection, or boilerplate.
+- Don't over-comment. Comment the *why*, not the *what*, especially for workarounds, and leave self-explanatory code uncommented.
 
 ## Theming
 
