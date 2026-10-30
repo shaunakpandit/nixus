@@ -80,12 +80,39 @@ let
       --unsetenv DISPLAY
     )
 
-    # The project is the only writable part of home. Started from home
-    # itself (or /), Claude can read but write nothing outside ~/.claude.
-    project="$(${pkgs.git}/bin/git rev-parse --show-toplevel 2>/dev/null || pwd)"
-    if [ "$project" != "$HOME" ] && [ "$project" != / ]; then
-      args+=(--bind "$project" "$project")
-    fi
+    # The project (plus any --add-dir directories) is the only writable part
+    # of home. Home itself and / are never made writable.
+    bind_rw() {
+      if [ -d "$1" ] && [ "$1" != "$HOME" ] && [ "$1" != / ]; then
+        args+=(--bind "$1" "$1")
+      fi
+    }
+
+    bind_rw "$(${pkgs.git}/bin/git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+    # `claude --add-dir DIR...`: like Claude's own parser, the flag takes
+    # every following argument up to the next option.
+    adding=0
+    for a in "$@"; do
+      case "$a" in
+        --add-dir)
+          adding=1
+          continue
+          ;;
+        --add-dir=*) dir="''${a#--add-dir=}" ;;
+        -*)
+          adding=0
+          continue
+          ;;
+        *)
+          [ "$adding" = 1 ] || continue
+          dir="$a"
+          ;;
+      esac
+      if dir="$(realpath -e -- "$dir" 2>/dev/null)"; then
+        bind_rw "$dir"
+      fi
+    done
 
     for p in ${lib.escapeShellArgs hidden}; do
       p="$HOME/$p"
