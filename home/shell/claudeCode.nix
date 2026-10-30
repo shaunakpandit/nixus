@@ -1,392 +1,309 @@
 {
   config,
+  osConfig,
   lib,
   pkgs,
   ...
 }:
 let
   # Lives outside the repo; never enters git or the Nix store.
+  # setup api key file:
+  # mkdir -p ~/.config/openrouter
+  # printf '%s' 'sk-or-v1-...' > ~/.config/openrouter/api_key
+  # chmod 600 ~/.config/openrouter/api_key
   keyFile = "${config.home.homeDirectory}/.config/openrouter/api_key";
+  # Claude's home inside the container: sessions, ~/.claude.json, nix caches.
+  stateDir = "${config.xdg.dataHome}/claude-box";
+  # Mounted at /scratch, for handing Claude files without mounting their directory.
+  scratchDir = "${config.home.homeDirectory}/claude-scratch";
 
   opus = "anthropic/claude-opus-5.5";
   sonnet = "anthropic/claude-sonnet-5.5";
   haiku = "anthropic/claude-haiku-5.5";
 
-  # Relative to $HOME, hidden inside the jail when they exist: credentials,
-  # agent sockets, and browser profiles (cookies are as good as passwords).
-  hidden = [
-    ".config/openrouter"
-    ".ssh"
-    ".gnupg"
-    ".password-store"
-    ".local/share/keyrings"
-    ".config/gh"
-    ".git-credentials"
-    ".netrc"
-    ".docker"
-    ".mozilla"
-    ".librewolf"
-    ".config/net.imput.helium"
-  ];
+  # /etc/claude-code/CLAUDE.md, loaded in every project alongside its own CLAUDE.md.
+  memory = ''
+    # Global rules
 
-  # The Bash sandbox masks these in the launch directory (most of them only
-  # because of CLAUDE_CODE_SUBPROCESS_ENV_SCRUB), and bwrap leaves an empty
-  # file behind as each mount point. They must sit in the project to shadow
-  # it, so they're removed on exit instead.
-  sandboxStubs = [
-    ".git/config.worktree"
-    "bunfig.toml"
-    "package.json"
-    "package-lock.json"
-    "yarn.lock"
-    "pnpm-lock.yaml"
-    ".npmrc"
-    ".yarnrc"
-    ".yarnrc.yml"
-    ".gitmodules"
-    ".env"
-    ".env.local"
-    ".env.development"
-    ".env.development.local"
-    ".env.test"
-    ".env.test.local"
-    ".env.production"
-    ".env.production.local"
-  ];
+    ## Code style
 
-  # Claude runs in auto mode, so the whole process (not just its Bash tool)
-  # is jailed. The root filesystem is read-only, and only the project,
-  # Claude's own state, and the nix eval cache are writable. Builds still go
-  # through nix-daemon, whose socket is reachable through the read-only bind.
-  # bwrap sets no_new_privs, so sudo and other setuid wrappers can't escalate.
-  # The network is shared because the API calls need it.
-  # There's no pid namespace and no private /proc, because they stop Claude's
-  # own nested bwrap sandbox from mounting /proc. The read-only bind of / is
-  # recursive, so /proc is rebound writable: the nested bwrap has to write
-  # its uid_map there.
-  jail = pkgs.writeShellScript "claude-jail" ''
-    set -euo pipefail
+    - Write clean, concise code. Prefer the shortest clear solution and avoid needless abstraction, indirection, or boilerplate.
+    - Don't over-comment. Comment the why (workarounds, non-obvious decisions), never the what.
+    - Prefer a functional style wherever the language allows: pure functions, immutable data, expressions over statements, and `map`/`filter`/`reduce` over loops that mutate state.
+    - Use full, descriptive names with no abbreviations: `number` not `num`, `index` not `idx`, `message` not `msg`, `button` not `btn`.
+    - Reuse before writing. Look for an existing function that does the job, and extend or generalize it instead of adding a near-duplicate.
+    - Match the style of the surrounding code.
 
-    # Read the key before entering the jail, where its directory is hidden.
-    ANTHROPIC_AUTH_TOKEN="$(cat ${keyFile})"
-    export ANTHROPIC_AUTH_TOKEN
+    ## Communication
 
-    # The formatters otherwise only exist on nvim's PATH (extraPackages),
-    # so expose them to Claude's shell too. ripgrep is pinned here because
-    # this Claude Code build has no Grep/Glob tools and searches via Bash.
-    export PATH=${
-      lib.makeBinPath [
-        pkgs.nixfmt-rs
-        pkgs.nixpkgs-fmt
-        pkgs.ripgrep
-      ]
-    }:$PATH
+    - Be brief. Lead with the answer and skip preamble and recaps.
 
-    # Keep Claude's global config in ~/.claude/.claude.json instead of
-    # ~/.claude.json, because home is read-only inside the jail. The copy
-    # carries over onboarding and trust state on the first run.
-    export CLAUDE_CONFIG_DIR="$HOME/.claude"
-    mkdir -p "$CLAUDE_CONFIG_DIR" "$HOME/.cache/nix" "$HOME/.cache/claude-cli-nodejs"
-    if [ ! -e "$CLAUDE_CONFIG_DIR/.claude.json" ] && [ -e "$HOME/.claude.json" ]; then
-      cp "$HOME/.claude.json" "$CLAUDE_CONFIG_DIR/.claude.json"
-    fi
+    ## Bash tools
 
-    args=(
-      --ro-bind / /
-      --bind /proc /proc
-      --dev /dev
-      --tmpfs /tmp
-      --unshare-ipc
-      --die-with-parent
-      --bind "$CLAUDE_CONFIG_DIR" "$CLAUDE_CONFIG_DIR"
-      --bind "$HOME/.cache/nix" "$HOME/.cache/nix"
-      --bind "$HOME/.cache/claude-cli-nodejs" "$HOME/.cache/claude-cli-nodejs"
-      --unsetenv SSH_AUTH_SOCK
-      --unsetenv GPG_AGENT_INFO
-      --unsetenv DBUS_SESSION_BUS_ADDRESS
-      --unsetenv WAYLAND_DISPLAY
-      --unsetenv DISPLAY
-    )
+    Use:
+    - The Read, Edit, and Write tools to read and change files.
+    - `rg` to search file contents, and `rg --files` to find files.
+    - `git log`, `git show`, `git diff`, and `git blame` for history and context.
+    - `jq` to query JSON.
+    - The project's own build, check, test, and format commands.
 
-    # The project (plus any --add-dir directories) is the only writable part
-    # of home. Home itself and / are never made writable.
-    bind_rw() {
-      if [ -d "$1" ] && [ "$1" != "$HOME" ] && [ "$1" != / ]; then
-        args+=(--bind "$1" "$1")
-      fi
-    }
-
-    bind_rw "$(${pkgs.git}/bin/git rev-parse --show-toplevel 2>/dev/null || pwd)"
-
-    # `claude --add-dir DIR...`: like Claude's own parser, the flag takes
-    # every following argument up to the next option.
-    adding=0
-    for a in "$@"; do
-      case "$a" in
-        --add-dir)
-          adding=1
-          continue
-          ;;
-        --add-dir=*) dir="''${a#--add-dir=}" ;;
-        -*)
-          adding=0
-          continue
-          ;;
-        *)
-          [ "$adding" = 1 ] || continue
-          dir="$a"
-          ;;
-      esac
-      if dir="$(realpath -e -- "$dir" 2>/dev/null)"; then
-        bind_rw "$dir"
-      fi
-    done
-
-    for p in ${lib.escapeShellArgs hidden}; do
-      p="$HOME/$p"
-      if [ -d "$p" ]; then
-        args+=(--tmpfs "$p")
-      elif [ -e "$p" ]; then
-        args+=(--ro-bind /dev/null "$p")
-      fi
-    done
-
-    # The session and system buses can start units outside the jail
-    # (systemd-run --user, logind), so hide them along with the other
-    # per-user sockets (wayland, pipewire, agents).
-    for p in "''${XDG_RUNTIME_DIR:-/run/user/$UID}" /run/dbus; do
-      if [ -d "$p" ]; then
-        args+=(--tmpfs "$p")
-      fi
-    done
-
-    # Only empty files are removed, so a real one is never lost.
-    remove_stubs() {
-      for stub in ${lib.escapeShellArgs sandboxStubs}; do
-        if [ -f "$stub" ] && [ ! -s "$stub" ]; then
-          rm -f -- "$stub"
-        fi
-      done
-      # Its .git/commondir stub holds ".", which git reads as the gitdir but
-      # libgit2 doesn't, so nix can no longer open the flake's repository.
-      if [ "$(cat .git/commondir 2>/dev/null)" = . ]; then
-        rm -f .git/commondir
-      fi
-    }
-    trap remove_stubs EXIT
-
-    ${pkgs.bubblewrap}/bin/bwrap "''${args[@]}" -- ${pkgs.claude-code}/bin/claude "$@"
+    Don't use:
+    - `cat`, `head`, `tail`, or `less` to read files. Use Read.
+    - `sed`, `awk`, `perl -i`, `echo`/`printf` redirects, or heredocs to create or edit files. Use Edit or Write.
+    - `grep`, `find`, or `ls -R`. Use `rg`.
+    - `sudo`, or global installers (`npm install -g`, `pip install`, `cargo install`, `go install`, `nix profile`, `nix-env`).
+    - `curl` or `wget` piped into a shell, or hand-downloaded binaries.
+    - Destructive commands: `rm -rf`, `git reset --hard`, `git clean`, `git checkout --`, `git push --force`, or `chmod`/`chown` fixes.
+    - `git commit` or `git push` unless asked.
   '';
-in
-{
-  programs.claude-code = {
-    enable = true;
 
-    # Wrap claude so the key is read from the file at launch time.
-    # setup apiey file:
-    # mkdir -p ~/.config/openrouter
-    # printf '%s' 'sk-or-v1-...' > ~/.config/openrouter/api_key
-    # chmod 600 ~/.config/openrouter/api_key
-    package = pkgs.symlinkJoin {
-      name = "claude-code-openrouter";
-      paths = [ pkgs.claude-code ];
-      postBuild = ''
-        rm $out/bin/claude
-        ln -s ${jail} $out/bin/claude
-      '';
+  # /etc/claude-code/managed-settings.json, which outranks any settings file
+  # Claude could write itself.
+  settings = {
+    model = opus;
+
+    # No apiKeyHelper: auth comes from ANTHROPIC_AUTH_TOKEN via the launcher.
+    env = {
+      ANTHROPIC_BASE_URL = "https://openrouter.ai/api";
+      # Must be explicitly empty so Claude Code doesn't try Anthropic's own auth.
+      ANTHROPIC_API_KEY = "";
+      ANTHROPIC_MODEL = opus;
+      ANTHROPIC_DEFAULT_OPUS_MODEL = opus;
+      ANTHROPIC_DEFAULT_SONNET_MODEL = sonnet;
+      ANTHROPIC_DEFAULT_HAIKU_MODEL = haiku;
+      ANTHROPIC_SMALL_FAST_MODEL = haiku;
+      # Keep the token out of the environment of Bash, hook, and MCP
+      # subprocesses; only the Claude process itself needs it.
+      CLAUDE_CODE_SUBPROCESS_ENV_SCRUB = "1";
     };
 
-    # ~/.claude/CLAUDE.md, loaded in every project alongside its own CLAUDE.md.
-    memory.text = ''
-      # Global rules
+    permissions = {
+      # Anything not allowed or denied below goes to the auto-mode
+      # classifier. The container is the hard boundary.
+      defaultMode = "auto";
+      disableBypassPermissionsMode = "disable";
+      additionalDirectories = [ "/scratch" ];
+      allow = [
+        "Read"
+        "Write(./**)"
+        "Edit(./**)"
+        "Write(//scratch/**)"
+        "Edit(//scratch/**)"
+        "Glob"
+        "Grep"
+        "WebSearch"
 
-      ## Code style
+        # Evaluate, build, format, and inspect.
+        "Bash(nix:*)"
+        "Bash(nix-instantiate:*)"
+        "Bash(nix-prefetch-url:*)"
+        "Bash(nix-hash:*)"
+        "Bash(nix-store:*)"
+        "Bash(nixfmt:*)"
+        "Bash(nixpkgs-fmt:*)"
 
-      - Write clean, concise code. Prefer the shortest clear solution and avoid needless abstraction, indirection, or boilerplate.
-      - Don't over-comment. Comment the why (workarounds, non-obvious decisions), never the what.
-      - Prefer a functional style wherever the language allows: pure functions, immutable data, expressions over statements, and `map`/`filter`/`reduce` over loops that mutate state.
-      - Use full, descriptive names with no abbreviations: `number` not `num`, `index` not `idx`, `message` not `msg`, `button` not `btn`.
-      - Reuse before writing. Look for an existing function that does the job, and extend or generalize it instead of adding a near-duplicate.
-      - Match the style of the surrounding code.
+        "Bash(cat:*)"
+        "Bash(head:*)"
+        "Bash(tail:*)"
+        "Bash(ls:*)"
+        "Bash(wc:*)"
+        "Bash(grep:*)"
+        "Bash(rg:*)"
+        "Bash(fd:*)"
+        "Bash(jq:*)"
 
-      ## Communication
+        # Read-only git, for the history behind a file.
+        "Bash(git log:*)"
+        "Bash(git show:*)"
+        "Bash(git diff:*)"
+        "Bash(git blame:*)"
+        "Bash(git status:*)"
+        "Bash(git shortlog:*)"
+        "Bash(git rev-parse:*)"
+        "Bash(git ls-files:*)"
+        "Bash(git grep:*)"
+      ];
+      # Deny wins over allow and over the auto-mode classifier.
+      deny = [
+        # The host nix-daemon honors garbage collection from any user, so
+        # these are only blocked here.
+        "Bash(nix store gc:*)"
+        "Bash(nix store delete:*)"
+        "Bash(nix store optimise:*)"
+        "Bash(nix-collect-garbage:*)"
+        "Bash(nix-store --gc:*)"
+        "Bash(nix-store --delete:*)"
+        "Bash(nix-store --optimise:*)"
 
-      - Be brief. Lead with the answer and skip preamble and recaps.
+        # Installing or running packages from outside the project.
+        "Bash(nix profile:*)"
+        "Bash(nix-env:*)"
+        "Bash(nix run:*)"
+        "Bash(nix shell:*)"
+        "Bash(nix-shell:*)"
+        "Bash(nix develop:*)"
+        "Bash(nix fmt:*)"
 
-      ## Bash tools
+        # Activation and lock bumps are the user's job. Activation can't work
+        # in the container anyway (no root, systemd, or system profile).
+        "Bash(nixos-rebuild:*)"
+        "Bash(home-manager:*)"
+        "Bash(nix flake update:*)"
+        "Bash(nix flake lock:*)"
 
-      Use:
-      - The Read, Edit, and Write tools to read and change files.
-      - `rg` to search file contents, and `rg --files` to find files.
-      - `git log`, `git show`, `git diff`, and `git blame` for history and context.
-      - `jq` to query JSON.
-      - The project's own build, check, test, and format commands.
+        # History rewrites, discarding uncommitted work, and anything
+        # that leaves the machine. Commits are the user's job too.
+        "Bash(git commit:*)"
+        "Bash(git push:*)"
+        "Bash(git reset:*)"
+        "Bash(git clean:*)"
+        "Bash(git checkout:*)"
+        "Bash(git restore:*)"
+        "Bash(git switch:*)"
+        "Bash(git rebase:*)"
+        "Bash(git merge:*)"
+        "Bash(git cherry-pick:*)"
+        "Bash(git revert:*)"
+        "Bash(git stash:*)"
+        "Bash(git config:*)"
+        "Bash(git remote:*)"
+        "Bash(git gc:*)"
+        "Bash(git filter-branch:*)"
+        "Bash(git update-ref:*)"
 
-      Don't use:
-      - `cat`, `head`, `tail`, or `less` to read files. Use Read.
-      - `sed`, `awk`, `perl -i`, `echo`/`printf` redirects, or heredocs to create or edit files. Use Edit or Write.
-      - `grep`, `find`, or `ls -R`. Use `rg`.
-      - `sudo`, or global installers (`npm install -g`, `pip install`, `cargo install`, `go install`, `nix profile`, `nix-env`).
-      - `curl` or `wget` piped into a shell, or hand-downloaded binaries.
-      - Destructive commands: `rm -rf`, `git reset --hard`, `git clean`, `git checkout --`, `git push --force`, or `chmod`/`chown` fixes.
-      - `git commit` or `git push` unless asked.
-    '';
+        "WebFetch"
+        "Agent"
+        "Task"
+      ];
+    };
 
-    settings = {
-      skipDangerousModePermissionPrompt = false;
-      model = opus;
+    # bwrap can't nest inside the container, which is the sandbox instead.
+    sandbox.enabled = false;
+    enableAllProjectMcpServers = false;
+    disableAllHooks = true;
 
-      # No apiKeyHelper: auth comes from ANTHROPIC_AUTH_TOKEN via the wrapper.
-      env = {
-        ANTHROPIC_BASE_URL = "https://openrouter.ai/api";
-        # Must be explicitly empty so Claude Code doesn't try Anthropic's own auth.
-        ANTHROPIC_API_KEY = "";
-        ANTHROPIC_MODEL = opus;
-        ANTHROPIC_DEFAULT_OPUS_MODEL = opus;
-        ANTHROPIC_DEFAULT_SONNET_MODEL = sonnet;
-        ANTHROPIC_DEFAULT_HAIKU_MODEL = haiku;
-        ANTHROPIC_SMALL_FAST_MODEL = haiku;
-        # Keep the token out of the environment of Bash, hook, and MCP
-        # subprocesses; only the Claude process itself needs it.
-        CLAUDE_CODE_SUBPROCESS_ENV_SCRUB = "1";
-      };
+    statusLine = {
+      command = "input=$(cat); echo \"[$(echo \"$input\" | jq -r '.model.display_name')] 📁 $(basename \"$(echo \"$input\" | jq -r '.workspace.current_dir')\")\"";
+      padding = 0;
+      type = "command";
+    };
+    theme = "dark";
+  };
 
-      permissions = {
-        # Anything not allowed or denied below goes to the auto-mode
-        # classifier. The jail in the wrapper is the hard boundary.
-        defaultMode = "auto";
-        disableBypassPermissionsMode = "disable";
-        additionalDirectories = [ ];
-        allow = [
-          "Read(./**)"
-          "Write(./**)"
-          "Edit(./**)"
-          "Glob"
-          "Grep"
-          "WebSearch"
+  # No package managers, curl, or wget: nix is the only way in.
+  tools = with pkgs; [
+    claude-code
+    osConfig.nix.package
+    nixfmt-rs
+    nixpkgs-fmt
+    git
+    bashInteractive
+    coreutils
+    findutils
+    diffutils
+    gnugrep
+    gnused
+    gawk
+    less
+    procps
+    which
+    ripgrep
+    fd
+    jq
+  ];
 
-          # Evaluate, build, format, and inspect.
-          "Bash(nix flake check:*)"
-          "Bash(nix flake show:*)"
-          "Bash(nix flake metadata:*)"
-          "Bash(nix flake prefetch:*)"
-          "Bash(nix eval:*)"
-          "Bash(nix build:*)"
-          "Bash(nix search:*)"
-          "Bash(nix path-info:*)"
-          "Bash(nix why-depends:*)"
-          "Bash(nix derivation show:*)"
-          "Bash(nix log:*)"
-          "Bash(nix hash:*)"
-          "Bash(nix store prefetch-file:*)"
-          "Bash(nix-prefetch-url:*)"
-          "Bash(nix-instantiate:*)"
-          "Bash(nixos-option:*)"
-          "Bash(nixfmt:*)"
-          "Bash(nixpkgs-fmt:*)"
-
-          # Read-only inspection. These stay inside the bash sandbox (writes
-          # limited to the repo, network proxied), which is the backstop for
-          # exec-style flags such as `rg --pre`.
-          "Bash(cat:*)"
-          "Bash(head:*)"
-          "Bash(tail:*)"
-          "Bash(ls:*)"
-          "Bash(wc:*)"
-          "Bash(grep:*)"
-          "Bash(rg:*)"
-
-          # Read-only git, for the history behind a file.
-          "Bash(git log:*)"
-          "Bash(git show:*)"
-          "Bash(git diff:*)"
-          "Bash(git blame:*)"
-          "Bash(git status:*)"
-          "Bash(git shortlog:*)"
-          "Bash(git rev-parse:*)"
-          "Bash(git ls-files:*)"
-          "Bash(git grep:*)"
-        ];
-        # Deny wins over allow and over the auto-mode classifier. Activation
-        # and imperative state changes are the user's job.
-        deny = [
-          "Bash(nixos-rebuild:*)"
-          "Bash(home-manager:*)"
-          "Bash(sudo:*)"
-          "Bash(nix flake update:*)"
-          "Bash(nix flake lock:*)"
-          "Bash(nix-env:*)"
-          "Bash(nix profile:*)"
-          "Bash(nix run:*)"
-          "Bash(nix shell:*)"
-          "Bash(nix develop:*)"
-          "Bash(nix fmt:*)"
-          "Bash(nix-shell:*)"
-          "Bash(nix store delete:*)"
-          "Bash(nix store gc:*)"
-          "Bash(nix-collect-garbage:*)"
-          # nix runs outside the bash sandbox (see excludedCommands), so block
-          # the flags that let evaluation read arbitrary files, the
-          # environment, or run programs (builtins.exec).
-          "Bash(nix*--impure*)"
-          "Bash(nix*--option*)"
-          "Bash(nix*unsafe*)"
-
-          # History rewrites, discarding uncommitted work, and anything
-          # that leaves the machine. Commits are the user's job too.
-          "Bash(git commit:*)"
-          "Bash(git push:*)"
-          "Bash(git reset:*)"
-          "Bash(git clean:*)"
-          "Bash(git checkout:*)"
-          "Bash(git restore:*)"
-          "Bash(git switch:*)"
-          "Bash(git rebase:*)"
-          "Bash(git merge:*)"
-          "Bash(git cherry-pick:*)"
-          "Bash(git revert:*)"
-          "Bash(git stash:*)"
-          "Bash(git config:*)"
-          "Bash(git remote:*)"
-          "Bash(git gc:*)"
-          "Bash(git filter-branch:*)"
-          "Bash(git update-ref:*)"
-
-          # cat/rg can read outside the repo, so keep the API key out of reach.
-          "Read(~/.config/openrouter/**)"
-          "WebFetch"
-          "Agent"
-          "Task"
-        ];
-      };
-
-      sandbox = {
-        enabled = true;
-        autoAllowBashIfSandboxed = false;
-        allowUnsandboxedCommands = false;
-        # The sandbox allows reads almost everywhere by default.
-        filesystem.denyRead = [ (builtins.dirOf keyFile) ];
-        # The sandbox blocks the nix-daemon socket and masks .gitmodules, so
-        # nix can't evaluate or build inside it. Outside it, nix is still
-        # confined by the jail, builds still run in nix's own sandbox, and
-        # the deny list above blocks impure evaluation. nix-instantiate and
-        # nixos-option evaluate impurely by default, so they stay sandboxed
-        # and may fail where they need the daemon; nix eval covers both.
-        excludedCommands = [
-          "nix"
-          "nix-prefetch-url"
-        ];
-      };
-
-      enableAllProjectMcpServers = false;
-      disableAllHooks = true;
-
-      statusLine = {
-        command = "input=$(cat); echo \"[$(echo \"$input\" | jq -r '.model.display_name')] 📁 $(basename \"$(echo \"$input\" | jq -r '.workspace.current_dir')\")\"";
-        padding = 0;
-        type = "command";
-      };
-      theme = "dark";
+  # The host store and nix-daemon socket are bind-mounted in, so the image
+  # carries no store paths of its own. nix reaches the daemon as the
+  # untrusted host user, and the root filesystem is mounted read-only.
+  image = pkgs.dockerTools.streamLayeredImage {
+    name = "claude-box";
+    includeStorePaths = false;
+    contents = with pkgs.dockerTools; [
+      fakeNss
+      usrBinEnv
+      binSh
+      caCertificates
+      (pkgs.writeTextDir "etc/claude-code/managed-settings.json" (builtins.toJSON settings))
+      (pkgs.writeTextDir "etc/claude-code/CLAUDE.md" memory)
+    ];
+    extraCommands = "mkdir -p tmp root scratch";
+    config = {
+      Cmd = [
+        "${pkgs.coreutils}/bin/sleep"
+        "infinity"
+      ];
+      Env = [
+        "PATH=${lib.makeBinPath tools}"
+        "HOME=/root"
+        "LANG=C.UTF-8"
+        "NIX_REMOTE=daemon"
+        "NIX_CONFIG=experimental-features = nix-command flakes"
+        "SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
+        "NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
+        "TERMINFO_DIRS=${pkgs.ncurses}/share/terminfo"
+      ];
     };
   };
+
+  # claude-box [claude ARGS... | shell | stop]
+  # One container per project (the git toplevel of the current directory),
+  # mounted at its host path. Every session started there joins it.
+  box = pkgs.writeShellApplication {
+    name = "claude-box";
+    runtimeInputs = [
+      pkgs.git
+      pkgs.coreutils
+    ];
+    text = ''
+      project="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+      if [ "$project" = "$HOME" ] || [ "$project" = / ]; then
+        echo "claude-box: refusing to mount $project" >&2
+        exit 1
+      fi
+      name="claude-box-$(printf %s "$project" | sha256sum | cut -c1-12)"
+      image=${image.imageName}:${image.imageTag}
+      command="''${1:-claude}"
+      shift || true
+
+      if [ "$command" = stop ]; then
+        exec docker stop "$name"
+      fi
+
+      if [ -z "$(docker ps -q --filter "name=^$name$")" ]; then
+        docker image inspect "$image" >/dev/null 2>&1 || ${image} | docker load
+        mkdir -p ${stateDir} ${scratchDir}
+        docker run -d --rm --init --name "$name" \
+          --read-only --tmpfs /tmp \
+          --cap-drop ALL --security-opt no-new-privileges \
+          -v /nix/store:/nix/store:ro \
+          -v /nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket:ro \
+          -v ${stateDir}:/root \
+          -v ${scratchDir}:/scratch \
+          -v "$project:$project" \
+          "$image" >/dev/null
+      fi
+
+      tty=()
+      if [ -t 0 ]; then tty=(-t); fi
+      case "$command" in
+        shell) exec docker exec -i "''${tty[@]}" -w "$PWD" "$name" bash ;;
+        claude)
+          # Passed by name so the value never shows up in ps.
+          ANTHROPIC_AUTH_TOKEN="$(< ${keyFile})"
+          export ANTHROPIC_AUTH_TOKEN
+          exec docker exec -i "''${tty[@]}" -e ANTHROPIC_AUTH_TOKEN -e COLORTERM -w "$PWD" "$name" claude "$@"
+          ;;
+        *)
+          echo "usage: claude-box [claude ARGS... | shell | stop]" >&2
+          exit 1
+          ;;
+      esac
+    '';
+  };
+in
+{
+  home.packages = [
+    box
+    (pkgs.writeShellScriptBin "claude" ''exec ${box}/bin/claude-box claude "$@"'')
+  ];
 }
