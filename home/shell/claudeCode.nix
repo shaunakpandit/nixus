@@ -15,42 +15,6 @@ in
 {
   programs.claude-code = {
     enable = true;
-    # /etc/claude-code/CLAUDE.md, loaded in every project alongside its own CLAUDE.md.
-    memory = ''
-      # Global rules
-
-      ## Code style
-
-      - Write clean, concise code. Prefer the shortest clear solution and avoid needless abstraction, indirection, or boilerplate.
-      - Don't over-comment. Comment the why (workarounds, non-obvious decisions), never the what.
-      - Prefer a functional style wherever the language allows: pure functions, immutable data, expressions over statements, and `map`/`filter`/`reduce` over loops that mutate state.
-      - Use full, descriptive names with no abbreviations: `number` not `num`, `index` not `idx`, `message` not `msg`, `button` not `btn`.
-      - Reuse before writing. Look for an existing function that does the job, and extend or generalize it instead of adding a near-duplicate.
-      - Match the style of the surrounding code.
-
-      ## Communication
-
-      - Be brief. Lead with the answer and skip preamble and recaps.
-
-      ## Bash tools
-
-      Use:
-      - The Read, Edit, and Write tools to read and change files.
-      - `rg` to search file contents, and `rg --files` to find files.
-      - `git log`, `git show`, `git diff`, and `git blame` for history and context.
-      - `jq` to query JSON.
-      - The project's own build, check, test, and format commands.
-
-      Don't use:
-      - `cat`, `head`, `tail`, or `less` to read files. Use Read.
-      - `sed`, `awk`, `perl -i`, `echo`/`printf` redirects, or heredocs to create or edit files. Use Edit or Write.
-      - `grep`, `find`, or `ls -R`. Use `rg`.
-      - `sudo`, or global installers (`npm install -g`, `pip install`, `cargo install`, `go install`, `nix profile`, `nix-env`).
-      - `curl` or `wget` piped into a shell, or hand-downloaded binaries.
-      - Destructive commands: `rm -rf`, `git reset --hard`, `git clean`, `git checkout --`, `git push --force`, or `chmod`/`chown` fixes.
-      - `git commit` or `git push` unless asked.
-    '';
-
     # Wrap claude so the key is read from the file at launch time.
     # setup apiey file:
     # mkdir -p ~/.config/openrouter
