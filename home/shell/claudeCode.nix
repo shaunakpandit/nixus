@@ -15,6 +15,41 @@ in
 {
   programs.claude-code = {
     enable = true;
+    # /etc/claude-code/CLAUDE.md, loaded in every project alongside its own CLAUDE.md.
+    memory = ''
+      # Global rules
+
+      ## Code style
+
+      - Write clean, concise code. Prefer the shortest clear solution and avoid needless abstraction, indirection, or boilerplate.
+      - Don't over-comment. Comment the why (workarounds, non-obvious decisions), never the what.
+      - Prefer a functional style wherever the language allows: pure functions, immutable data, expressions over statements, and `map`/`filter`/`reduce` over loops that mutate state.
+      - Use full, descriptive names with no abbreviations: `number` not `num`, `index` not `idx`, `message` not `msg`, `button` not `btn`.
+      - Reuse before writing. Look for an existing function that does the job, and extend or generalize it instead of adding a near-duplicate.
+      - Match the style of the surrounding code.
+
+      ## Communication
+
+      - Be brief. Lead with the answer and skip preamble and recaps.
+
+      ## Bash tools
+
+      Use:
+      - The Read, Edit, and Write tools to read and change files.
+      - `rg` to search file contents, and `rg --files` to find files.
+      - `git log`, `git show`, `git diff`, and `git blame` for history and context.
+      - `jq` to query JSON.
+      - The project's own build, check, test, and format commands.
+
+      Don't use:
+      - `cat`, `head`, `tail`, or `less` to read files. Use Read.
+      - `sed`, `awk`, `perl -i`, `echo`/`printf` redirects, or heredocs to create or edit files. Use Edit or Write.
+      - `grep`, `find`, or `ls -R`. Use `rg`.
+      - `sudo`, or global installers (`npm install -g`, `pip install`, `cargo install`, `go install`, `nix profile`, `nix-env`).
+      - `curl` or `wget` piped into a shell, or hand-downloaded binaries.
+      - Destructive commands: `rm -rf`, `git reset --hard`, `git clean`, `git checkout --`, `git push --force`, or `chmod`/`chown` fixes.
+      - `git commit` or `git push` unless asked.
+    '';
 
     # Wrap claude so the key is read from the file at launch time.
     # setup apiey file:
@@ -86,28 +121,83 @@ in
           "Bash(nixos-option:*)"
           "Bash(nixfmt:*)"
           "Bash(nixpkgs-fmt:*)"
+
+          "Bash(cat:*)"
+          "Bash(head:*)"
+          "Bash(tail:*)"
+          "Bash(ls:*)"
+          "Bash(wc:*)"
+          "Bash(grep:*)"
+          "Bash(rg:*)"
+          "Bash(fd:*)"
+          "Bash(jq:*)"
+
+          # Read-only git, for the history behind a file.
+          "Bash(git log:*)"
+          "Bash(git show:*)"
+          "Bash(git diff:*)"
+          "Bash(git blame:*)"
+          "Bash(git status:*)"
+          "Bash(git shortlog:*)"
+          "Bash(git rev-parse:*)"
+          "Bash(git ls-files:*)"
+          "Bash(git grep:*)"
         ];
         # Not reachable via the allow list anyway; listed so they stay blocked
         # even if defaultMode is relaxed. Activation and imperative state
         # changes are the user's job.
         deny = [
-          "Bash(nixos-rebuild:*)"
-          "Bash(home-manager:*)"
-          "Bash(sudo:*)"
-          "Bash(nix flake update:*)"
-          "Bash(nix flake lock:*)"
-          "Bash(nix-env:*)"
+          # The host nix-daemon honors garbage collection from any user, so
+          # these are only blocked here.
+          "Bash(nix store gc:*)"
+          "Bash(nix store delete:*)"
+          "Bash(nix store optimise:*)"
+          "Bash(nix-collect-garbage:*)"
+          "Bash(nix-store --gc:*)"
+          "Bash(nix-store --delete:*)"
+          "Bash(nix-store --optimise:*)"
+
+          # Installing or running packages from outside the project.
           "Bash(nix profile:*)"
+          "Bash(nix-env:*)"
           "Bash(nix run:*)"
           "Bash(nix shell:*)"
-          "Bash(nix develop:*)"
           "Bash(nix-shell:*)"
-          "Bash(nix store delete:*)"
-          "Bash(nix store gc:*)"
-          "Bash(nix-collect-garbage:*)"
+          "Bash(nix develop:*)"
+          "Bash(nix fmt:*)"
+
+          # Activation and lock bumps are the user's job. Activation can't work
+          # in the container anyway (no root, systemd, or system profile).
+          "Bash(nixos-rebuild:*)"
+          "Bash(home-manager:*)"
+          "Bash(nix flake update:*)"
+          "Bash(nix flake lock:*)"
+
+          # History rewrites, discarding uncommitted work, and anything
+          # that leaves the machine. Commits are the user's job too.
+          "Bash(git commit:*)"
+          "Bash(git push:*)"
+          "Bash(git reset:*)"
+          "Bash(git clean:*)"
+          "Bash(git checkout:*)"
+          "Bash(git restore:*)"
+          "Bash(git switch:*)"
+          "Bash(git rebase:*)"
+          "Bash(git merge:*)"
+          "Bash(git cherry-pick:*)"
+          "Bash(git revert:*)"
+          "Bash(git stash:*)"
+          "Bash(git config:*)"
+          "Bash(git remote:*)"
+          "Bash(git gc:*)"
+          "Bash(git filter-branch:*)"
+          "Bash(git update-ref:*)"
+
           "WebFetch"
           "Agent"
           "Task"
+
+          "Bash(sudo:*)"
         ];
       };
 

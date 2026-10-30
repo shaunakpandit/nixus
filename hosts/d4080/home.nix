@@ -13,7 +13,7 @@ in
     ../../home/mango
     ../../home/ghostty.nix
     ../../home/discord.nix
-    ../../home/firefox.nix
+    ../../home/librewolf.nix
     ../../home/helium.nix
     ../../home/waybar.nix
     ../../home/fuzzel.nix
