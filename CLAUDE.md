@@ -28,7 +28,7 @@ This is the most important rule in this repo. **Every change must be expressed i
 
 ## Environment constraints for Claude
 
-- The Claude Code config in `home/shell/claudeCode.nix` allows a fixed set of read-only, eval, and build commands: `nix flake check/show/metadata/prefetch`, `nix eval`, `nix build`, `nix search`, `nix path-info`, `nix why-depends`, `nix derivation show`, `nix log`, `nix hash`, `nix store prefetch-file`, `nix-prefetch-url`, `nix-instantiate`, `nixos-option`, `nixfmt`, and `nixpkgs-fmt`. Every other shell command is refused, including `nixos-rebuild`, `home-manager`, `sudo`, `nix flake update/lock`, `nix run/shell/develop`, and `git`. `WebFetch`, `Agent`, and `Task` are denied.
+- The Claude Code config in `home/shell/claudeCode.nix` allows a fixed set of read-only, eval, and build commands: `nix flake check/show/metadata/prefetch`, `nix eval`, `nix build`, `nix search`, `nix path-info`, `nix why-depends`, `nix derivation show`, `nix log`, `nix hash`, `nix store prefetch-file`, `nix-prefetch-url`, `nix-instantiate`, `nixos-option`, `nixfmt`, and `nixpkgs-fmt`. Any other command prompts the user for approval, except a deny list that is always refused: `nixos-rebuild`, `home-manager`, `sudo`, `nix flake update/lock`, `nix run/shell/develop`, garbage collection, and git commands that change state (only read-only git is allowed). `WebFetch`, `Agent`, and `Task` are denied.
 - Use these commands to verify your edits:
   - Format edited files with `nixfmt <file>`.
   - Check that every host evaluates with `nix flake check`, or check a single host cheaply with `nix eval .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath`.

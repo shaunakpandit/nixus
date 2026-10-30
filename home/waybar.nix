@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   inputs,
   ...
 }:
@@ -20,92 +21,95 @@ in
   programs.waybar = {
     enable = true;
     package = inputs.waybar-git.packages.${pkgs.system}.default;
-    settings = [
-      {
-        position = "bottom";
-        height = 24;
+    settings.mainBar = {
+      position = "bottom";
+      height = 24;
 
-        modules-left = [
-          "mango/workspaces"
-          "mango/layout"
-          "mango/window"
-        ];
+      modules-left = [
+        "mango/workspaces"
+        "mango/layout"
+        "mango/window"
+      ];
 
-        modules-center = [
-          "clock"
-          "cpu"
-          "memory"
-        ];
+      modules-center = [
+        "clock"
+        "cpu"
+        "memory"
+      ];
 
-        modules-right = [
+      # Split so modules from other files (e.g. nightlight.nix) land after backlight.
+      modules-right = lib.mkMerge [
+        (lib.mkBefore [
           "network"
           "pulseaudio"
           "backlight"
+        ])
+        (lib.mkAfter [
           "disk"
           "temperature"
           "battery"
-        ];
+        ])
+      ];
 
-        # "mango/workspaces" = {
-        #   "format" = "{icon}";
-        #   "format-icons" = {
-        #     "1" = "一";
-        #     "2" = "二";
-        #     "active" = "";
-        #     "default" = "";
-        #     "urgent" = "";
-        #     "empty" = "";
-        #   };
-        #   "on-click" = "activate";
-        #   "on-click-right" = "toggle";
-        #   "overview-label" = "";
-        # };
+      # "mango/workspaces" = {
+      #   "format" = "{icon}";
+      #   "format-icons" = {
+      #     "1" = "一";
+      #     "2" = "二";
+      #     "active" = "";
+      #     "default" = "";
+      #     "urgent" = "";
+      #     "empty" = "";
+      #   };
+      #   "on-click" = "activate";
+      #   "on-click-right" = "toggle";
+      #   "overview-label" = "";
+      # };
 
-        "mango/window" = {
-          "format" = " {title}";
-          "rewrite" = {
-            ".*" = "";
-            "(.*) - Librewolf " = "🌎 $1";
-            "(.*) - zsh" = "> [$1]";
-          };
-          "icon" = true;
-          "icon-size" = 20;
+      "mango/window" = {
+        "format" = " {title}";
+        "rewrite" = {
+          ".*" = "";
+          "(.*) - Librewolf " = "🌎 $1";
+          "(.*) - zsh" = "> [$1]";
         };
+        "icon" = true;
+        "icon-size" = 20;
+      };
 
-        "mango/workspaces" = {
-          "format" = "{value}";
-          "hide-empty" = false;
-          "on-click" = "activate";
-          "on-click-right" = "toggle";
-          "overview-label" = "OVERVIEW";
-        };
+      "mango/workspaces" = {
+        "format" = "{value}";
+        "hide-empty" = false;
+        "on-click" = "activate";
+        "on-click-right" = "toggle";
+        "overview-label" = "OVERVIEW";
+      };
 
-        "clock" = {
-          format = "{:%Y-%m-%d %H:%M}";
-        };
+      "clock" = {
+        format = "{:%Y-%m-%d %H:%M}";
+      };
 
-        "cpu" = {
-          interval = 1;
-          format = "{usage}% ";
-        };
+      "cpu" = {
+        interval = 1;
+        format = "{usage}% ";
+      };
 
-        "memory" = {
-          interval = 1;
-          max-length = 10;
-          format = "{used:.2f}GB ";
-        };
+      "memory" = {
+        interval = 1;
+        max-length = 10;
+        format = "{used:.2f}GB ";
+      };
 
-        "network" = {
-          interval = 1;
-          format = "{essid}   {bandwidthTotalBytes} {ipaddr}";
-          # format-wifi = "{essid} ({signalStrength}%) ";
-        };
+      "network" = {
+        interval = 1;
+        format = "{essid}   {bandwidthTotalBytes} {ipaddr}";
+        # format-wifi = "{essid} ({signalStrength}%) ";
+      };
 
-        "disk" = {
-          format = "{used}";
-        };
-      }
-    ];
+      "disk" = {
+        format = "{used}";
+      };
+    };
     style = ''
       * {
         font-size: 14px;

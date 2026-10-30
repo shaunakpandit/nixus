@@ -38,6 +38,31 @@ in
       '';
     };
 
+    # ~/.claude/CLAUDE.md, loaded in every project alongside any project CLAUDE.md.
+    memory.text = ''
+      # Global rules
+
+      ## Code style
+
+      - Write clean, concise code. Prefer the shortest clear solution and avoid needless abstraction, indirection, or boilerplate.
+      - Don't over-comment. Comment the why (workarounds, non-obvious decisions), never the what.
+      - Prefer a functional style wherever the language allows: pure functions, immutable data, expressions over statements, and `map`/`filter`/`reduce` over loops that mutate state.
+      - Use full, descriptive names with no abbreviations: `number` not `num`, `index` not `idx`, `message` not `msg`, `button` not `btn`.
+      - Reuse before writing. Look for an existing function that does the job, and extend or generalize it instead of adding a near-duplicate.
+      - Match the style of the surrounding code.
+
+      ## Communication
+
+      - Be brief. Lead with the answer and skip preamble and recaps.
+
+      ## Bash tool
+
+      - Never run destructive commands: no `rm`, `shred`, `dd`, `truncate`, or overwriting files with redirection.
+      - Never run git commands that change commit history, push, or overwrite branch history: no `commit --amend`, `rebase`, `reset`, `push` (forced or not), `branch -D`/`-f`, or `filter-branch`.
+      - Never change file ownership or permissions with `chmod`, `chown`, or `chgrp`.
+      - Reading files, searching (`grep`, `rg`, `fd`, `fzf --filter`), and creating files or directories are fine.
+    '';
+
     settings = {
       skipDangerousModePermissionPrompt = false;
       model = opus;
@@ -55,7 +80,7 @@ in
       };
 
       permissions = {
-        defaultMode = "dontAsk";
+        defaultMode = "default";
         additionalDirectories = [ ];
         allow = [
           "Read(./**)"
@@ -65,8 +90,8 @@ in
           "Grep"
           "WebSearch"
 
-          # Evaluate, build, format, and inspect. With defaultMode = "dontAsk",
-          # any shell command not listed here is refused.
+          # Evaluate, build, format, and inspect. Any shell command not listed
+          # here prompts for approval.
           "Bash(nix flake check:*)"
           "Bash(nix flake show:*)"
           "Bash(nix flake metadata:*)"
@@ -95,6 +120,9 @@ in
           "Bash(rg:*)"
           "Bash(fd:*)"
           "Bash(jq:*)"
+          "Bash(fzf:*)"
+          "Bash(mkdir:*)"
+          "Bash(touch:*)"
 
           # Read-only git, for the history behind a file.
           "Bash(git log:*)"
@@ -107,8 +135,7 @@ in
           "Bash(git ls-files:*)"
           "Bash(git grep:*)"
         ];
-        # Not reachable via the allow list anyway; listed so they stay blocked
-        # even if defaultMode is relaxed. Activation and imperative state
+        # Refused outright, never prompted. Activation and imperative state
         # changes are the user's job.
         deny = [
           # The host nix-daemon honors garbage collection from any user, so
@@ -156,6 +183,21 @@ in
           "Bash(git gc:*)"
           "Bash(git filter-branch:*)"
           "Bash(git update-ref:*)"
+          "Bash(git branch -D:*)"
+          "Bash(git branch -f:*)"
+          "Bash(git tag -d:*)"
+          "Bash(git reflog expire:*)"
+          "Bash(git reflog delete:*)"
+
+          # Destructive file operations and permission changes.
+          "Bash(rm:*)"
+          "Bash(rmdir:*)"
+          "Bash(shred:*)"
+          "Bash(dd:*)"
+          "Bash(truncate:*)"
+          "Bash(chmod:*)"
+          "Bash(chown:*)"
+          "Bash(chgrp:*)"
 
           "WebFetch"
           "Agent"
