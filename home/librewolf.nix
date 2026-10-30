@@ -291,6 +291,18 @@ in
     };
   };
 
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = lib.genAttrs [
+      "text/html"
+      "application/xhtml+xml"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+      "x-scheme-handler/about"
+      "x-scheme-handler/unknown"
+    ] (_: "librewolf.desktop");
+  };
+
   stylix.targets.librewolf = {
     enable = true;
     colorTheme.enable = true;
