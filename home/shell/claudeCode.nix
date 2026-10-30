@@ -29,6 +29,30 @@ let
     ".config/net.imput.helium"
   ];
 
+  # CLAUDE_CODE_SUBPROCESS_ENV_SCRUB makes the Bash sandbox mask these in the
+  # launch directory, and bwrap leaves an empty file behind as each mount
+  # point. They must sit in the project to shadow it, so they're removed on
+  # exit instead.
+  scrubStubs = [
+    "bunfig.toml"
+    "package.json"
+    "package-lock.json"
+    "yarn.lock"
+    "pnpm-lock.yaml"
+    ".npmrc"
+    ".yarnrc"
+    ".yarnrc.yml"
+    ".gitmodules"
+    ".env"
+    ".env.local"
+    ".env.development"
+    ".env.development.local"
+    ".env.test"
+    ".env.test.local"
+    ".env.production"
+    ".env.production.local"
+  ];
+
   # Claude runs in auto mode, so the whole process (not just its Bash tool)
   # is jailed. The root filesystem is read-only, and only the project,
   # Claude's own state, and the nix eval cache are writable. Builds still go
@@ -36,7 +60,9 @@ let
   # bwrap sets no_new_privs, so sudo and other setuid wrappers can't escalate.
   # The network is shared because the API calls need it.
   # There's no pid namespace and no private /proc, because they stop Claude's
-  # own nested bwrap sandbox from mounting /proc.
+  # own nested bwrap sandbox from mounting /proc. The read-only bind of / is
+  # recursive, so /proc is rebound writable: the nested bwrap has to write
+  # its uid_map there.
   jail = pkgs.writeShellScript "claude-jail" ''
     set -euo pipefail
 
@@ -66,6 +92,7 @@ let
 
     args=(
       --ro-bind / /
+      --bind /proc /proc
       --dev /dev
       --tmpfs /tmp
       --unshare-ipc
@@ -132,7 +159,17 @@ let
       fi
     done
 
-    exec ${pkgs.bubblewrap}/bin/bwrap "''${args[@]}" -- ${pkgs.claude-code}/bin/claude "$@"
+    # Only empty files are removed, so a real one is never lost.
+    remove_stubs() {
+      for stub in ${lib.escapeShellArgs scrubStubs}; do
+        if [ -f "$stub" ] && [ ! -s "$stub" ]; then
+          rm -f -- "$stub"
+        fi
+      done
+    }
+    trap remove_stubs EXIT
+
+    ${pkgs.bubblewrap}/bin/bwrap "''${args[@]}" -- ${pkgs.claude-code}/bin/claude "$@"
   '';
 in
 {
@@ -152,6 +189,42 @@ in
         ln -s ${jail} $out/bin/claude
       '';
     };
+
+    # ~/.claude/CLAUDE.md, loaded in every project alongside its own CLAUDE.md.
+    memory.text = ''
+      # Global rules
+
+      ## Code style
+
+      - Write clean, concise code. Prefer the shortest clear solution and avoid needless abstraction, indirection, or boilerplate.
+      - Don't over-comment. Comment the why (workarounds, non-obvious decisions), never the what.
+      - Prefer a functional style wherever the language allows: pure functions, immutable data, expressions over statements, and `map`/`filter`/`reduce` over loops that mutate state.
+      - Use full, descriptive names with no abbreviations: `number` not `num`, `index` not `idx`, `message` not `msg`, `button` not `btn`.
+      - Reuse before writing. Look for an existing function that does the job, and extend or generalize it instead of adding a near-duplicate.
+      - Match the style of the surrounding code.
+
+      ## Communication
+
+      - Be brief. Lead with the answer and skip preamble and recaps.
+
+      ## Bash tools
+
+      Use:
+      - The Read, Edit, and Write tools to read and change files.
+      - `rg` to search file contents, and `rg --files` to find files.
+      - `git log`, `git show`, `git diff`, and `git blame` for history and context.
+      - `jq` to query JSON.
+      - The project's own build, check, test, and format commands.
+
+      Don't use:
+      - `cat`, `head`, `tail`, or `less` to read files. Use Read.
+      - `sed`, `awk`, `perl -i`, `echo`/`printf` redirects, or heredocs to create or edit files. Use Edit or Write.
+      - `grep`, `find`, or `ls -R`. Use `rg`.
+      - `sudo`, or global installers (`npm install -g`, `pip install`, `cargo install`, `go install`, `nix profile`, `nix-env`).
+      - `curl` or `wget` piped into a shell, or hand-downloaded binaries.
+      - Destructive commands: `rm -rf`, `git reset --hard`, `git clean`, `git checkout --`, `git push --force`, or `chmod`/`chown` fixes.
+      - `git commit` or `git push` unless asked.
+    '';
 
     settings = {
       skipDangerousModePermissionPrompt = false;
