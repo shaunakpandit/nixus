@@ -23,13 +23,16 @@
       CPU_BOOST_ON_AC = 1;
       CPU_BOOST_ON_BAT = 0;
 
-      # Cap performance on battery. Raise this if the laptop feels sluggish.
-      CPU_MIN_PERF_ON_BAT = 0;
-      CPU_MAX_PERF_ON_BAT = 40;
-
       # Supported on many recent ThinkPads.
       PLATFORM_PROFILE_ON_AC = "balanced";
       PLATFORM_PROFILE_ON_BAT = "low-power";
+
+      # Adaptive backlight modulation: dims the panel on dark content and
+      # boosts contrast to compensate. Lower it if colors look washed out.
+      AMDGPU_ABM_LEVEL_ON_AC = 0;
+      AMDGPU_ABM_LEVEL_ON_BAT = 3;
+
+      DEVICES_TO_DISABLE_ON_BAT_NOT_IN_USE = "bluetooth nfc wwan";
 
       # Device power saving
       WIFI_PWR_ON_AC = "off";

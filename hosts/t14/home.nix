@@ -14,6 +14,8 @@ in
     ../../home/helium.nix
     ../../home/librewolf.nix
     ../../home/waybar.nix
+    ../../home/nightlight.nix
+    ../../home/idle.nix
     ../../home/easyeffects.nix
     ../../home/fuzzel.nix
     ../../home/iptvnator.nix
