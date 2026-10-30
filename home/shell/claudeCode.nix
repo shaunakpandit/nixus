@@ -29,11 +29,12 @@ let
     ".config/net.imput.helium"
   ];
 
-  # CLAUDE_CODE_SUBPROCESS_ENV_SCRUB makes the Bash sandbox mask these in the
-  # launch directory, and bwrap leaves an empty file behind as each mount
-  # point. They must sit in the project to shadow it, so they're removed on
-  # exit instead.
-  scrubStubs = [
+  # The Bash sandbox masks these in the launch directory (most of them only
+  # because of CLAUDE_CODE_SUBPROCESS_ENV_SCRUB), and bwrap leaves an empty
+  # file behind as each mount point. They must sit in the project to shadow
+  # it, so they're removed on exit instead.
+  sandboxStubs = [
+    ".git/config.worktree"
     "bunfig.toml"
     "package.json"
     "package-lock.json"
@@ -161,11 +162,16 @@ let
 
     # Only empty files are removed, so a real one is never lost.
     remove_stubs() {
-      for stub in ${lib.escapeShellArgs scrubStubs}; do
+      for stub in ${lib.escapeShellArgs sandboxStubs}; do
         if [ -f "$stub" ] && [ ! -s "$stub" ]; then
           rm -f -- "$stub"
         fi
       done
+      # Its .git/commondir stub holds ".", which git reads as the gitdir but
+      # libgit2 doesn't, so nix can no longer open the flake's repository.
+      if [ "$(cat .git/commondir 2>/dev/null)" = . ]; then
+        rm -f .git/commondir
+      fi
     }
     trap remove_stubs EXIT
 
