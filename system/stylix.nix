@@ -78,6 +78,15 @@ in
     # to update color scheme, search for THEME_UPDATE
     base16Scheme = "${pkgs.base16-schemes}/share/themes/black-metal-immortal.yaml";
     # base16Scheme = techbaseLite;
+    # Flip with the scheme. Qt picks icons.dark only when this is "dark".
+    polarity = "dark";
+    # Dolphin and other Qt/GTK apps have no icons without a theme.
+    icons = {
+      enable = true;
+      package = pkgs.papirus-icon-theme;
+      dark = "Papirus-Dark";
+      light = "Papirus-Light";
+    };
     image = ../walls/solar.png;
     fonts = {
       serif = zed;

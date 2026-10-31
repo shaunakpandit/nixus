@@ -11,6 +11,20 @@ let
   opus = "anthropic/claude-opus-5.5";
   sonnet = "anthropic/claude-sonnet-5.5";
   haiku = "anthropic/claude-haiku-5.5";
+
+  # Cost is Claude Code's own estimate from token counts, not OpenRouter's bill.
+  statusLine = pkgs.writeShellScript "claude-statusline" ''
+    IFS=$'\t' read -r model directory used tokens size cost < <(${lib.getExe pkgs.jq} -r '[
+      .model.display_name,
+      (.workspace.current_dir | split("/") | last),
+      (.context_window.used_percentage // 0),
+      (.context_window.total_input_tokens // 0) / 1000,
+      (.context_window.context_window_size // 0) / 1000,
+      (.cost.total_cost_usd // 0)
+    ] | @tsv')
+    printf '[%s] 📁 %s | ctx %.0f%% (%.0fk/%.0fk) | $%.2f' \
+      "$model" "$directory" "$used" "$tokens" "$size" "$cost"
+  '';
 in
 {
   programs.claude-code = {
@@ -223,10 +237,11 @@ in
       };
 
       enableAllProjectMcpServers = false;
-      disableAllHooks = true;
+      # true would also suppress the status line.
+      disableAllHooks = false;
 
       statusLine = {
-        command = "input=$(cat); echo \"[$(echo \"$input\" | jq -r '.model.display_name')] 📁 $(basename \"$(echo \"$input\" | jq -r '.workspace.current_dir')\")\"";
+        command = "${statusLine}";
         padding = 0;
         type = "command";
       };
