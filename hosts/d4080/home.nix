@@ -42,6 +42,10 @@ in
   home.sessionVariables = {
     EDITOR = "nvim";
     TERMINAL = "ghostty";
+    # Partial damage repaints at the AW3225QF's 1.25 fractional scale leave
+    # stale buffer contents (wallpaper, black bars) flickering in the bottom
+    # right of the screen. Repainting the whole frame every time avoids it.
+    WLR_SCENE_DEBUG_DAMAGE = "rerender";
   };
 
   home.packages = with pkgs; [

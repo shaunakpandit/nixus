@@ -39,5 +39,9 @@
     # Enable the Nvidia settings menu,
     # accessible via `nvidia-settings`.
     nvidiaSettings = true;
+
+    # The default "stable" branch tracks production (595.x). "latest" picks
+    # whichever of production and new_feature (615.x) is newer.
+    branch = "latest";
   };
 }
