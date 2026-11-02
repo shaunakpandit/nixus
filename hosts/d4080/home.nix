@@ -26,6 +26,8 @@ in
     ../../home/shell/cliamp.nix
     ../../home/shell/dev.nix
     ../../home/shell/nvim.nix
+    ../../home/shell/newsboat.nix
+    ../../home/shell/claudeCode.nix
     ../../home/games/prism.nix
   ];
 
