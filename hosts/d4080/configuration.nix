@@ -18,6 +18,7 @@
     ../../system/locale.nix
     ../../system/utils.nix
     ../../system/fail2ban.nix
+    ../../system/sops.nix
     ../../system/nvidia.nix
     ../../system/mango.nix
     ../../system/gaming/starcitizen.nix

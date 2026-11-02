@@ -26,6 +26,10 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     helium.url = "gitlab:ntgn/helium-flake";
     nix-citizen.url = "github:LovingMelody/nix-citizen";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
@@ -47,6 +51,17 @@
       ...
     }@inputs:
     {
+      # Secrets tooling, available before a host imports system/sops.nix.
+      devShells.x86_64-linux.default =
+        with nixpkgs.legacyPackages.x86_64-linux;
+        mkShell {
+          packages = [
+            sops
+            age
+            ssh-to-age
+          ];
+        };
+
       # Please replace my-nixos with your hostname
       nixosConfigurations = {
         t14 = nixpkgs.lib.nixosSystem {

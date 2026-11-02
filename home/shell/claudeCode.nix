@@ -1,12 +1,16 @@
 {
   config,
+  osConfig,
   lib,
   pkgs,
   ...
 }:
 let
-  # Lives outside the repo; never enters git or the Nix store.
-  keyFile = "${config.home.homeDirectory}/.config/openrouter/api_key";
+  # Decrypted by sops-nix (system/sops.nix). The fallback covers hosts that
+  # don't import system/sops.nix yet; drop it once they all do.
+  keyFile =
+    osConfig.sops.secrets.openrouter_api_key.path
+      or "${config.home.homeDirectory}/.config/openrouter/api_key";
 
   opus = "anthropic/claude-opus-5.5";
   sonnet = "anthropic/claude-sonnet-5.5";
@@ -30,10 +34,6 @@ in
   programs.claude-code = {
     enable = true;
     # Wrap claude so the key is read from the file at launch time.
-    # setup apiey file:
-    # mkdir -p ~/.config/openrouter
-    # printf '%s' 'sk-or-v1-...' > ~/.config/openrouter/api_key
-    # chmod 600 ~/.config/openrouter/api_key
     package = pkgs.symlinkJoin {
       name = "claude-code-openrouter";
       paths = [ pkgs.claude-code ];
