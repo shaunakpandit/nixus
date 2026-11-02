@@ -15,6 +15,9 @@
 
   hardware.nvidia = {
 
+    # the default (stable) tracks the production branch, which lags behind new_feature
+    package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.latest;
+
     # Modesetting is required.
     modesetting.enable = true;
 
