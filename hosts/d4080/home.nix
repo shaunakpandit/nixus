@@ -14,7 +14,6 @@ in
     ../../home/ghostty.nix
     ../../home/discord.nix
     ../../home/librewolf.nix
-    ../../home/helium.nix
     ../../home/waybar.nix
     ../../home/fuzzel.nix
     ../../home/iptvnator.nix
@@ -26,6 +25,8 @@ in
     ../../home/shell/cliamp.nix
     ../../home/shell/dev.nix
     ../../home/shell/nvim.nix
+    ../../home/shell/newsboat.nix
+    ../../home/shell/claudeCode.nix
     ../../home/games/prism.nix
   ];
 
