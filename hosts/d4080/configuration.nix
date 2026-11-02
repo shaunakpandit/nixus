@@ -21,14 +21,18 @@
     ../../system/nvidia.nix
     ../../system/mango.nix
     ../../system/gaming/starcitizen.nix
+    ../../system/gaming/performance.nix
     ../../system/gaming
   ];
 
-  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
-  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+  # see https://github.com/xddxdd/nix-cachyos-kernel/issues/110
+  nix.settings.substituters = [ "https://cache.lantian.pub/lantian" ];
+  nix.settings.trusted-public-keys = [ "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ=" ];
 
   boot = {
-    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+    # what CachyOS installs on Zen 4: ThinLTO and -march=znver4.
+    # The kernel is cached but the nvidia module for it builds locally
+    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-zen4;
   };
 
   networking.hostName = "d4080"; # Define your hostname.
