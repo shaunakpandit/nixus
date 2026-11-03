@@ -88,6 +88,14 @@ Make the edits, format and evaluate them, then ask the user to run the rebuild.
 - Keep code concise and simple to read. Prefer the shortest clear expression, and avoid needless abstraction, indirection, or boilerplate.
 - Don't over-comment. Comment the *why*, not the *what*, especially for workarounds, and leave self-explanatory code uncommented.
 
+## Home Server configuration
+- Home server is comprised of 3 servers:
+    - thoth as the main compute running the defined contianers
+    - an ubuntu based raspberry pi 4b 2Gb running traefik as reverse proxy
+    - a dietpi based raspberry pi 4b 2GB running pihole and unbound as well as tailscale
+        - tailscale is globally configured to use this pi with unbound as the dns and also sends tailnet trafic through the pihole configuration
+- Home server configuration is accessible to outside network via cloudflare on domain jssp.io. webui and booklore are CNAMED to jssp.io, traefik reverse proxy handles routing for these services
+
 ## Theming
 
 Stylix (`system/stylix.nix`) is the source of truth for colors, fonts, and the cursor. The current scheme is base16 `black-metal-immortal`. Home modules read the palette with `config.lib.stylix.colors` (`c.base0B` etc., or `.withHashtag`) instead of hardcoding hex, as in the mango border colors, waybar, fuzzel, and firefox. Some theme pieces can't come from stylix and are marked with a `THEME_UPDATE` comment: the nvim colorscheme in `dots/nvim/lua/plugins/init.lua` and the ghostty palette override. When you change the scheme, grep for `THEME_UPDATE` and update each marked spot.
