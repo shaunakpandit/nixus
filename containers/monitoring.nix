@@ -175,6 +175,7 @@ in
       pull = "always";
       environment.TZ = config.time.timeZone;
       # Keep the pihole password outside the world-readable Nix store.
+      # Create /etc/glance.env containing PIHOLE_PASSWORD=
       environmentFiles = [ "/etc/glance.env" ];
       ports = [ "8080:8080" ];
       volumes = [
