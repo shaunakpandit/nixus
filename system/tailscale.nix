@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   services.tailscale = {
@@ -16,7 +16,7 @@
 
     extraUpFlags = [
       "--accept-dns=false"
-      "--advertise-routes=192.168.4.28/32"
+      "--advertise-routes=${config.var.homelab.${config.var.hostname}}/32"
     ];
   };
 
