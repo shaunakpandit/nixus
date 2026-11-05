@@ -12,10 +12,9 @@
       FTLCONF_dns_upstreams = "${config.var.homelab.${config.var.hostname}}#5335";
       # Bridge networking hides that LAN/tailnet clients are local, so answer everyone.
       FTLCONF_dns_listeningMode = "all";
+      # Empty disables web/API auth; unset, pihole generates a random password.
+      FTLCONF_webserver_api_password = "";
     };
-    # Keep the admin password outside the world-readable Nix store.
-    # Create /etc/pihole.env containing FTLCONF_webserver_api_password=
-    environmentFiles = [ "/etc/pihole.env" ];
     ports = [
       "53:53/tcp"
       "53:53/udp"
