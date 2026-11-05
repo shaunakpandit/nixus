@@ -14,6 +14,8 @@
     ../../system/tailscale.nix
     ../../system/nvidiaLegacy.nix
     ../../system/virtualisation.nix
+    ../../containers/unbound.nix
+    ../../containers/pihole.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -71,6 +73,22 @@
     docker-compose
     compose2nix
   ];
+
+  # After thoth's 03:00 run, so thoth's pulls don't land while pihole is restarting.
+  systemd.services.update-containers.startAt = "Tue *-*-* 03:15:00";
+
+  # Global ports, so these are also open on tailscale0 for tailnet DNS.
+  networking.firewall = {
+    allowedTCPPorts = [
+      53 # pihole
+      8089 # pihole web ui
+      5335 # unbound
+    ];
+    allowedUDPPorts = [
+      53 # pihole
+      5335 # unbound
+    ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
