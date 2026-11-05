@@ -42,6 +42,16 @@ let
       private-address: 192.168.0.0/16
       private-address: 169.254.0.0/16
       private-address: 100.64.0.0/10
+
+      # Allow private A records from these zones despite DNS rebinding protection.
+      private-domain: "serverless.use1.cache.amazonaws.com."
+      private-domain: "plex.direct"
+
+    forward-zone:
+      name: "serverless.use1.cache.amazonaws.com."
+      forward-addr: 8.8.8.8
+      # Fall back to full recursion if 8.8.8.8 fails.
+      forward-first: yes
   '';
 in
 {
