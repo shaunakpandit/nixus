@@ -74,6 +74,9 @@
     compose2nix
   ];
 
+  # After thoth's 03:00 run, so thoth's pulls don't land while pihole is restarting.
+  systemd.services.update-containers.startAt = "Tue *-*-* 03:15:00";
+
   # Global ports, so these are also open on tailscale0 for tailnet DNS.
   networking.firewall = {
     allowedTCPPorts = [

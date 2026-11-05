@@ -47,7 +47,7 @@ in
 {
   virtualisation.oci-containers.containers.unbound = {
     image = "mvance/unbound:latest";
-    pull = "always";
+    # pull = "always";
     # Listens on the LAN so pihole (and gatus on thoth) can reach it.
     ports = [
       "5335:5335/tcp"
