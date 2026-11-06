@@ -16,7 +16,20 @@
     ../../system/laptop.nix
     ../../system/mango.nix
     ../../system/gaming
+    ../../system/sops.nix
   ];
+
+  sops = {
+    # No openssh host key on t14, so the admin key decrypts too. /home is on the root fs, so it's readable at boot.
+    age.keyFile = "/home/void/.config/sops/age/keys.txt";
+    # root's key for the thoth remote builder; its public half is in hosts/thoth/configuration.nix
+    secrets.nixbuild_ssh_key = { };
+    # Symlinked to where home/shell/claudeCode.nix reads it
+    secrets.openrouter_api_key = {
+      owner = config.var.username;
+      path = "/home/void/.config/openrouter/api_key";
+    };
+  };
 
   nix.settings.substituters = [ "https://cache.lantian.pub/lantian" ];
   nix.settings.trusted-public-keys = [ "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ=" ];
@@ -33,11 +46,7 @@
     {
       hostName = "192.168.4.28";
       sshUser = "hugh";
-      # The nix daemon runs as root, so root needs its own key. Create it on t14 with:
-      #   sudo ssh-keygen -t ed25519 -f /root/.ssh/nixbuild -N "" -C root@t14
-      # Then put the output of `sudo cat /root/.ssh/nixbuild.pub` in
-      # users.users.hugh.openssh.authorizedKeys.keys in hosts/thoth/configuration.nix.
-      sshKey = "/root/.ssh/nixbuild";
+      sshKey = config.sops.secrets.nixbuild_ssh_key.path;
       protocol = "ssh-ng";
       system = "x86_64-linux";
       maxJobs = 8;

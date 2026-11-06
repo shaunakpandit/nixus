@@ -1,0 +1,10 @@
+# Public age recipients only; private keys never enter the repo.
+keys:
+  # void's admin key (~/.config/sops/age/keys.txt), also t14's decryption key.
+  # Replace with the output of `age-keygen -y ~/.config/sops/age/keys.txt`.
+  - &void age1tffmq7e9ksp2vellqj8mmqyqmtv3ha5ghtr23n29ceymqqrea4hsgqsa0f
+creation_rules:
+  - path_regex: secrets/t14\.yaml$
+    key_groups:
+      - age:
+          - *void
