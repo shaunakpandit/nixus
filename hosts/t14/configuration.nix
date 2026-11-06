@@ -25,6 +25,38 @@
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Offload builds to thoth; falls back to building locally when thoth is unreachable.
+  nix.distributedBuilds = true;
+  # thoth fetches from caches itself instead of pulling everything through the laptop
+  nix.settings.builders-use-substitutes = true;
+  nix.buildMachines = [
+    {
+      hostName = "192.168.4.28";
+      sshUser = "hugh";
+      # The nix daemon runs as root, so root needs its own key. Create it on t14 with:
+      #   sudo ssh-keygen -t ed25519 -f /root/.ssh/nixbuild -N "" -C root@t14
+      # Then put the output of `sudo cat /root/.ssh/nixbuild.pub` in
+      # users.users.hugh.openssh.authorizedKeys.keys in hosts/thoth/configuration.nix.
+      sshKey = "/root/.ssh/nixbuild";
+      protocol = "ssh-ng";
+      system = "x86_64-linux";
+      maxJobs = 8;
+      supportedFeatures = [
+        "nixos-test"
+        "benchmark"
+        "big-parallel"
+        "kvm"
+      ];
+    }
+  ];
+  # Pins thoth's host key so root's non-interactive ssh doesn't stall on the fingerprint prompt.
+  # Get it with `ssh-keyscan -t ed25519 192.168.4.28` (drop the leading IP),
+  # or `cat /etc/ssh/ssh_host_ed25519_key.pub` on thoth.
+  programs.ssh.knownHosts.thoth = {
+    hostNames = [ "192.168.4.28" ];
+    publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJg5rB28CPMtl44xAIjSkdyEuZlh99Iw5+LlM+5O6F/C root@nixos";
+  };
+
   networking.hostName = "t14"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
