@@ -14,7 +14,7 @@ in
     ../../home/librewolf.nix
     ../../home/waybar.nix
     ../../home/nightlight.nix
-    ../../home/idle.nix
+    ../../home/idleSuspend.nix
     ../../home/easyeffects.nix
     ../../home/fuzzel.nix
     ../../home/iptvnator.nix
