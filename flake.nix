@@ -29,6 +29,10 @@
     helium.url = "gitlab:ntgn/helium-flake";
     nix-citizen.url = "github:LovingMelody/nix-citizen";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -44,9 +48,23 @@
       nix-citizen,
       helium,
       nix-cachyos-kernel,
+      sops-nix,
       ...
     }@inputs:
     {
+      # `nix develop` provides the tools for creating keys and editing secrets/
+      devShells.x86_64-linux.default =
+        let
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        in
+        pkgs.mkShell {
+          packages = with pkgs; [
+            sops
+            age
+            ssh-to-age
+          ];
+        };
+
       # Please replace my-nixos with your hostname
       nixosConfigurations = {
         t14 = nixpkgs.lib.nixosSystem {
@@ -71,6 +89,7 @@
               };
             }
             nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
+            sops-nix.nixosModules.sops
             mangowm.nixosModules.mango
             stylix.nixosModules.stylix
             helium.nixosModules.helium

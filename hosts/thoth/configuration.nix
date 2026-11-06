@@ -41,9 +41,7 @@
   ];
 
   users.users.hugh = {
-    # root@t14's build key. Create it on t14 with:
-    #   sudo ssh-keygen -t ed25519 -f /root/.ssh/nixbuild -N "" -C root@t14
-    # and paste the output of `sudo cat /root/.ssh/nixbuild.pub` here.
+    # Public half of t14's nixbuild_ssh_key (secrets/t14.yaml)
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILAOMhTiyoWYdjPSyRo/X64KEys4YMMwiGDs5NnC/vPp root@t14"
     ];
