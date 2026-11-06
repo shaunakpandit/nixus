@@ -22,8 +22,7 @@
   nix.settings.trusted-public-keys = [ "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ=" ];
 
   # TODO: set as 'pkgs.linuxPackages_latest;' on first build
-  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
   # Offload builds to thoth; falls back to building locally when thoth is unreachable.
   # test with sudo nix store info --store ssh-ng://hugh@192.168.4.28
