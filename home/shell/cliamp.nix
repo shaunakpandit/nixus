@@ -7,11 +7,6 @@ in
     cliamp
   ];
 
-  xdg.configFile."cliamp" = {
-    source = ../../dots/cliamp;
-    recursive = true;
-  };
-
   # Capitalized filename so it matches `theme = "Stylix"` whether cliamp title-cases names or not.
   xdg.configFile."cliamp/themes/Stylix.toml".text = ''
     bg = "${c.base00}"

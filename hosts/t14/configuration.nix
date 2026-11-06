@@ -17,6 +17,7 @@
     ../../system/mango.nix
     ../../system/gaming
     ../../system/sops.nix
+    ../../system/cliamp.nix
   ];
 
   sops = {

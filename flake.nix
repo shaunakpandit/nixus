@@ -133,6 +133,7 @@
                 ];
               };
             }
+            sops-nix.nixosModules.sops
             mangowm.nixosModules.mango
             stylix.nixosModules.stylix
             helium.nixosModules.helium

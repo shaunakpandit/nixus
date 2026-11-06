@@ -23,7 +23,12 @@
     ../../system/gaming/starcitizen.nix
     ../../system/gaming/performance.nix
     ../../system/gaming
+    ../../system/sops.nix
+    ../../system/cliamp.nix
   ];
+
+  # Same as t14: no openssh host key, so the admin key decrypts. /home is on the root fs, so it's readable at boot.
+  sops.age.keyFile = "/home/void/.config/sops/age/keys.txt";
 
   nix.settings.substituters = [ "https://cache.lantian.pub/lantian" ];
   nix.settings.trusted-public-keys = [ "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ=" ];
