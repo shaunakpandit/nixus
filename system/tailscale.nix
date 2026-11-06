@@ -4,10 +4,10 @@
   services.tailscale = {
     enable = true;
     openFirewall = true;
+    # authkey is not needed. can just do: sudo tailscale login
     # sudo install -d -m 700 /etc/tailscale
     # sudo install -m 600 /dev/null /etc/tailscale/authkey
     # sudoedit /etc/tailscale/authkey
-
     # Secret supplied outside the Nix store.
     authKeyFile = "/etc/tailscale/authkey";
 
@@ -25,5 +25,5 @@
   ];
 
   # run the following to find tailscale IP of new device
-  # failssscale ip -4
+  # tailscale ip -4
 }
