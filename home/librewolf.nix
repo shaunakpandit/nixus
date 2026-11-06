@@ -252,7 +252,8 @@ in
 
       settings = {
         "browser.startup.page" = 1;
-        "browser.startup.homepage" = "file://${homepage}";
+        # glance (containers/monitoring.nix); swap back to "file://${homepage}" for the static page.
+        "browser.startup.homepage" = "http://${thoth}:8080";
 
         # for stylix to work
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
