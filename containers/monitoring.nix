@@ -1,8 +1,14 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (config.var.homelab)
     thoth
+    rama
     pihole
     piholePort
     traefik
@@ -105,14 +111,67 @@ let
           ];
   };
 
+  # Glance takes colors as "H S L".
+  hsl =
+    hex:
+    let
+      channel = offset: lib.fromHexString (builtins.substring offset 2 hex) / 255.0;
+      red = channel 0;
+      green = channel 2;
+      blue = channel 4;
+      max = lib.max red (lib.max green blue);
+      min = lib.min red (lib.min green blue);
+      delta = max - min;
+      lightness = (max + min) / 2;
+      saturation =
+        if delta == 0 then 0 else delta / (if lightness > 0.5 then 2 - max - min else max + min);
+      sector =
+        if delta == 0 then
+          0
+        else if max == red then
+          (green - blue) / delta
+        else if max == green then
+          (blue - red) / delta + 2
+        else
+          (red - green) / delta + 4;
+      hue = 60 * (if sector < 0 then sector + 6 else sector);
+      round = number: toString (builtins.floor (number + 0.5));
+    in
+    "${round hue} ${round (saturation * 100)} ${round (lightness * 100)}";
+
+  colors = config.lib.stylix.colors;
+
+  # Links only; the services on rama and the pis aren't checked by gatus.
+  linkedServices = thothServices ++ [
+    {
+      name = "Pi-hole (rama)";
+      url = "http://${rama}:8089/admin/";
+    }
+    {
+      name = "Pi-hole (pi)";
+      url = "${piholeWeb}/admin/";
+    }
+    {
+      name = "Traefik";
+      url = "http://${traefik}:8080/dashboard/";
+    }
+  ];
+
   glanceConfig = yaml.generate "glance.yml" {
+    theme = {
+      background-color = hsl colors.base00;
+      primary-color = hsl colors.base0B;
+      positive-color = hsl colors.base0B;
+      negative-color = hsl colors.base08;
+    };
     pages = [
       {
-        name = "thoth";
+        name = "Home";
         columns = [
           {
             size = "small";
             widgets = [
+              { type = "calendar"; }
               {
                 type = "server-stats";
                 servers = [
@@ -122,14 +181,18 @@ let
                     hide-mountpoints-by-default = true;
                     mountpoints."/".name = "root";
                   }
+                  {
+                    type = "remote";
+                    name = "rama";
+                    url = "http://${rama}:27973";
+                  }
                 ];
               }
               {
                 type = "dns-stats";
+                title = "Pi-hole (rama)";
                 service = "pihole-v6";
-                url = piholeWeb;
-                # Substituted by glance from /etc/glance.env.
-                password = "\${PIHOLE_PASSWORD}";
+                url = "http://${rama}:8089";
               }
             ];
           }
@@ -145,9 +208,35 @@ let
                   inherit (service) url;
                   check-url = service.check or service.url;
                   allow-insecure = service.insecure or false;
-                }) thothServices;
+                }) linkedServices;
               }
-              { type = "docker-containers"; }
+              {
+                type = "docker-containers";
+                title = "thoth containers";
+              }
+              {
+                # Served by containers/glance-remote.nix.
+                type = "docker-containers";
+                title = "rama containers";
+                sock-path = "tcp://${rama}:2375";
+              }
+            ];
+          }
+          {
+            size = "small";
+            widgets = [
+              {
+                type = "rss";
+                title = "Hacker News";
+                limit = 15;
+                feeds = [ { url = "https://news.ycombinator.com/rss"; } ];
+              }
+              {
+                type = "rss";
+                title = "Mindscape";
+                limit = 10;
+                feeds = [ { url = "https://rss.libsyn.com/shows/604590/destinations/5264190.xml"; } ];
+              }
             ];
           }
         ];
@@ -174,9 +263,6 @@ in
       image = "glanceapp/glance:latest";
       pull = "always";
       environment.TZ = config.time.timeZone;
-      # Keep the pihole password outside the world-readable Nix store.
-      # Create /etc/glance.env containing PIHOLE_PASSWORD=
-      environmentFiles = [ "/etc/glance.env" ];
       ports = [ "8080:8080" ];
       volumes = [
         "${glanceConfig}:/app/config/glance.yml:ro"

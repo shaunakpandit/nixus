@@ -16,6 +16,7 @@
     ../../system/virtualisation.nix
     ../../containers/unbound.nix
     ../../containers/pihole.nix
+    ../../containers/glance-remote.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -83,6 +84,8 @@
       53 # pihole
       8089 # pihole web ui
       5335 # unbound
+      27973 # glance agent
+      2375 # docker socket proxy, read only, for glance
     ];
     allowedUDPPorts = [
       53 # pihole
