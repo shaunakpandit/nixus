@@ -26,6 +26,7 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Offload builds to thoth; falls back to building locally when thoth is unreachable.
+  # test with sudo nix store info --store ssh-ng://hugh@192.168.4.28
   nix.distributedBuilds = true;
   # thoth fetches from caches itself instead of pulling everything through the laptop
   nix.settings.builders-use-substitutes = true;
