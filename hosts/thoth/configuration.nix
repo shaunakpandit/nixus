@@ -19,6 +19,7 @@
     ../../containers/plex.nix
     ../../containers/grimmory.nix
     ../../containers/craftycontroller.nix
+    ../../containers/monitoring.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -97,6 +98,9 @@
 
       8443 # Crafty Controller; web page
       8123 # Crafty Controller; Optional map web server, e.g. Dynmap
+
+      8080 # glance
+      8081 # gatus
     ];
 
     allowedTCPPortRanges = [

@@ -6,6 +6,12 @@
     remap = "";
     rebuildCommand = "sudo nixos-rebuild switch --flake ~/dev/nixus#thoth";
     cursorSize = 36;
+    homelab = {
+      thoth = "192.168.4.28";
+      pihole = "192.168.4.25";
+      piholePort = 8089;
+      traefik = "192.168.4.26";
+    };
   };
   # Let this here
   options = {

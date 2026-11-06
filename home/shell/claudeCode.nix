@@ -79,7 +79,8 @@ in
 
     settings = {
       skipDangerousModePermissionPrompt = false;
-      model = opus;
+      model = sonnet;
+      effortLevel = "medium";
 
       # No apiKeyHelper: auth comes from ANTHROPIC_AUTH_TOKEN via the wrapper.
       env = {
