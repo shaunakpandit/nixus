@@ -7,9 +7,9 @@
 
   boot = {
     # see https://github.com/LovingMelody/nix-citizen/tree/main/pkgs/rsi-launcher
+    # fs.file-max is left out: systemd already raises it to the maximum at boot
     kernel.sysctl = {
       "vm.max_map_count" = 16777216;
-      "fs.file-max" = 524288;
     };
   };
 

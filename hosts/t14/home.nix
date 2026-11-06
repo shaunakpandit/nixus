@@ -11,7 +11,6 @@ in
   imports = [
     ../../home/mango
     ../../home/ghostty.nix
-    ../../home/helium.nix
     ../../home/librewolf.nix
     ../../home/waybar.nix
     ../../home/nightlight.nix

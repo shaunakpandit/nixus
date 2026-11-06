@@ -13,7 +13,13 @@
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  # from CachyOS: skip zeroing system memory before handing it to the GPU
+  boot.extraModprobeConfig = "options nvidia NVreg_InitializeSystemMemoryAllocations=0";
+
   hardware.nvidia = {
+
+    # the default (stable) tracks the production branch, which lags behind new_feature
+    package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.latest;
 
     # Modesetting is required.
     modesetting.enable = true;
