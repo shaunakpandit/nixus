@@ -24,6 +24,14 @@
   networking.hostName = "rama";
   networking.networkmanager.enable = true;
 
+  # DHCP hands out rama itself, so without a fallback docker can't resolve the
+  # registry to pull pihole while pihole is down. Port 53 refuses when pihole
+  # is stopped, so glibc moves straight on to 1.1.1.1.
+  networking.networkmanager.insertNameservers = [
+    "127.0.0.1"
+    "1.1.1.1"
+  ];
+
   services.printing.enable = true;
 
   nixpkgs.config.allowUnfree = true;
