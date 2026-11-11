@@ -10,9 +10,8 @@
   services.fail2ban = {
     enable = true;
     ignoreIP = [
+      # only ignore client hosts, servers should really not be sshing to each other
       "192.168.4.30" # d4080
-      "192.168.4.28" # thoth
-      "192.168.4.29" # rama
       "192.168.4.22" # t14
     ];
   };
