@@ -21,6 +21,8 @@ in
     ../../home/feh.nix
     ../../home/sioyek.nix
     ../../home/easyeffects.nix
+    ../../home/idleSuspend.nix
+    ../../home/joystickIdleInhibit.nix
     ../../home/shell/shell.nix
     ../../home/shell/utils.nix
     ../../home/shell/cliamp.nix
