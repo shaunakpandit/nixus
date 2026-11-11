@@ -66,11 +66,11 @@ in
 
     settings = {
       skipDangerousModePermissionPrompt = false;
-      model = "sonnet";
-      effortLevel = "medium";
+      model = "opus";
+      effortLevel = "high";
 
       permissions = {
-        defaultMode = "default";
+        defaultMode = "plan";
         additionalDirectories = [ ];
         allow = [
           "Read(./**)"
