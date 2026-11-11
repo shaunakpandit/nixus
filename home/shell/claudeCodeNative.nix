@@ -61,8 +61,17 @@ in
       - Never run destructive commands: no `rm`, `shred`, `dd`, `truncate`, or overwriting files with redirection.
       - Never run git commands that change commit history, push, or overwrite branch history: no `commit --amend`, `rebase`, `reset`, `push` (forced or not), `branch -D`/`-f`, or `filter-branch`.
       - Never change file ownership or permissions with `chmod`, `chown`, or `chgrp`.
-      - Reading files, searching (`grep`, `rg`, `fd`, `fzf --filter`), and creating files or directories are fine.
+      - Reading files, searching (see File Search block), and creating files or directories are fine.
+
+      ## File search
+
+      - Prefer the fff MCP tools (`find_files`, `grep`, `multi_grep`) over Glob, Grep, `find`, `rg`, or `fd` for finding files and searching code in the current project. Fall back to the built-in tools only when fff is unavailable or the target is outside the project.
     '';
+
+    mcpServers.fff = {
+      type = "stdio";
+      command = lib.getExe pkgs.fff-mcp;
+    };
 
     settings = {
       skipDangerousModePermissionPrompt = false;
@@ -79,6 +88,8 @@ in
           "Glob"
           "Grep"
           "WebSearch"
+          # fff MCP, loaded through home-manager's generated "hm" plugin.
+          "mcp__plugin_hm_fff"
 
           # Evaluate, build, format, and inspect. Any shell command not listed
           # here prompts for approval.
