@@ -179,7 +179,10 @@ let
                     type = "local";
                     name = "thoth";
                     hide-mountpoints-by-default = true;
-                    mountpoints."/".name = "root";
+                    mountpoints."/" = {
+                      name = "root";
+                      hide = false;
+                    };
                   }
                   {
                     type = "remote";
