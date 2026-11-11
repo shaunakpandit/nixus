@@ -28,7 +28,7 @@ in
     ../../home/shell/dev.nix
     ../../home/shell/nvim.nix
     ../../home/shell/newsboat.nix
-    ../../home/shell/claudeCode.nix
+    ../../home/shell/claudeCodeNative.nix
     ./variables.nix
   ];
 
