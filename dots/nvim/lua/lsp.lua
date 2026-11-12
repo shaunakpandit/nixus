@@ -12,5 +12,6 @@ vim.lsp.enable({
 	"nil_ls",
 	"superhtml",
 	"basedpyright",
+	"markdown_oxide",
 })
 vim.diagnostic.config({ virtual_text = true })

@@ -75,6 +75,9 @@
       # python
       basedpyright
       ruff
+
+      # markdown
+      markdown-oxide
     ];
   };
 
