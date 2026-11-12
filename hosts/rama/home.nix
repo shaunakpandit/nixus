@@ -10,6 +10,7 @@
     ../../home/shell/shell.nix
     ../../home/shell/dev.nix
     ../../home/shell/utils.nix
+    ../../home/mytools
     ./variables.nix
   ];
 

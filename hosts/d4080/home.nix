@@ -9,6 +9,7 @@ let
 in
 {
   imports = [
+    ../../home/mytools
     ./variables.nix
     ../../home/mango
     ../../home/ghostty.nix

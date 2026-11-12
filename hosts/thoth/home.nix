@@ -14,6 +14,7 @@ in
     ../../home/shell/dev.nix
     ../../home/shell/utils.nix
     ../../home/shell/claudeCodeNative.nix
+    ../../home/mytools
     ./variables.nix
   ];
 

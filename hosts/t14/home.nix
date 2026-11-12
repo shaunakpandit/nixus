@@ -29,8 +29,11 @@ in
     ../../home/shell/nvim.nix
     ../../home/shell/newsboat.nix
     ../../home/shell/claudeCodeNative.nix
+    ../../home/mytools
     ./variables.nix
   ];
+
+  mytools.gowifi.enable = true;
 
   home.username = "void";
   home.homeDirectory = "/home/void";
