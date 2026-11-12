@@ -127,6 +127,12 @@ in
         rebase = false;
       };
     };
+    includes = [
+      {
+        condition = "gitdir:~/notes/";
+        contents.core.hooksPath = ".githooks";
+      }
+    ];
   };
 
   programs.ssh = {
