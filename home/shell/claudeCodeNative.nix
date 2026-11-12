@@ -27,13 +27,14 @@ in
       paths = [ pkgs.claude-code ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
       # The formatters otherwise only exist on nvim's PATH (extraPackages),
-      # so expose them to Claude's shell too.
+      # so expose them to Claude's shell too. Node runs ponytail's hooks.
       postBuild = ''
         wrapProgram $out/bin/claude \
           --prefix PATH : ${
             lib.makeBinPath [
               pkgs.nixfmt-rs
               pkgs.nixpkgs-fmt
+              pkgs.nodejs
             ]
           }
       '';
@@ -71,6 +72,13 @@ in
     mcpServers.fff = {
       type = "stdio";
       command = lib.getExe pkgs.fff-mcp;
+    };
+
+    plugins.ponytail = pkgs.fetchFromGitHub {
+      owner = "DietrichGebert";
+      repo = "ponytail";
+      rev = "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846";
+      hash = lib.fakeHash;
     };
 
     settings = {
