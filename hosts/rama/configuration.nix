@@ -118,6 +118,7 @@
       8686 # lidarr
       5299 # lazylibrarian
       6767 # bazarr
+      5055 # seerr
     ];
     allowedUDPPorts = [
       53 # pihole

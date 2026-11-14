@@ -32,7 +32,13 @@ let
 in
 {
   systemd.tmpfiles.rules =
-    map (name: "d /var/lib/${name} 0750 1000 100 -") ([ "gluetun" ] ++ mediaContainers)
+    map (name: "d /var/lib/${name} 0750 1000 100 -") (
+      [
+        "gluetun"
+        "seerr"
+      ]
+      ++ mediaContainers
+    )
     ++ map (dir: "d ${mediaDir}/${dir} 0775 1000 100 -") [
       "torrents"
       "torrents/tv"
@@ -78,7 +84,43 @@ in
         dependsOn = [ "gluetun" ];
         extraOptions = [ "--network=container:gluetun" ];
       };
+
+      # Request site for movies and tv, signs in with plex accounts. Runs as uid 1000.
+      seerr = {
+        image = "ghcr.io/seerr-team/seerr:latest";
+        pull = "always";
+        environment.TZ = config.time.timeZone;
+        volumes = [ "/var/lib/seerr:/app/config" ];
+        ports = [ "5055:5055" ];
+        extraOptions = [ "--init" ];
+      };
     };
+
+  # Syncs TRaSH guide quality profiles and custom formats into sonarr/radarr, limited to 2160p.
+  # API keys come from each app's Settings > General, saved to these root-only files on rama.
+  services.recyclarr = {
+    enable = true;
+    configuration = {
+      sonarr.tv = {
+        base_url = "http://localhost:${toString arrs.sonarr}";
+        api_key._secret = "/etc/recyclarr/sonarr_api_key";
+        include = map (template: { inherit template; }) [
+          "sonarr-quality-definition-series"
+          "sonarr-v4-quality-profile-web-2160p"
+          "sonarr-v4-custom-formats-web-2160p"
+        ];
+      };
+      radarr.movies = {
+        base_url = "http://localhost:${toString arrs.radarr}";
+        api_key._secret = "/etc/recyclarr/radarr_api_key";
+        include = map (template: { inherit template; }) [
+          "radarr-quality-definition-movie"
+          "radarr-quality-profile-uhd-bluray-web"
+          "radarr-custom-formats-uhd-bluray-web"
+        ];
+      };
+    };
+  };
 
   systemd.services = lib.genAttrs (map (name: "docker-${name}") mediaContainers) (_: {
     unitConfig.RequiresMountsFor = [ mediaDir ];
