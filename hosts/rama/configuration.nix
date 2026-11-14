@@ -14,14 +14,19 @@
     ../../system/tailscale.nix
     ../../system/nvidiaLegacy.nix
     ../../system/virtualisation.nix
+    ../../system/zfs.nix
+    ../../system/nixarr.nix
+    ../../system/nas.nix
     ../../containers/unbound.nix
     ../../containers/pihole.nix
     ../../containers/glance-remote.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Default LTS kernel, because linuxPackages_latest often outruns ZFS support.
 
   networking.hostName = "rama";
+  # Required by ZFS; random, must stay stable.
+  networking.hostId = "279ca6f9";
   networking.networkmanager.enable = true;
 
   # DHCP hands out rama itself, so without a fallback docker can't resolve the
@@ -94,6 +99,7 @@
       5335 # unbound
       27973 # glance agent
       2375 # docker socket proxy, read only, for glance
+      5252 # qbittorrent web ui, proxied out of the vpn namespace by nixarr's nginx
     ];
     allowedUDPPorts = [
       53 # pihole

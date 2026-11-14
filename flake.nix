@@ -29,6 +29,11 @@
     helium.url = "gitlab:ntgn/helium-flake";
     nix-citizen.url = "github:LovingMelody/nix-citizen";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    # After adding or removing this input: nix flake lock
+    nixarr = {
+      url = "github:nix-media-server/nixarr";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,6 +54,7 @@
       helium,
       nix-cachyos-kernel,
       sops-nix,
+      nixarr,
       ...
     }@inputs:
     {
@@ -196,6 +202,7 @@
               };
             }
             stylix.nixosModules.stylix
+            nixarr.nixosModules.default
           ];
         };
 
