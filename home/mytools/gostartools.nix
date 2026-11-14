@@ -16,10 +16,10 @@
           owner = "shaunakpandit";
           repo = "gostartools";
           rev = "d85adc844ef6e9e6654244ce9c5351c0db547062";
-          hash = lib.fakeHash;
+          hash = "sha256-sI3PuVwn8KtBJTQaCigInDO1MfsdlcHm+/9MPaCZPO4=";
         };
         # Unlike gowifi this has dependencies, so it needs a real hash.
-        vendorHash = lib.fakeHash;
+        vendorHash = "sha256-sI3PuVwn8KtBJTQaCigInDO1MfsdlcHm+/9MPaCZPO4=";
         meta.mainProgram = "sctool";
       })
     ];
