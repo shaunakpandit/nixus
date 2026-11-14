@@ -7,11 +7,13 @@
       image = "glanceapp/agent:latest";
       pull = "always";
       # The container's / is overlayfs on the host root, so it reports the host's root disk.
+      # The zfs pool is bind-mounted at the same path so its usage shows too.
       environment = {
         HIDE_MOUNTPOINTS_BY_DEFAULT = "true";
-        MOUNTPOINTS = "/";
+        MOUNTPOINTS = "/,/mnt/media";
       };
       ports = [ "27973:27973" ];
+      volumes = [ "/mnt/media:/mnt/media:ro" ];
     };
 
     # Read-only Docker API (container list only) instead of exposing the socket itself.
