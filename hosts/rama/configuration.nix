@@ -14,12 +14,28 @@
     ../../system/tailscale.nix
     ../../system/nvidiaLegacy.nix
     ../../system/virtualisation.nix
+    ../../system/zfs.nix
+    ../../system/samba.nix
     ../../containers/unbound.nix
     ../../containers/pihole.nix
     ../../containers/glance-remote.nix
+    ../../containers/plex.nix
+    ../../containers/arr.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # LTS, because zfs often lags the newest kernel and gets marked broken.
+  boot.kernelPackages = pkgs.linuxPackages;
+
+  # Required by zfs; any stable unique value.
+  networking.hostId = "7a3d91c2";
+
+  # Pool "tank" on the 6TB disk, created with mountpoint=legacy so systemd orders services after it.
+  fileSystems."/mnt/media" = {
+    device = "tank";
+    fsType = "zfs";
+    # Boot even if the pool is missing.
+    options = [ "nofail" ];
+  };
 
   networking.hostName = "rama";
   networking.networkmanager.enable = true;
@@ -94,6 +110,14 @@
       5335 # unbound
       27973 # glance agent
       2375 # docker socket proxy, read only, for glance
+      32400 # plex
+      8080 # qbittorrent
+      9696 # prowlarr
+      8989 # sonarr
+      7878 # radarr
+      8686 # lidarr
+      5299 # lazylibrarian
+      6767 # bazarr
     ];
     allowedUDPPorts = [
       53 # pihole
