@@ -15,7 +15,7 @@
         src = pkgs.fetchFromGitHub {
           owner = "shaunakpandit";
           repo = "gostartools";
-          rev = "<commit>";
+          rev = "d85adc844ef6e9e6654244ce9c5351c0db547062";
           hash = lib.fakeHash;
         };
         # Unlike gowifi this has dependencies, so it needs a real hash.

@@ -34,6 +34,7 @@ in
   ];
 
   mytools.gowifi.enable = true;
+  mytools.gostartools.enable = true;
 
   home.username = "void";
   home.homeDirectory = "/home/void";
