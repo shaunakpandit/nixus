@@ -15,11 +15,11 @@
         src = pkgs.fetchFromGitHub {
           owner = "shaunakpandit";
           repo = "gostartools";
-          rev = "d85adc844ef6e9e6654244ce9c5351c0db547062";
-          hash = "sha256-sI3PuVwn8KtBJTQaCigInDO1MfsdlcHm+/9MPaCZPO4=";
+          rev = "b0e671b921f12de71e6b2276eb06be9a86f29ddd";
+          hash = "sha256-pkx1Hd3LXCD/6RQUjjKQcyLFSwTTHboLTDKR+vxXy+M=";
         };
         # Unlike gowifi this has dependencies, so it needs a real hash.
-        vendorHash = "sha256-sI3PuVwn8KtBJTQaCigInDO1MfsdlcHm+/9MPaCZPO4=";
+        vendorHash = "sha256-P3iFBhlDRS+bTfGRwy2bTPmi83HgIOMPKI364SRUouI=";
         meta.mainProgram = "sctool";
       })
     ];
