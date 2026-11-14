@@ -126,6 +126,9 @@ in
       enable_hotarea = 0;
       overview_gap_outer = 5;
 
+      # fullscreen video players often don't set an idle inhibitor themselves
+      idle_inhibit_when_fullscreen = 1;
+
       # see https://mangowm.github.io/docs/configuration/monitors#tearing-game-mode
       allow_tearing = 1;
       # see https://mangowm.github.io/docs/configuration/monitors#hdr
