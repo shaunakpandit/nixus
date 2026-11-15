@@ -14,6 +14,7 @@
     ../../system/tailscale.nix
     ../../system/nvidiaLegacy.nix
     ../../system/virtualisation.nix
+    ../../system/mtp.nix
     # ../../containers/portainer.nix
     ../../containers/openwebui.nix
     ../../containers/plex.nix

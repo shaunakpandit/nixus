@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -88,7 +89,7 @@ in
 
       permissions = {
         defaultMode = "plan";
-        additionalDirectories = [ ];
+        additionalDirectories = [ "${config.home.homeDirectory}/dev/nixus" ];
         allow = [
           "Read(./**)"
           "Write(./**)"
@@ -132,6 +133,13 @@ in
           "Bash(fzf:*)"
           "Bash(mkdir:*)"
           "Bash(touch:*)"
+
+          # Read-only MTP (libmtp, installed by system/mtp.nix).
+          "Bash(mtp-detect:*)"
+          "Bash(mtp-files:*)"
+          "Bash(mtp-filetree:*)"
+          "Bash(mtp-folders:*)"
+          "Bash(mtp-getfile:*)"
 
           # Read-only git, for the history behind a file.
           "Bash(git log:*)"
@@ -208,6 +216,15 @@ in
           "Bash(chown:*)"
           "Bash(chgrp:*)"
 
+          # MTP commands that change the device.
+          "Bash(mtp-delfile:*)"
+          "Bash(mtp-sendfile:*)"
+          "Bash(mtp-sendtr:*)"
+          "Bash(mtp-format:*)"
+          "Bash(mtp-newfolder:*)"
+          "Bash(mtp-reset:*)"
+          "Bash(mtp-emptyfolders:*)"
+
           "WebFetch"
           "Agent"
           "Task"
@@ -228,6 +245,12 @@ in
           "nix-instantiate"
           "nix-prefetch-url"
           "nixos-option"
+          # The sandbox's /dev has no USB nodes, so MTP can't see devices inside it.
+          "mtp-detect"
+          "mtp-files"
+          "mtp-filetree"
+          "mtp-folders"
+          "mtp-getfile"
         ];
       };
 
