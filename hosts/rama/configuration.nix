@@ -99,7 +99,6 @@
       5335 # unbound
       27973 # glance agent
       2375 # docker socket proxy, read only, for glance
-      5252 # qbittorrent web ui, proxied out of the vpn namespace by nixarr's nginx
     ];
     allowedUDPPorts = [
       53 # pihole
