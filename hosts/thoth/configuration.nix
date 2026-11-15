@@ -111,6 +111,8 @@
 
       8080 # glance
       8081 # gatus
+
+      4200 # pattern game
     ];
 
     allowedTCPPortRanges = [
