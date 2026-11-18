@@ -46,6 +46,8 @@
     # Public half of t14's nixbuild_ssh_key (secrets/t14.yaml)
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILAOMhTiyoWYdjPSyRo/X64KEys4YMMwiGDs5NnC/vPp root@t14"
+      # void@t14
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOST1BDY81RViIwoRqex1mYipRpRdDf3fwBgUAYmusVS shaunakdpandit@gmail.com"
     ];
     isNormalUser = true;
     description = "hugh";
