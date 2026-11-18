@@ -10,11 +10,13 @@
 #    From thoth: ssh claude@10.100.0.2, put the key in /var/lib/tailscale-authkey, then on thoth:
 #      sudo systemctl restart microvm@claudebox
 # 3. GitHub token: github.com/settings/personal-access-tokens/new (fine-grained)
-#    Repository access: All repositories. Permissions: Contents read/write, Pull requests read/write. Nothing else.
+#    Repository access: All repositories. Permissions: Contents read/write, Pull requests read/write, Issues read/write. Nothing else.
 #    In the VM: gh auth login --with-token, then paste the token.
 # 4. In the VM: claude /login
+# 5. LAN access (ssh claudebox from t14/d4080 jumps via hugh@thoth): add the device's ~/.ssh/id_ed25519.pub
+#    to users.users.claude.openssh.authorizedKeys.keys below. d4080 still needs adding.
 #
-# Use: ssh claudebox, tmux, claude --dangerously-skip-permissions
+# Use: ssh claudebox (LAN, via thoth) or ssh claudeboxtail (tailnet), then tmux, claude --dangerously-skip-permissions
 {
   config,
   lib,
@@ -156,9 +158,14 @@ in
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       openssh.authorizedKeys.keys = [
+        # thoth
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICmL0OiFEZ/l2usxzvKkje514gDkfUg6JpArW7CoguxX shaunakdpandit@gmail.com"
+        # t14
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOST1BDY81RViIwoRqex1mYipRpRdDf3fwBgUAYmusVS shaunakdpandit@gmail.com"
       ];
     };
+    # /home is a volume mounted after activation creates home dirs, so recreate it once mounted.
+    systemd.tmpfiles.rules = [ "d /home/claude 0700 claude users -" ];
     security.sudo.wheelNeedsPassword = false;
 
     nix.settings.experimental-features = [

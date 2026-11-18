@@ -142,8 +142,17 @@ in
         user = "git";
         identityFile = "~/.ssh/id_ed25519";
       };
-      # Tailscale SSH via MagicDNS (system/claudebox.nix)
-      claudebox.user = "claude";
+      # LAN: jump through thoth to the VM's tap address (system/claudebox.nix)
+      claudebox = {
+        hostname = "10.100.0.2";
+        user = "claude";
+        proxyJump = "hugh@192.168.4.28";
+      };
+      # Tailnet: Tailscale SSH via MagicDNS
+      claudeboxtail = {
+        hostname = "claudebox";
+        user = "claude";
+      };
     };
   };
 
