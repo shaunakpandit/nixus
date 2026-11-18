@@ -39,7 +39,7 @@ in
   ];
 
   # thoth reaches the VM's tap directly, no jump through itself.
-  programs.ssh.matchBlocks.claudebox.proxyJump = lib.mkForce null;
+  programs.ssh.settings.claudebox.ProxyJump = lib.mkForce null;
 
   home.stateVersion = "26.05";
 }

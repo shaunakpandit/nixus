@@ -11,7 +11,8 @@
     enable = true;
     # Auth is Claude Code's own browser login (`/login`); credentials stay in ~/.claude.
     package = pkgs.symlinkJoin {
-      name = "claude-code-native";
+      # Versioned name so home-manager detects >= 2.1.157 and drops the legacy --plugin-dir wrapper.
+      name = "claude-code-native-${pkgs.claude-code.version}";
       paths = [ pkgs.claude-code ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
       # The formatters otherwise only exist on nvim's PATH (extraPackages),
@@ -29,7 +30,7 @@
     };
 
     # ~/.claude/CLAUDE.md, loaded in every project alongside any project CLAUDE.md.
-    memory.text = ''
+    context = ''
       # Global rules
 
       ## Code style
