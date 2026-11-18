@@ -259,6 +259,8 @@ in
       jq
       curl
       tmux
+      # Lets ssh sessions from ghostty (TERM=xterm-ghostty) work with clear, nvim and tmux.
+      ghostty.terminfo
       nodejs
       python3
       gcc
