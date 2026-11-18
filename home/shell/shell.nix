@@ -93,6 +93,7 @@ in
 
   programs.yazi = {
     enable = true;
+    shellWrapperName = "y";
   };
 
   programs.btop = {
@@ -131,21 +132,23 @@ in
 
   programs.ssh = {
     enable = true;
-    matchBlocks = {
+    # The legacy defaults were all OpenSSH's own defaults anyway.
+    enableDefaultConfig = false;
+    settings = {
       "github.com" = {
-        user = "git";
-        identityFile = "~/.ssh/id_ed25519";
+        User = "git";
+        IdentityFile = "~/.ssh/id_ed25519";
       };
       # LAN: jump through thoth to the VM's tap address (system/claudebox.nix)
       claudebox = {
-        hostname = "10.100.0.2";
-        user = "claude";
-        proxyJump = "hugh@192.168.4.28";
+        HostName = "10.100.0.2";
+        User = "claude";
+        ProxyJump = "hugh@192.168.4.28";
       };
       # Tailnet: Tailscale SSH via MagicDNS
       claudeboxtail = {
-        hostname = "claudebox";
-        user = "claude";
+        HostName = "claudebox";
+        User = "claude";
       };
     };
   };

@@ -20,7 +20,7 @@ in
 
   programs.waybar = {
     enable = true;
-    package = inputs.waybar-git.packages.${pkgs.system}.default;
+    package = inputs.waybar-git.packages.${pkgs.stdenv.hostPlatform.system}.default;
     settings.mainBar = {
       position = "bottom";
       height = 24;
