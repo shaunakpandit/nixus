@@ -146,9 +146,13 @@ in
       useGlobalPkgs = true;
       users.claude = {
         imports = [ ../home/shell/claudeCodeBase.nix ];
+        # Teaches Claude the agent-browser CLI (ships with the package).
+        programs.claude-code.skills.agent-browser = "${pkgs.agent-browser}/skills/agent-browser";
         home.stateVersion = "26.05";
       };
     };
+    # Use nixpkgs' chromium instead of agent-browser downloading its own.
+    environment.variables.AGENT_BROWSER_EXECUTABLE_PATH = lib.getExe pkgs.chromium;
     environment.etc."claude-code/CLAUDE.md".text = ''
       # claudebox
 
@@ -203,6 +207,10 @@ in
       nodejs
       python3
       gcc
+
+      # Headless browser
+      agent-browser
+      chromium
 
       # Go
       go
