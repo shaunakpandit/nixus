@@ -28,6 +28,8 @@ in
 
     settings = {
       effortLevel = lib.mkDefault "high";
+      # Claude Code ranks model defaults/experiments above effortLevel; the env var beats them.
+      env.CLAUDE_CODE_EFFORT_LEVEL = lib.mkDefault "high";
       # true would also suppress the status line.
       disableAllHooks = false;
       statusLine = {

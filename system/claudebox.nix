@@ -27,6 +27,8 @@
 }:
 let
   tap = "vm-claude";
+  # Host side of the VM's ~/shared, owned by the host user (uid 1000 on both sides).
+  shared = "/home/${config.var.username}/claudebox";
   dns = config.var.homelab.pihole;
   # New connections the guest must not open, dropped in mangle (after conntrack, before Docker's DNAT) so replies to host-initiated SSH still pass.
   blocked = [
@@ -103,6 +105,14 @@ in
         }
       ];
       writableStoreOverlay = "/nix/.rw-store";
+      shares = [
+        {
+          proto = "virtiofs";
+          tag = "shared";
+          source = shared;
+          mountPoint = "/home/claude/shared";
+        }
+      ];
     };
 
     networking.hostName = "claudebox";
@@ -141,11 +151,26 @@ in
 
     environment.shellAliases.claude = "claude --dangerously-skip-permissions";
     # Ponytail plugin, status line and effort shared with the hosts.
-    imports = [ inputs.home-manager.nixosModules.home-manager ];
+    # Stylix themes nvim (and auto-imports its home-manager module for the user below).
+    imports = [
+      inputs.home-manager.nixosModules.home-manager
+      inputs.stylix.nixosModules.stylix
+      ./stylix.nix
+    ];
     home-manager = {
       useGlobalPkgs = true;
+      # /home persists, so files Claude or tools created there must not block activation.
+      backupFileExtension = "hm-backup";
       users.claude = {
-        imports = [ ../home/shell/claudeCodeBase.nix ];
+        imports = [
+          ../home/shell/claudeCodeBase.nix
+          ../home/shell/tmux.nix
+          ../home/shell/nvim.nix
+        ];
+        # Lets home.shellAliases (tm, tmm, tmn) reach the login shell.
+        programs.bash.enable = true;
+        # Claude owns ~/.claude here and writes settings.json itself, which blocks a read-only symlink; merge into it instead.
+        programs.claude-code.mutableSettings = true;
         # Teaches Claude the agent-browser CLI (ships with the package).
         programs.claude-code.skills.agent-browser = "${pkgs.agent-browser}/skills/agent-browser";
         home.stateVersion = "26.05";
@@ -158,6 +183,12 @@ in
 
       You are running in an isolated VM built for long, autonomous dev work. You have full root here.
       The VM can reach the internet but not the owner's LAN or tailnet, so don't try.
+
+      ## Shared directory
+
+      `~/shared` (`/home/claude/shared`) is shared live with the owner's host machine. Use it to hand over
+      notes, reports and other markdown, and to read files the owner drops in for you. The owner reads everything
+      written here, so never put secrets or tokens in it. Keep repos and build output out of it, in `~` instead.
 
       ## Git and GitHub rules
 
@@ -172,6 +203,8 @@ in
     '';
     users.users.claude = {
       isNormalUser = true;
+      # Matches the host user so files in ~/shared are owned correctly on both sides.
+      uid = 1000;
       extraGroups = [ "wheel" ];
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICmL0OiFEZ/l2usxzvKkje514gDkfUg6JpArW7CoguxX shaunakdpandit@gmail.com"
@@ -279,6 +312,25 @@ in
     };
   };
   networking.networkmanager.unmanaged = [ tap ];
+
+  # The guest has root and virtiofsd runs as root, so it could plant setuid or device files; this mount
+  # neuters them on the host. The backing directory is root-only so the share is reachable only through it.
+  systemd.tmpfiles.rules = [
+    "d /var/lib/claudebox 0700 root root -"
+    "d /var/lib/claudebox/shared 0755 ${config.var.username} users -"
+    "d ${shared} 0755 ${config.var.username} users -"
+  ];
+  fileSystems.${shared} = {
+    device = "/var/lib/claudebox/shared";
+    fsType = "none";
+    options = [
+      "bind"
+      "nosuid"
+      "nodev"
+      "noexec"
+    ];
+  };
+  systemd.services."microvm-virtiofsd@claudebox".unitConfig.RequiresMountsFor = [ shared ];
   networking.nat = {
     enable = true;
     internalInterfaces = [ tap ];
