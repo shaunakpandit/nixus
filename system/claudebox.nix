@@ -24,7 +24,7 @@
 let
   tap = "vm-claude";
   dns = config.var.homelab.pihole;
-  # Everything the guest must not reach, dropped in the raw table so Docker's DNAT can't route around it.
+  # New connections the guest must not open, dropped in mangle (after conntrack, before Docker's DNAT) so replies to host-initiated SSH still pass.
   blocked = [
     "10.0.0.0/8"
     "172.16.0.0/12"
@@ -42,7 +42,8 @@ let
   rules =
     flag:
     lib.concatMapStringsSep "\n" (
-      spec: "iptables -t raw ${flag} PREROUTING -i ${tap} ${spec} 2>/dev/null || true"
+      spec:
+      "iptables -t mangle ${flag} PREROUTING -i ${tap} -m conntrack --ctstate NEW ${spec} 2>/dev/null || true"
     ) specs;
 
   # Backs up the CLAUDE.md git rules below; Claude has root in the guest, so it's a guard against accidents only.
