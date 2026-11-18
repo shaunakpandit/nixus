@@ -30,7 +30,8 @@ let
   # Host side of the VM's ~/shared, owned by the host user (uid 1000 on both sides).
   shared = "/home/${config.var.username}/claudebox";
   dns = config.var.homelab.pihole;
-  # New connections the guest must not open, dropped in mangle (after conntrack, before Docker's DNAT) so replies to host-initiated SSH still pass.
+  # Guest traffic other than replies, dropped in mangle (after conntrack, before Docker's DNAT) so replies to host-initiated SSH still pass.
+  # Matching everything but ESTABLISHED,RELATED also catches INVALID packets, which a NEW-only match would let through.
   blocked = [
     "10.0.0.0/8"
     "172.16.0.0/12"
@@ -45,12 +46,19 @@ let
       "udp"
       "tcp"
     ];
+  # Only deletes may fail (rule absent); a failed insert must fail the firewall unit instead of silently leaving the guest unisolated.
   rules =
     flag:
-    lib.concatMapStringsSep "\n" (
-      spec:
-      "iptables -t mangle ${flag} PREROUTING -i ${tap} -m conntrack --ctstate NEW ${spec} 2>/dev/null || true"
-    ) specs;
+    lib.concatMapStringsSep "\n"
+      (command: command + lib.optionalString (flag == "-D") " 2>/dev/null || true")
+      (
+        map (
+          spec:
+          "iptables -t mangle ${flag} PREROUTING -i ${tap} -m conntrack ! --ctstate ESTABLISHED,RELATED ${spec}"
+        ) specs
+        # The guest has root and can re-enable IPv6; tailscale turns on host IPv6 forwarding, and link-local would reach host ports.
+        ++ [ "ip6tables -t raw ${flag} PREROUTING -i ${tap} -j DROP" ]
+      );
 
   # Backs up the CLAUDE.md git rules below; Claude has root in the guest, so it's a guard against accidents only.
   prePush = pkgs.writeShellScript "pre-push" ''
