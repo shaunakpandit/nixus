@@ -3,14 +3,11 @@ let
   c = config.lib.stylix.colors;
 in
 {
+  imports = [ ./tmux.nix ];
+
   home.packages = with pkgs; [
     jq
   ];
-
-  xdg.configFile."tmux" = {
-    source = ../../dots/tmux;
-    recursive = true;
-  };
 
   # xdg.configFile."ghostty" = {
   #   source = ../../dots/ghostty;
@@ -65,9 +62,6 @@ in
       nixos = "cd ~/dev/nixus";
       vi = "nvim";
       vim = "nvim";
-      tm = "tmux new -A -s code -n code ';' neww -d -S -t code: -n term ';' neww -d -S -t code: -n frenchie";
-      tmm = "tmux new -A -s gen -n gen ';' neww -d -S -t gen: -n shell";
-      tmn = "tmux new -A -s notes -n notes";
       c = "clear";
       ".." = "cd ..";
       zs = "source ~/.zshrc";
@@ -142,11 +136,18 @@ in
         user = "git";
         identityFile = "~/.ssh/id_ed25519";
       };
+      # LAN: jump through thoth to the VM's tap address (system/claudebox.nix)
+      claudebox = {
+        hostname = "10.100.0.2";
+        user = "claude";
+        proxyJump = "hugh@192.168.4.28";
+      };
+      # Tailnet: Tailscale SSH via MagicDNS
+      claudeboxtail = {
+        hostname = "claudebox";
+        user = "claude";
+      };
     };
-  };
-
-  programs.tmux = {
-    enable = true;
   };
 
   # Add go binaries to PATH

@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   ...
@@ -36,6 +37,9 @@ in
   home.packages = with pkgs; [
     jq
   ];
+
+  # thoth reaches the VM's tap directly, no jump through itself.
+  programs.ssh.matchBlocks.claudebox.proxyJump = lib.mkForce null;
 
   home.stateVersion = "26.05";
 }

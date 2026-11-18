@@ -15,6 +15,7 @@
     ../../system/nvidiaLegacy.nix
     ../../system/virtualisation.nix
     ../../system/mtp.nix
+    ../../system/claudebox.nix
     # ../../containers/portainer.nix
     ../../containers/openwebui.nix
     ../../containers/plex.nix
