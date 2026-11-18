@@ -61,6 +61,10 @@
       lua-language-server
       stylua
 
+      # nvim-treesitter compiles its parsers with these
+      tree-sitter
+      gcc
+
       # General
       bash-language-server
       rust-analyzer
