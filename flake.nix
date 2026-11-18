@@ -33,6 +33,10 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    microvm = {
+      url = "github:microvm-nix/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -49,6 +53,7 @@
       helium,
       nix-cachyos-kernel,
       sops-nix,
+      microvm,
       ...
     }@inputs:
     {
@@ -175,6 +180,7 @@
               };
             }
             stylix.nixosModules.stylix
+            microvm.nixosModules.host
           ];
         };
 
