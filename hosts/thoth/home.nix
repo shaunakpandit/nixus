@@ -37,10 +37,5 @@ in
     jq
   ];
 
-  programs.ssh.matchBlocks.claudebox = {
-    hostname = "10.100.0.2";
-    user = "claude";
-  };
-
   home.stateVersion = "26.05";
 }

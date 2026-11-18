@@ -29,7 +29,7 @@ let
       spec: "iptables -t raw ${flag} PREROUTING -i ${tap} ${spec} 2>/dev/null || true"
     ) specs;
 
-  # Accident guard only: Claude has root in the guest. GitHub rulesets are the real enforcement.
+  # Backs up the CLAUDE.md git rules below; Claude has root in the guest, so it's a guard against accidents only.
   prePush = pkgs.writeShellScript "pre-push" ''
     zero=0000000000000000000000000000000000000000
     while read -r localRef localSha remoteRef remoteSha; do
@@ -74,6 +74,12 @@ in
           mountPoint = "/nix/.rw-store";
           size = 20480;
         }
+        # The guest root is ephemeral; this keeps tailscale's identity and the SSH host key across reboots.
+        {
+          image = "var-lib.img";
+          mountPoint = "/var/lib";
+          size = 10240;
+        }
       ];
       writableStoreOverlay = "/nix/.rw-store";
     };
@@ -93,7 +99,42 @@ in
     services.openssh = {
       enable = true;
       settings.PasswordAuthentication = false;
+      hostKeys = [
+        {
+          path = "/var/lib/ssh/ssh_host_ed25519_key";
+          type = "ed25519";
+        }
+      ];
     };
+    # Inbound only: the tailnet policy gives tag:claudebox no outbound grants, so other nodes drop its traffic.
+    # Tailscale SSH authenticates by tailnet identity, so other devices need no keys in here.
+    services.tailscale = {
+      enable = true;
+      authKeyFile = "/var/lib/tailscale-authkey";
+      extraUpFlags = [
+        "--ssh"
+        "--advertise-tags=tag:claudebox"
+        "--accept-dns=false"
+      ];
+    };
+
+    environment.etc."claude-code/CLAUDE.md".text = ''
+      # claudebox
+
+      You are running in an isolated VM built for long, autonomous dev work. You have full root here.
+      The VM can reach the internet but not the owner's LAN or tailnet, so don't try.
+
+      ## Git and GitHub rules
+
+      These are hard rules. A pre-push hook backs them up, but don't rely on it and never bypass it (no `--no-verify`, no editing `core.hooksPath`).
+
+      - Never push to `main` or `master`. Do all work on a new branch named for the task.
+      - Always raise a pull request with `gh pr create` for new work. Never merge your own PRs; the owner reviews and merges.
+      - Never force push (`--force`, `--force-with-lease`, `+refspec`).
+      - Never rewrite published history: no `rebase`, `commit --amend`, `reset`, or `filter-branch` on commits that were pushed.
+      - Never delete remote branches, tags, or repositories.
+      - If a task seems to need any of the above, stop and say so in the PR or your final message instead.
+    '';
     users.users.claude = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];

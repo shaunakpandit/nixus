@@ -142,6 +142,8 @@ in
         user = "git";
         identityFile = "~/.ssh/id_ed25519";
       };
+      # Tailscale SSH via MagicDNS (system/claudebox.nix)
+      claudebox.user = "claude";
     };
   };
 
