@@ -1,10 +1,10 @@
 # Isolated microVM where Claude runs with full permissions: internet plus home DNS only, no LAN/tailnet/host services.
 #
 # One-time setup:
-# 1. Tailnet policy (login.tailscale.com > Access controls). Replace the default allow-all grant with:
-#      "tagOwners": { "tag:claudebox": ["autogroup:admin"] },
-#      "grants": [ { "src": ["autogroup:member"], "dst": ["*"], "ip": ["*"] } ],
-#      "ssh": [ { "action": "accept", "src": ["autogroup:member"], "dst": ["tag:claudebox"], "users": ["claude"] } ]
+# 1. Tailnet policy (login.tailscale.com > Access controls). Edit, don't replace the file:
+#      add     "tagOwners": { "tag:claudebox": ["autogroup:admin"] },
+#      change  the allow-all grant's "src": ["*"] to "src": ["autogroup:member"]
+#      append  to "ssh": { "action": "accept", "src": ["autogroup:member"], "dst": ["tag:claudebox"], "users": ["claude"] }
 #    Tagged nodes aren't members, so claudebox can't reach out. Other tagged nodes need their own grants.
 # 2. Auth key: Settings > Keys > Generate auth key, with tag:claudebox and not reusable.
 #    From thoth: ssh claude@10.100.0.2, put the key in /var/lib/tailscale-authkey, then restart microvm@claudebox.
