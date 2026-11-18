@@ -7,16 +7,16 @@
 #      append  to "ssh": { "action": "accept", "src": ["autogroup:member"], "dst": ["tag:claudebox"], "users": ["claude"] }
 #    Tagged nodes aren't members, so claudebox can't reach out. Other tagged nodes need their own grants.
 #    Make sure no "autoApprovers" entry matches tag:claudebox, and never approve routes or exit nodes it advertises.
-#    add tests, so the console rejects any later policy edit that lets claudebox out (fill in the tailnet IPs from `tailscale ip -4`):
+#    add tests, so the console rejects any later policy edit that lets claudebox out
+#    (thoth, rama, dietpi, iphone171, and thoth's 192.168.4.28/32 subnet route; add new devices here as they join):
 #      "tests": [
 #        { "src": "tag:claudebox", "deny": [
-#            "<thoth tailnet IP>:22", "<thoth tailnet IP>:3000", "<rama tailnet IP>:22", "<rama tailnet IP>:53",
-#            "<t14 tailnet IP>:22", "<d4080 tailnet IP>:22",
-#            "192.168.4.28:22", "192.168.4.29:53" ] },
-#        { "src": "shaunakdpandit@gmail.com", "accept": [ "tag:claudebox:22" ] }
+#            "100.67.36.10:22", "100.67.36.10:3000", "192.168.4.28:22",
+#            "100.94.125.114:22", "100.102.220.56:22", "100.102.220.56:53", "100.116.199.110:443" ] },
+#        { "src": "cfdyg4mhtp@privaterelay.appleid.com", "accept": [ "tag:claudebox:22" ] }
 #      ],
 #      "sshTests": [
-#        { "src": "shaunakdpandit@gmail.com", "dst": [ "tag:claudebox" ], "accept": [ "claude" ], "deny": [ "root" ] }
+#        { "src": "cfdyg4mhtp@privaterelay.appleid.com", "dst": [ "tag:claudebox" ], "accept": [ "claude" ], "deny": [ "root" ] }
 #      ]
 # 2. Auth key: Settings > Keys > Generate auth key, with tag:claudebox and not reusable.
 #    From thoth: ssh claude@10.100.0.2, put the key in /var/lib/tailscale-authkey, then on thoth:
