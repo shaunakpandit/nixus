@@ -1,7 +1,13 @@
-# Isolated microVM where Claude runs with full permissions: internet only, no LAN/tailnet/host services.
-{ lib, pkgs, ... }:
+# Isolated microVM where Claude runs with full permissions: internet plus home DNS only, no LAN/tailnet/host services.
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   tap = "vm-claude";
+  dns = config.var.homelab.pihole;
   # Everything the guest must not reach, dropped in the raw table so Docker's DNAT can't route around it.
   blocked = [
     "10.0.0.0/8"
@@ -10,11 +16,39 @@ let
     "100.64.0.0/10"
     "169.254.0.0/16"
   ];
+  # -I prepends, so the DNS accepts (inserted last) end up above the drops.
+  specs =
+    map (range: "-d ${range} -j DROP") blocked
+    ++ map (protocol: "-d ${dns} -p ${protocol} --dport 53 -j ACCEPT") [
+      "udp"
+      "tcp"
+    ];
   rules =
     flag:
     lib.concatMapStringsSep "\n" (
-      range: "iptables -t raw ${flag} PREROUTING -i ${tap} -d ${range} -j DROP || true"
-    ) blocked;
+      spec: "iptables -t raw ${flag} PREROUTING -i ${tap} ${spec} 2>/dev/null || true"
+    ) specs;
+
+  # Accident guard only: Claude has root in the guest. GitHub rulesets are the real enforcement.
+  prePush = pkgs.writeShellScript "pre-push" ''
+    zero=0000000000000000000000000000000000000000
+    while read -r localRef localSha remoteRef remoteSha; do
+      case "$remoteRef" in
+        refs/heads/main | refs/heads/master)
+          echo "claudebox: no direct pushes to $remoteRef, open a PR" >&2
+          exit 1
+          ;;
+      esac
+      if [ "$localSha" = "$zero" ]; then
+        echo "claudebox: deleting remote branches is not allowed" >&2
+        exit 1
+      fi
+      if [ "$remoteSha" != "$zero" ] && ! git merge-base --is-ancestor "$remoteSha" "$localSha"; then
+        echo "claudebox: non-fast-forward push to $remoteRef rejected" >&2
+        exit 1
+      fi
+    done
+  '';
 in
 {
   microvm.vms.claudebox.config = {
@@ -52,7 +86,7 @@ in
         matchConfig.Type = "ether";
         address = [ "10.100.0.2/24" ];
         gateway = [ "10.100.0.1" ];
-        dns = [ "1.1.1.1" ];
+        dns = [ dns ];
       };
     };
 
@@ -73,8 +107,20 @@ in
       "nix-command"
       "flakes"
     ];
+    programs.git = {
+      enable = true;
+      config = {
+        credential."https://github.com".helper = "!gh auth git-credential";
+        user.name = "Claude (claudebox)";
+        user.email = "shaunakdpandit@gmail.com";
+        core.hooksPath = "/etc/git-hooks";
+      };
+    };
+    environment.etc."git-hooks/pre-push".source = prePush;
+
     environment.systemPackages = with pkgs; [
       claude-code
+      dig
       git
       gh
       ripgrep
