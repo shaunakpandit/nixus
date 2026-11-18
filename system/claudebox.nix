@@ -230,20 +230,23 @@ in
       waybackurls
       gau
 
-      # Security
-      nmap
-      naabu
-      httpx
-      katana
-      nuclei
-      ffuf
-      gobuster
-      nikto
-      whatweb
-      wafw00f
-      testssl
-      sqlmap
-      hydra
+      # Active scanning: targets and the ISP see the home IP, so these stay off until
+      # the VM's traffic is routed through a VPN on thoth (e.g. Proton WireGuard, policy-routed for 10.100.0.0/24).
+      # nmap
+      # naabu
+      # httpx
+      # katana
+      # nuclei
+      # ffuf
+      # gobuster
+      # nikto
+      # whatweb
+      # wafw00f
+      # testssl
+      # sqlmap
+      # hydra
+
+      # Security (offline / local)
       john
       trufflehog
       gitleaks
