@@ -1,4 +1,19 @@
 # Isolated microVM where Claude runs with full permissions: internet plus home DNS only, no LAN/tailnet/host services.
+#
+# One-time setup:
+# 1. Tailnet policy (login.tailscale.com > Access controls). Replace the default allow-all grant with:
+#      "tagOwners": { "tag:claudebox": ["autogroup:admin"] },
+#      "grants": [ { "src": ["autogroup:member"], "dst": ["*"], "ip": ["*"] } ],
+#      "ssh": [ { "action": "accept", "src": ["autogroup:member"], "dst": ["tag:claudebox"], "users": ["claude"] } ]
+#    Tagged nodes aren't members, so claudebox can't reach out. Other tagged nodes need their own grants.
+# 2. Auth key: Settings > Keys > Generate auth key, with tag:claudebox and not reusable.
+#    From thoth: ssh claude@10.100.0.2, put the key in /var/lib/tailscale-authkey, then restart microvm@claudebox.
+# 3. GitHub token: github.com/settings/personal-access-tokens/new (fine-grained)
+#    Repository access: All repositories. Permissions: Contents read/write, Pull requests read/write. Nothing else.
+#    In the VM: gh auth login --with-token, then paste the token.
+# 4. In the VM: claude /login
+#
+# Use: ssh claudebox, tmux, claude --dangerously-skip-permissions
 {
   config,
   lib,
