@@ -25,6 +25,7 @@
 }:
 let
   tap = "vm-claude";
+  uplink = "enp5s0";
   dns = config.var.homelab.pihole;
   # New connections the guest must not open, dropped in mangle (after conntrack, before Docker's DNAT) so replies to host-initiated SSH still pass.
   blocked = [
@@ -46,7 +47,13 @@ let
     lib.concatMapStringsSep "\n" (
       spec:
       "iptables -t mangle ${flag} PREROUTING -i ${tap} -m conntrack --ctstate NEW ${spec} 2>/dev/null || true"
-    ) specs;
+    ) specs
+    # Docker sets the FORWARD policy to DROP, so the guest's NATed traffic must be allowed explicitly.
+    + ''
+
+      iptables ${flag} FORWARD -i ${tap} -o ${uplink} -j ACCEPT 2>/dev/null || true
+      iptables ${flag} FORWARD -i ${uplink} -o ${tap} -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT 2>/dev/null || true
+    '';
 
   # Backs up the CLAUDE.md git rules below; Claude has root in the guest, so it's a guard against accidents only.
   prePush = pkgs.writeShellScript "pre-push" ''
@@ -212,7 +219,7 @@ in
   networking.nat = {
     enable = true;
     internalInterfaces = [ tap ];
-    externalInterface = "enp5s0";
+    externalInterface = uplink;
   };
   # Delete first so firewall reloads do not stack duplicate rules.
   networking.firewall.extraCommands = rules "-D" + "\n" + rules "-I";
