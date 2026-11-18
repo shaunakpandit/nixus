@@ -6,6 +6,18 @@
 #      change  the allow-all grant's "src": ["*"] to "src": ["autogroup:member"]
 #      append  to "ssh": { "action": "accept", "src": ["autogroup:member"], "dst": ["tag:claudebox"], "users": ["claude"] }
 #    Tagged nodes aren't members, so claudebox can't reach out. Other tagged nodes need their own grants.
+#    Make sure no "autoApprovers" entry matches tag:claudebox, and never approve routes or exit nodes it advertises.
+#    add tests, so the console rejects any later policy edit that lets claudebox out (fill in the tailnet IPs from `tailscale ip -4`):
+#      "tests": [
+#        { "src": "tag:claudebox", "deny": [
+#            "<thoth tailnet IP>:22", "<thoth tailnet IP>:3000", "<rama tailnet IP>:22", "<rama tailnet IP>:53",
+#            "<t14 tailnet IP>:22", "<d4080 tailnet IP>:22",
+#            "192.168.4.28:22", "192.168.4.29:53" ] },
+#        { "src": "shaunakdpandit@gmail.com", "accept": [ "tag:claudebox:22" ] }
+#      ],
+#      "sshTests": [
+#        { "src": "shaunakdpandit@gmail.com", "dst": [ "tag:claudebox" ], "accept": [ "claude" ], "deny": [ "root" ] }
+#      ]
 # 2. Auth key: Settings > Keys > Generate auth key, with tag:claudebox and not reusable.
 #    From thoth: ssh claude@10.100.0.2, put the key in /var/lib/tailscale-authkey, then on thoth:
 #      sudo systemctl restart microvm@claudebox
