@@ -11,21 +11,22 @@
 #      sudo systemctl restart microvm@claudebox
 # 3. GitHub token: github.com/settings/personal-access-tokens/new (fine-grained)
 #    Repository access: All repositories. Permissions: Contents read/write, Pull requests read/write, Issues read/write. Nothing else.
-#    In the VM: gh auth login --with-token, then paste the token.
+#    In the VM:
+#       1. gh auth login --with-token
+#       2. paste token and hit enter
+#       3. ctrl+d
 # 4. In the VM: claude /login
-# 5. LAN access (ssh claudebox from t14/d4080 jumps via hugh@thoth): add the device's ~/.ssh/id_ed25519.pub
-#    to users.users.claude.openssh.authorizedKeys.keys below. d4080 still needs adding.
 #
-# Use: ssh claudebox (LAN, via thoth) or ssh claudeboxtail (tailnet), then tmux, claude --dangerously-skip-permissions
+# Use: ssh claudebox, tmux, claude (aliased to --dangerously-skip-permissions)
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
 }:
 let
   tap = "vm-claude";
-  uplink = "enp5s0";
   dns = config.var.homelab.pihole;
   # New connections the guest must not open, dropped in mangle (after conntrack, before Docker's DNAT) so replies to host-initiated SSH still pass.
   blocked = [
@@ -47,13 +48,7 @@ let
     lib.concatMapStringsSep "\n" (
       spec:
       "iptables -t mangle ${flag} PREROUTING -i ${tap} -m conntrack --ctstate NEW ${spec} 2>/dev/null || true"
-    ) specs
-    # Docker sets the FORWARD policy to DROP, so the guest's NATed traffic must be allowed explicitly.
-    + ''
-
-      iptables ${flag} FORWARD -i ${tap} -o ${uplink} -j ACCEPT 2>/dev/null || true
-      iptables ${flag} FORWARD -i ${uplink} -o ${tap} -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT 2>/dev/null || true
-    '';
+    ) specs;
 
   # Backs up the CLAUDE.md git rules below; Claude has root in the guest, so it's a guard against accidents only.
   prePush = pkgs.writeShellScript "pre-push" ''
@@ -144,6 +139,16 @@ in
       ];
     };
 
+    environment.shellAliases.claude = "claude --dangerously-skip-permissions";
+    # Ponytail plugin, status line and effort shared with the hosts.
+    imports = [ inputs.home-manager.nixosModules.home-manager ];
+    home-manager = {
+      useGlobalPkgs = true;
+      users.claude = {
+        imports = [ ../home/shell/claudeCodeBase.nix ];
+        home.stateVersion = "26.05";
+      };
+    };
     environment.etc."claude-code/CLAUDE.md".text = ''
       # claudebox
 
@@ -165,14 +170,9 @@ in
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       openssh.authorizedKeys.keys = [
-        # thoth
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICmL0OiFEZ/l2usxzvKkje514gDkfUg6JpArW7CoguxX shaunakdpandit@gmail.com"
-        # t14
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOST1BDY81RViIwoRqex1mYipRpRdDf3fwBgUAYmusVS shaunakdpandit@gmail.com"
       ];
     };
-    # /home is a volume mounted after activation creates home dirs, so recreate it once mounted.
-    systemd.tmpfiles.rules = [ "d /home/claude 0700 claude users -" ];
     security.sudo.wheelNeedsPassword = false;
 
     nix.settings.experimental-features = [
@@ -203,6 +203,57 @@ in
       nodejs
       python3
       gcc
+
+      # Go
+      go
+      gopls
+      golangci-lint
+      delve
+
+      # JavaScript / TypeScript
+      typescript
+      typescript-language-server
+      pnpm
+      bun
+
+      # OSINT
+      whois
+      theharvester
+      amass
+      subfinder
+      dnsx
+      dnsrecon
+      sherlock
+      maigret
+      holehe
+      exiftool
+      waybackurls
+      gau
+
+      # Security
+      nmap
+      naabu
+      httpx
+      katana
+      nuclei
+      ffuf
+      gobuster
+      nikto
+      whatweb
+      wafw00f
+      testssl
+      sqlmap
+      hydra
+      john
+      trufflehog
+      gitleaks
+      mitmproxy
+      tcpdump
+      socat
+      binwalk
+      radare2
+      yara
+      seclists
     ];
 
     system.stateVersion = "26.05";
@@ -219,7 +270,7 @@ in
   networking.nat = {
     enable = true;
     internalInterfaces = [ tap ];
-    externalInterface = uplink;
+    externalInterface = "enp5s0";
   };
   # Delete first so firewall reloads do not stack duplicate rules.
   networking.firewall.extraCommands = rules "-D" + "\n" + rules "-I";
