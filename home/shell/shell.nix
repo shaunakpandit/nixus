@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   c = config.lib.stylix.colors;
 in
@@ -115,7 +120,7 @@ in
     enable = true;
     settings = {
       user = {
-        email = "shaunakdpandit@gmail.com";
+        email = lib.mkDefault "shaunakdpandit@gmail.com";
         name = "shaunakpandit";
       };
       pull = {
