@@ -266,6 +266,7 @@ in
       git
       gh
       ripgrep
+      fzf
       fd
       jq
       curl
