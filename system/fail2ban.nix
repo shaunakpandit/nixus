@@ -11,8 +11,8 @@
     enable = true;
     ignoreIP = [
       # only ignore client hosts, servers should really not be sshing to each other
-      "192.168.4.30" # d4080
-      "192.168.4.22" # t14
+      config.var.homelab.d4080
+      config.var.homelab.t14
     ];
   };
 }

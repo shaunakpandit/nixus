@@ -105,6 +105,8 @@ let
   '';
 in
 {
+  imports = [ inputs.microvm.nixosModules.host ];
+
   microvm.vms.claudebox.config = {
     microvm = {
       hypervisor = "qemu";

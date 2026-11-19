@@ -1,5 +1,7 @@
-{ config, pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
+  imports = [ inputs.mangowm.nixosModules.mango ];
+
   programs.mango.enable = true;
 
   xdg.terminal-exec = {

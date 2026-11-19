@@ -5,7 +5,6 @@
     username = "void";
     remap = "";
     rebuildCommand = "sudo nixos-rebuild switch --flake ~/dev/nixus#d4080";
-    cursorSize = 36;
   };
   # Let this here
   options = {
