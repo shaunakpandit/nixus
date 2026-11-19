@@ -4,10 +4,10 @@
     ./dev.nix
     ./thunderbird.nix
     ./sharepoint.nix
+    ./teams.nix
   ];
 
   home.packages = with pkgs; [
-    teams-for-linux
     # MySQL GUI; enable its Vim keymap in settings
     beekeeper-studio
   ];
