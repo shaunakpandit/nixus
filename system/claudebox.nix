@@ -30,6 +30,17 @@
 # 4. In the VM: claude /login
 #
 # Use: ssh claudebox, tmux, claude (aliased to --dangerously-skip-permissions)
+#
+# Persistence: the guest root is rebuilt from this file on every boot. Images in /var/lib/microvms/claudebox/ on thoth keep:
+#   home.img     /home: repos, ~/.claude (login, sessions), ~/.config/gh (token)
+#   nix-rw.img   /nix/.rw-store: store paths built or fetched inside the VM
+#   var-lib.img  /var/lib: tailscale identity and auth key, SSH host key
+# ~/shared lives on thoth (/var/lib/claudebox/shared) and survives a reset.
+#
+# Reset (on thoth): sudo systemctl stop microvm@claudebox, delete the images to wipe, sudo systemctl start microvm@claudebox.
+#   Empty images are recreated at boot. Deleting only nix-rw.img keeps all logins; only home.img needs steps 3-4 again.
+#   After deleting var-lib.img: remove the old claudebox node in the tailscale console (or it rejoins as claudebox-1),
+#   redo steps 2-4, and drop the stale claudebox / 10.100.0.2 entries from known_hosts.
 {
   config,
   inputs,
