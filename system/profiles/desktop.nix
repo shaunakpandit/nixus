@@ -20,8 +20,5 @@
     plexamp
   ];
 
-  environment.systemPackages = with pkgs; [
-    xdg-utils
-    wev
-  ];
+  environment.systemPackages = [ pkgs.wev ];
 }

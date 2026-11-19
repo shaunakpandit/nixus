@@ -48,6 +48,8 @@
     bc
     gcc
     git-ignore
+    # xdg-open, which lazygit uses to open PRs in a browser
+    xdg-utils
     curl
     go
     comma

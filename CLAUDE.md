@@ -111,7 +111,7 @@ Profiles are plain files: an `imports` list plus the settings every machine of t
 | Profile | Imports / sets | Used by |
 |---|---|---|
 | `system/profiles/base.nix` | stylix (+ its flake module), optimization, boot, locale, utils; hostname from `var.hostname`; networkmanager, printing, flakes, allowUnfree; zsh; the user account from `var.username` (`wheel`, `networkmanager`); the shared CLI package list; `var.homelab` | every NixOS host (via the two below) |
-| `system/profiles/desktop.nix` | base + audio, mango, peripherals, the helium NixOS module; dolphin, plexamp, wev, xdg-utils | t14, d4080 |
+| `system/profiles/desktop.nix` | base + audio, mango, peripherals, the helium NixOS module; dolphin, plexamp, wev | t14, d4080 |
 | `system/profiles/server.nix` | base + fail2ban, tailscale, virtualisation; `docker` group; all terminfo; docker-compose, compose2nix | thoth, rama |
 | `home/profiles/base.nix` | shell, utils, dev, nvim, mytools; `EDITOR`/`TERMINAL`; `var.homelab` | every host |
 | `home/profiles/desktop.nix` | home base + mango, ghostty, librewolf, waybar, fuzzel, feh, sioyek, easyeffects, iptvnator, idleSuspend, cliamp, newsboat, claudeCodeNative | t14, d4080 |
