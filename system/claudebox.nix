@@ -192,26 +192,20 @@ in
       useGlobalPkgs = true;
       # /home persists, so files Claude or tools created there must not block activation.
       backupFileExtension = "hm-backup";
-      users.claude =
-        { config, ... }:
-        {
-          imports = [
-            ../home/shell/claudeCodeBase.nix
-            ../home/shell/tmux.nix
-            ../home/shell/nvim.nix
-          ];
-          # Lets home.shellAliases (tm, tmm, tmn) reach the login shell.
-          programs.bash.enable = true;
-          # Claude owns ~/.claude here and writes settings.json itself, which blocks a read-only symlink; merge into it instead.
-          programs.claude-code.mutableSettings = true;
-          # Teaches Claude the agent-browser CLI (ships with the package).
-          programs.claude-code.skills.agent-browser = "${pkgs.agent-browser}/skills/agent-browser";
-          # HM wraps plugins in a dir of per-entry symlinks; on the VM's overlay store Claude Code then rejects
-          # ponytail's hooks as escaping the plugin dir, so link the real source instead.
-          home.file."${config.programs.claude-code.configDir}/skills/ponytail".source =
-            lib.mkForce config.programs.claude-code.plugins.ponytail;
-          home.stateVersion = "26.05";
-        };
+      users.claude = {
+        imports = [
+          ../home/shell/claudeCodeBase.nix
+          ../home/shell/tmux.nix
+          ../home/shell/nvim.nix
+        ];
+        # Lets home.shellAliases (tm, tmm, tmn) reach the login shell.
+        programs.bash.enable = true;
+        # Claude owns ~/.claude here and writes settings.json itself, which blocks a read-only symlink; merge into it instead.
+        programs.claude-code.mutableSettings = true;
+        # Teaches Claude the agent-browser CLI (ships with the package).
+        programs.claude-code.skills.agent-browser = "${pkgs.agent-browser}/skills/agent-browser";
+        home.stateVersion = "26.05";
+      };
     };
     # Use nixpkgs' chromium instead of agent-browser downloading its own.
     environment.variables.AGENT_BROWSER_EXECUTABLE_PATH = lib.getExe pkgs.chromium;

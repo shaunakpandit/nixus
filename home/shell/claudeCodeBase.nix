@@ -1,5 +1,10 @@
 # Claude Code pieces shared by the hosts (claudeCodeNative.nix) and the claudebox VM (system/claudebox.nix).
-{ lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   # Cost is Claude Code's own estimate from token counts; on a subscription it isn't billed.
   statusLine = pkgs.writeShellScript "claude-statusline" ''
@@ -39,4 +44,9 @@ in
       };
     };
   };
+
+  # HM wraps plugins in a dir of per-entry symlinks, so Claude Code rejects ponytail's hooks as escaping
+  # the plugin dir; link the real source instead.
+  home.file."${config.programs.claude-code.configDir}/skills/ponytail".source =
+    lib.mkForce config.programs.claude-code.plugins.ponytail;
 }
