@@ -10,7 +10,7 @@ let
 
   # thoth's LAN address. It is also advertised as a tailscale subnet route
   # (system/tailscale.nix), so the same links work away from home.
-  thoth = "192.168.4.28";
+  thoth = config.var.homelab.thoth;
 
   # Keep in sync with containers/ and the firewall in hosts/thoth/configuration.nix.
   sections = [

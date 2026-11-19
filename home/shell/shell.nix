@@ -46,7 +46,7 @@ in
   programs.zsh = {
     enable = true;
     sessionVariables = {
-      MUSIC_LEAGUE_DB_URL = "mysql://mluser:mlpassword@192.168.4.28:33061/musicleague";
+      MUSIC_LEAGUE_DB_URL = "mysql://mluser:mlpassword@${config.var.homelab.thoth}:33061/musicleague";
     };
     autosuggestion = {
       enable = true;
@@ -75,10 +75,10 @@ in
       fo = "fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\"";
       gl = "git pull";
       bios = "systemctl reboot --firmware-setup";
-      singapl = "ssh singapl@192.168.4.28";
-      cplex = "rsync -avh --progress singapl@192.168.4.28:/mnt/library/music/ ~/Music";
+      singapl = "ssh singapl@${config.var.homelab.thoth}";
+      cplex = "rsync -avh --progress singapl@${config.var.homelab.thoth}:/mnt/library/music/ ~/Music";
       cdone = "cp -r ~/Music/NewDownloads/ ~/Music/";
-      tplex = "rsync -avh --progress ~/Music/NewDownloads singapl@192.168.4.28:/mnt/library/music/ ";
+      tplex = "rsync -avh --progress ~/Music/NewDownloads singapl@${config.var.homelab.thoth}:/mnt/library/music/ ";
       mzip = "for f in *.zip; do unzip \"$f\" -d ~/Music/NewDownloads; done";
     };
   };
@@ -143,7 +143,7 @@ in
       claudebox = {
         HostName = "10.100.0.2";
         User = "claude";
-        ProxyJump = "hugh@192.168.4.28";
+        ProxyJump = "hugh@${config.var.homelab.thoth}";
       };
       # Tailnet: Tailscale SSH via MagicDNS
       claudeboxtail = {

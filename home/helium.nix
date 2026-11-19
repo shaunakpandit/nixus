@@ -1,11 +1,8 @@
+{ inputs, ... }:
 {
-  config,
-  pkgs,
-  inputs,
-  lib,
-  ...
-}:
-{
+  # Policies are written to /etc by inputs.helium.nixosModules.helium, loaded in system/profiles/desktop.nix
+  imports = [ inputs.helium.homeModules.helium ];
+
   # see https://gitlab.com/ntgn/helium-flake
   # for configuration
   programs.helium = {
