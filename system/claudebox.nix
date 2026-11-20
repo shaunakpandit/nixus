@@ -189,6 +189,8 @@ in
       inputs.home-manager.nixosModules.home-manager
       inputs.stylix.nixosModules.stylix
       ./stylix.nix
+      # A UTC browser on a New York IP is a bot signal.
+      ./locale.nix
     ];
     home-manager = {
       useGlobalPkgs = true;
@@ -211,6 +213,12 @@ in
     };
     # Use nixpkgs' chromium instead of agent-browser downloading its own.
     environment.variables.AGENT_BROWSER_EXECUTABLE_PATH = lib.getExe pkgs.chromium;
+    # A near-empty font list is a headless-browser fingerprint.
+    fonts.packages = with pkgs; [
+      noto-fonts
+      liberation_ttf
+      dejavu_fonts
+    ];
     environment.etc."claude-code/CLAUDE.md".text = ''
       # claudebox
 
