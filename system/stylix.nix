@@ -111,4 +111,7 @@ in
       chromium.enable = true;
     };
   };
+
+  # rofi is unused, and stylix's rofi target sets the renamed `programs.rofi.font`.
+  home-manager.sharedModules = [ { stylix.targets.rofi.enable = false; } ];
 }

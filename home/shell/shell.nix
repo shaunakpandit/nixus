@@ -3,14 +3,11 @@ let
   c = config.lib.stylix.colors;
 in
 {
+  imports = [ ./tmux.nix ];
+
   home.packages = with pkgs; [
     jq
   ];
-
-  xdg.configFile."tmux" = {
-    source = ../../dots/tmux;
-    recursive = true;
-  };
 
   # xdg.configFile."ghostty" = {
   #   source = ../../dots/ghostty;
@@ -49,7 +46,7 @@ in
   programs.zsh = {
     enable = true;
     sessionVariables = {
-      MUSIC_LEAGUE_DB_URL = "mysql://mluser:mlpassword@192.168.4.28:33061/musicleague";
+      MUSIC_LEAGUE_DB_URL = "mysql://mluser:mlpassword@${config.var.homelab.thoth}:33061/musicleague";
     };
     autosuggestion = {
       enable = true;
@@ -65,9 +62,6 @@ in
       nixos = "cd ~/dev/nixus";
       vi = "nvim";
       vim = "nvim";
-      tm = "tmux new -A -s code -n code ';' neww -d -S -t code: -n term ';' neww -d -S -t code: -n frenchie";
-      tmm = "tmux new -A -s gen -n gen ';' neww -d -S -t gen: -n shell";
-      tmn = "tmux new -A -s notes -n notes";
       c = "clear";
       ".." = "cd ..";
       zs = "source ~/.zshrc";
@@ -81,10 +75,10 @@ in
       fo = "fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\"";
       gl = "git pull";
       bios = "systemctl reboot --firmware-setup";
-      singapl = "ssh singapl@192.168.4.28";
-      cplex = "rsync -avh --progress singapl@192.168.4.28:/mnt/library/music/ ~/Music";
+      singapl = "ssh singapl@${config.var.homelab.thoth}";
+      cplex = "rsync -avh --progress singapl@${config.var.homelab.thoth}:/mnt/library/music/ ~/Music";
       cdone = "cp -r ~/Music/NewDownloads/ ~/Music/";
-      tplex = "rsync -avh --progress ~/Music/NewDownloads singapl@192.168.4.28:/mnt/library/music/ ";
+      tplex = "rsync -avh --progress ~/Music/NewDownloads singapl@${config.var.homelab.thoth}:/mnt/library/music/ ";
       mzip = "for f in *.zip; do unzip \"$f\" -d ~/Music/NewDownloads; done";
     };
   };
@@ -99,6 +93,7 @@ in
 
   programs.yazi = {
     enable = true;
+    shellWrapperName = "y";
   };
 
   programs.btop = {
@@ -137,16 +132,25 @@ in
 
   programs.ssh = {
     enable = true;
-    matchBlocks = {
+    # The legacy defaults were all OpenSSH's own defaults anyway.
+    enableDefaultConfig = false;
+    settings = {
       "github.com" = {
-        user = "git";
-        identityFile = "~/.ssh/id_ed25519";
+        User = "git";
+        IdentityFile = "~/.ssh/id_ed25519";
+      };
+      # LAN: jump through thoth to the VM's tap address (system/claudebox.nix)
+      claudebox = {
+        HostName = "10.100.0.2";
+        User = "claude";
+        ProxyJump = "hugh@${config.var.homelab.thoth}";
+      };
+      # Tailnet: Tailscale SSH via MagicDNS
+      claudeboxtail = {
+        HostName = "claudebox";
+        User = "claude";
       };
     };
-  };
-
-  programs.tmux = {
-    enable = true;
   };
 
   # Add go binaries to PATH

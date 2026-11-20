@@ -1,10 +1,8 @@
 {
-  description = "A simple NixOS flake";
+  description = "NixOS hosts: t14, d4080, thoth, rama";
 
   inputs = {
-    # NixOS official package source, using the nixos-25.11 branch here
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -38,25 +36,39 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    microvm = {
+      url = "github:microvm-nix/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      home-manager,
-      mangowm,
-      stylix,
-      waybar-git,
-      firefox-addons,
-      nixos-hardware,
-      nix-citizen,
-      helium,
-      nix-cachyos-kernel,
-      sops-nix,
-      nixarr,
-      ...
-    }@inputs:
+    { nixpkgs, home-manager, ... }@inputs:
+    let
+      # A host is hosts/<name>/configuration.nix, plus hosts/<name>/home.nix for var.username.
+      mkHost =
+        name:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/${name}/configuration.nix
+            home-manager.nixosModules.home-manager
+            (
+              { config, ... }:
+              {
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  backupFileExtension = "backup";
+                  extraSpecialArgs = { inherit inputs; };
+                  users.${config.var.username}.imports = [ ./hosts/${name}/home.nix ];
+                };
+              }
+            )
+          ];
+        };
+    in
     {
       # `nix develop` provides the tools for creating keys and editing secrets/
       devShells.x86_64-linux.default =
@@ -71,141 +83,11 @@
           ];
         };
 
-      # Please replace my-nixos with your hostname
       nixosConfigurations = {
-        t14 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            # Import the previous configuration.nix we used,
-            # so the old configuration file still takes effect
-            ./hosts/t14/configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
-              home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.void = {
-                imports = [
-                  ./hosts/t14/home.nix
-                  inputs.mangowm.hmModules.mango
-                  inputs.helium.homeModules.helium
-                ];
-              };
-            }
-            nixos-hardware.nixosModules.lenovo-thinkpad-t14-amd-gen2
-            sops-nix.nixosModules.sops
-            mangowm.nixosModules.mango
-            stylix.nixosModules.stylix
-            helium.nixosModules.helium
-            (
-              { pkgs, ... }:
-              {
-                nixpkgs.overlays = [
-                  # Use nixpkgs from your environment, nixpkgs.config will apply.
-                  # Has small chance of kernel modules not being compatible with kernel version.
-                  nix-cachyos-kernel.overlays.default
-
-                  # Alternatively, use the exact nixpkgs revision as defined in this repo.
-                  # Guarantees you have binary cache, but initializes another nixpkgs instance.
-                  # nix-cachyos-kernel.overlays.pinned
-
-                  # Only use one of the two overlays!
-                ];
-              }
-            )
-          ];
-        };
-
-        d4080 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            # Import the previous configuration.nix we used,
-            # so the old configuration file still takes effect
-            ./hosts/d4080/configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
-              home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.void = {
-                imports = [
-                  ./hosts/d4080/home.nix
-                  inputs.mangowm.hmModules.mango
-                  inputs.helium.homeModules.helium
-                ];
-              };
-            }
-            mangowm.nixosModules.mango
-            stylix.nixosModules.stylix
-            helium.nixosModules.helium
-            (
-              { pkgs, ... }:
-              {
-                nixpkgs.overlays = [
-                  # Use nixpkgs from your environment, nixpkgs.config will apply.
-                  # Has small chance of kernel modules not being compatible with kernel version.
-                  nix-cachyos-kernel.overlays.default
-
-                  # Alternatively, use the exact nixpkgs revision as defined in this repo.
-                  # Guarantees you have binary cache, but initializes another nixpkgs instance.
-                  # nix-cachyos-kernel.overlays.pinned
-
-                  # Only use one of the two overlays!
-                ];
-              }
-            )
-          ];
-        };
-
-        thoth = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            # Import the previous configuration.nix we used,
-            # so the old configuration file still takes effect
-            ./hosts/thoth/configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
-              home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.hugh = {
-                imports = [
-                  ./hosts/thoth/home.nix
-                ];
-              };
-            }
-            stylix.nixosModules.stylix
-          ];
-        };
-
-        rama = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/rama/configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
-              home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.icarus = {
-                imports = [
-                  ./hosts/rama/home.nix
-                ];
-              };
-            }
-            stylix.nixosModules.stylix
-            nixarr.nixosModules.default
-          ];
-        };
-
+        t14 = mkHost "t14";
+        d4080 = mkHost "d4080";
+        thoth = mkHost "thoth";
+        rama = mkHost "rama";
       };
     };
 }

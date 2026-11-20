@@ -1,19 +1,12 @@
 { config, pkgs, ... }:
-
 {
   imports = [
     ./variables.nix
     ./hardware-configuration.nix
-    ../../system/stylix.nix
-    ../../system/optimization.nix
-    ../../system/audio.nix
-    ../../system/boot.nix
-    ../../system/locale.nix
-    ../../system/utils.nix
-    ../../system/fail2ban.nix
-    ../../system/tailscale.nix
+    ../../system/profiles/server.nix
     ../../system/nvidiaLegacy.nix
-    ../../system/virtualisation.nix
+    ../../system/mtp.nix
+    ../../system/claudebox.nix
     # ../../containers/portainer.nix
     ../../containers/openwebui.nix
     ../../containers/plex.nix
@@ -24,76 +17,19 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "thoth";
-  networking.networkmanager.enable = true;
-
-  services.printing.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
   # Lets t14 use thoth as a remote builder (see nix.buildMachines in hosts/t14/configuration.nix).
   nix.settings.trusted-users = [
     "root"
     "hugh"
   ];
 
-  users.users.hugh = {
+  users.users.${config.var.username}.openssh.authorizedKeys.keys = [
     # Public half of t14's nixbuild_ssh_key (secrets/t14.yaml)
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILAOMhTiyoWYdjPSyRo/X64KEys4YMMwiGDs5NnC/vPp root@t14"
-    ];
-    isNormalUser = true;
-    description = "hugh";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "docker"
-    ];
-    shell = pkgs.zsh;
-    packages = with pkgs; [
-    ];
-  };
-
-  programs.zsh.enable = true;
-  # for zsh autocompletions
-  # see: https://home-manager-options.extranix.com/?query=programs&release=master
-  environment.pathsToLink = [ "/share/zsh" ];
-
-  # for sshing with x256 color terminals
-  environment.enableAllTerminfo = true;
-
-  environment.systemPackages = with pkgs; [
-    fd
-    bc
-    gcc
-    git-ignore
-    xdg-utils
-    curl
-    go
-    comma
-    lua
-    luarocks
-    cargo
-    bat
-    fzf
-    ripgrep
-    unzip
-    dig
-    wev
-    tree-sitter
-    mysql84
-    docker-compose
-    compose2nix
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILAOMhTiyoWYdjPSyRo/X64KEys4YMMwiGDs5NnC/vPp root@t14"
+    # void@t14
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOST1BDY81RViIwoRqex1mYipRpRdDf3fwBgUAYmusVS shaunakdpandit@gmail.com"
   ];
 
-  # fonts.packages = with pkgs; [
-  #   nerd-fonts.lilex
-  # ];
-
-  # Open ports in the firewall.
   networking.firewall = {
     allowedTCPPorts = [
       8000 # portainer
@@ -110,6 +46,8 @@
 
       8080 # glance
       8081 # gatus
+
+      4200 # pattern game
     ];
 
     allowedTCPPortRanges = [
@@ -129,15 +67,6 @@
       19132 # Craftcontroller; Bedrock
     ];
   };
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "26.05"; # Did you read the comment?
+  system.stateVersion = "26.05"; # Release of the first install; never change it.
 }

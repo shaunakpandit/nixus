@@ -1,41 +1,13 @@
-{
-  config,
-  pkgs,
-  inputs,
-  ...
-}:
-let
-  c = config.lib.stylix.colors;
-in
+{ lib, ... }:
 {
   imports = [
-    ../../home/shell/nvim.nix
-    ../../home/shell/shell.nix
-    ../../home/shell/dev.nix
-    ../../home/shell/utils.nix
-    ../../home/shell/claudeCodeNative.nix
-    ../../home/mytools
     ./variables.nix
+    ../../home/profiles/base.nix
+    ../../home/shell/claudeCodeNative.nix
   ];
 
-  home.username = "hugh";
-  home.homeDirectory = "/home/hugh";
-
-  # to add binaries to path
-  # home.sessionPath = [
-  #   "$HOME/.local/bin"
-  #   "$HOME/bin"
-  #   "$HOME/.nix-profile/bin"
-  # ];
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    TERMINAL = "ghostty";
-  };
-
-  home.packages = with pkgs; [
-    jq
-  ];
+  # thoth reaches the VM's tap directly, no jump through itself.
+  programs.ssh.settings.claudebox.ProxyJump = lib.mkForce null;
 
   home.stateVersion = "26.05";
 }

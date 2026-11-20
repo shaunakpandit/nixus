@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, inputs, ... }:
 let
   enabled = {
     enable = true;
@@ -20,6 +20,8 @@ let
   localAuth.settings.auth.required = "DisabledForLocalAddresses";
 in
 {
+  imports = [ inputs.nixarr.nixosModules.default ];
+
   services.prowlarr = localAuth;
   services.sonarr = localAuth;
   services.radarr = localAuth;
