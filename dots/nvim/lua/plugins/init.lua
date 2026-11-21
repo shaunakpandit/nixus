@@ -19,6 +19,7 @@ vim.pack.add({
 
 require("gitsigns").setup({ signcolumn = true })
 require("nvim-autopairs").setup()
+require("render-markdown").setup({ heading = { backgrounds = {} } })
 
 -- THEMES
 -- THEME_UPDATE
