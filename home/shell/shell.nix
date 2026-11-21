@@ -75,7 +75,10 @@ in
       fo = "fuzzel -d --lines=0 --prompt=\"homemanager-options: \" | xargs -I {} xdg-open \"https://search.nixos.org/options?channel=unstable&query={}\"";
       gl = "git pull";
       bios = "systemctl reboot --firmware-setup";
-      singapl = "ssh singapl@${config.var.homelab.thoth}";
+      hugh = "ssh hugh@${config.var.homelab.thoth}";
+      rama = "ssh icarus@${config.var.homelab.rama}";
+      vnc = "ssh -L 5900:localhost:5900 claudebox";
+      vnct = "ssh -L 5900:localhost:5900 claudeboxtail";
       cplex = "rsync -avh --progress singapl@${config.var.homelab.thoth}:/mnt/library/music/ ~/Music";
       cdone = "cp -r ~/Music/NewDownloads/ ~/Music/";
       tplex = "rsync -avh --progress ~/Music/NewDownloads singapl@${config.var.homelab.thoth}:/mnt/library/music/ ";
