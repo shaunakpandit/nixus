@@ -264,8 +264,12 @@ in
 
       A real, headed Google Chrome runs on display :1 with a persistent profile and the Claude in Chrome extension.
       Use the Chrome tools (claude runs with `--chrome`) for real websites; agent-browser is headless and fine for quick, simple pages.
-      The owner can watch the browser over VNC. If a site shows a CAPTCHA, a login wall, or blocks automation, stop and
-      ask the owner to handle it. Never try to bypass or evade bot detection.
+
+      The owner can watch the browser over VNC. If a site shows a CAPTCHA, a login wall, try to get past once then stop and
+      ask the owner to handle it. For other issues you cannot get past after an attempt, also ask the owner to handle it
+
+      The headed Chrome browser has a tutamail email logged in for your use. when using the browser, do not sign into it 
+      using the shown google account. Never sign into the browser, or accept signing into the browser
 
       ## Git and GitHub rules
 
