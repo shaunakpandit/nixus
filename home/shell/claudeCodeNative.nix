@@ -258,10 +258,10 @@
         # so nix can't evaluate or build inside it. Builds still run in nix's
         # own sandbox, and only the subcommands allowed above can run.
         excludedCommands = [
-          "nix"
-          "nix-instantiate"
-          "nix-prefetch-url"
-          "nixos-option"
+          "nix *"
+          "nix-instantiate *"
+          "nix-prefetch-url *"
+          "nixos-option *"
           # The sandbox's /dev has no USB nodes, so MTP can't see devices inside it.
           "mtp-detect"
           "mtp-files"
@@ -269,10 +269,12 @@
           "mtp-folders"
           "mtp-getfile"
           # The SSH remote and GitHub API aren't reachable through the sandbox proxy.
-          "git fetch:*"
-          "git pull:*"
-          "git push:*"
-          "gh pr:*"
+          "git fetch"
+          "git fetch *"
+          "git pull"
+          "git pull *"
+          "git push *"
+          "gh pr *"
         ];
       };
 
