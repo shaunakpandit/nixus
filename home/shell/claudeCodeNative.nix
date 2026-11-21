@@ -49,7 +49,8 @@
       ## Bash tool
 
       - Never run destructive commands: no `rm`, `shred`, `dd`, `truncate`, or overwriting files with redirection.
-      - Never run git commands that change commit history, push, or overwrite branch history: no `commit --amend`, `rebase`, `reset`, `push` (forced or not), `branch -D`/`-f`, or `filter-branch`.
+      - Never rewrite history or discard work: no `commit --amend`, `rebase`, `reset`, force-push (`--force`, `-f`, `+refspec`), `branch -D`/`-f`, or `filter-branch`.
+      - Branching, committing, pulling, pushing a feature branch, and opening or commenting on PRs with `gh` are fine. Ask before pushing to master/main.
       - Never change file ownership or permissions with `chmod`, `chown`, or `chgrp`.
       - Reading files, searching (see File Search block), and creating files or directories are fine.
 
@@ -131,6 +132,32 @@
           "Bash(git rev-parse:*)"
           "Bash(git ls-files:*)"
           "Bash(git grep:*)"
+
+          # Branch, commit, push, and PR work. Rewrites and force pushes stay
+          # denied. Plain `git checkout` prompts: it also discards file changes.
+          "Bash(git add:*)"
+          "Bash(git commit:*)"
+          "Bash(git branch:*)"
+          "Bash(git switch:*)"
+          "Bash(git checkout -b:*)"
+          "Bash(git fetch:*)"
+          "Bash(git pull:*)"
+          "Bash(git push:*)"
+          "Bash(gh pr create:*)"
+          "Bash(gh pr comment:*)"
+          "Bash(gh pr view:*)"
+          "Bash(gh pr list:*)"
+          "Bash(gh pr diff:*)"
+          "Bash(gh pr checks:*)"
+          "Bash(gh pr status:*)"
+        ];
+        # Pushes that may land on master prompt.
+        ask = [
+          "Bash(git push)"
+          "Bash(git push origin)"
+          "Bash(git push *master*)"
+          "Bash(git push *main*)"
+          "Bash(git push *HEAD*)"
         ];
         # Refused outright, never prompted. Activation and imperative state
         # changes are the user's job.
@@ -161,15 +188,25 @@
           "Bash(nix flake update:*)"
           "Bash(nix flake lock:*)"
 
-          # History rewrites, discarding uncommitted work, and anything
-          # that leaves the machine. Commits are the user's job too.
-          "Bash(git commit:*)"
-          "Bash(git push:*)"
+          # History rewrites, force pushes, and discarding uncommitted work.
+          # shortcut: prefix patterns miss combined short flags (`git push -uf`);
+          # the CLAUDE.md rule is the backstop.
+          "Bash(git push *--force*)"
+          "Bash(git push -f*)"
+          "Bash(git push * -f*)"
+          "Bash(git push *+*)"
+          "Bash(git push *--delete*)"
+          "Bash(git push * -d*)"
+          "Bash(git push *--mirror*)"
+          "Bash(git commit *--amend*)"
+          "Bash(git switch -f*)"
+          "Bash(git switch *--force*)"
+          "Bash(git switch *--discard-changes*)"
+          "Bash(git switch -C*)"
+          "Bash(git branch -M:*)"
           "Bash(git reset:*)"
           "Bash(git clean:*)"
-          "Bash(git checkout:*)"
           "Bash(git restore:*)"
-          "Bash(git switch:*)"
           "Bash(git rebase:*)"
           "Bash(git merge:*)"
           "Bash(git cherry-pick:*)"
@@ -231,6 +268,11 @@
           "mtp-filetree"
           "mtp-folders"
           "mtp-getfile"
+          # The SSH remote and GitHub API aren't reachable through the sandbox proxy.
+          "git fetch:*"
+          "git pull:*"
+          "git push:*"
+          "gh pr:*"
         ];
       };
 
