@@ -28,6 +28,8 @@
 #       2. paste token and hit enter
 #       3. ctrl+d
 # 4. In the VM: claude /login
+# 5. Browser: ssh -L 5900:localhost:5900 claudebox, open a VNC viewer on localhost:5900,
+#    and sign in to claude.ai in the Claude extension (same account as step 4). Also sign in to any sites Claude should use.
 #
 # Use: ssh claudebox, tmux, claude (aliased to --dangerously-skip-permissions)
 #
@@ -111,7 +113,8 @@ in
     microvm = {
       hypervisor = "qemu";
       vcpu = 2;
-      mem = 4096;
+      # Headed Chrome on Xvfb needs the headroom.
+      mem = 6144;
       interfaces = [
         {
           type = "tap";
@@ -182,7 +185,7 @@ in
       ];
     };
 
-    environment.shellAliases.claude = "claude --dangerously-skip-permissions";
+    environment.shellAliases.claude = "claude --dangerously-skip-permissions --chrome";
     # Ponytail plugin, status line and effort shared with the hosts.
     # Stylix themes nvim (and auto-imports its home-manager module for the user below).
     imports = [
@@ -209,6 +212,40 @@ in
         home.stateVersion = "26.05";
       };
     };
+    # Headed Chrome with a persistent profile on a virtual display, driven via the Claude in Chrome extension.
+    # Sites flag headless browsers; the owner watches and handles logins/CAPTCHAs over VNC (localhost only, reached by ssh -L).
+    programs.chromium = {
+      enable = true;
+      extensions = [ "fcoeoabgfenejglbffodgkkbkcdhcgfn" ];
+    };
+    systemd.services =
+      let
+        service = command: {
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            User = "claude";
+            ExecStart = command;
+            Restart = "always";
+          };
+        };
+      in
+      {
+        claudebox-xvfb = service "${pkgs.xvfb}/bin/Xvfb :1 -screen 0 1920x1080x24 -nolisten tcp";
+        claudebox-vnc =
+          service "${lib.getExe pkgs.x11vnc} -display :1 -localhost -forever -shared -nopw"
+          // {
+            requires = [ "claudebox-xvfb.service" ];
+            after = [ "claudebox-xvfb.service" ];
+          };
+        claudebox-chrome =
+          service "${lib.getExe pkgs.google-chrome} --no-first-run --password-store=basic"
+          // {
+            requires = [ "claudebox-xvfb.service" ];
+            after = [ "claudebox-xvfb.service" ];
+            environment.DISPLAY = ":1";
+            unitConfig.RequiresMountsFor = [ "/home/claude" ];
+          };
+      };
     # Use nixpkgs' chromium instead of agent-browser downloading its own.
     environment.variables.AGENT_BROWSER_EXECUTABLE_PATH = lib.getExe pkgs.chromium;
     environment.etc."claude-code/CLAUDE.md".text = ''
@@ -222,6 +259,17 @@ in
       `~/shared` (`/home/claude/shared`) is shared live with the owner's host machine. Use it to hand over
       notes, reports and other markdown, and to read files the owner drops in for you. The owner reads everything
       written here, so never put secrets or tokens in it. Keep repos and build output out of it, in `~` instead.
+
+      ## Browser
+
+      A real, headed Google Chrome runs on display :1 with a persistent profile and the Claude in Chrome extension.
+      Use the Chrome tools (claude runs with `--chrome`) for real websites; agent-browser is headless and fine for quick, simple pages.
+
+      The owner can watch the browser over VNC. If a site shows a CAPTCHA, a login wall, try to get past once then stop and
+      ask the owner to handle it. For other issues you cannot get past after an attempt, also ask the owner to handle it
+
+      The headed Chrome browser has a tutamail email logged in for your use. when using the browser, do not sign into it 
+      using the shown google account. Never sign into the browser, or accept signing into the browser
 
       ## Git and GitHub rules
 
