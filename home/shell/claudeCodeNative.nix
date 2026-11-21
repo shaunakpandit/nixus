@@ -244,8 +244,6 @@
           "Bash(mtp-emptyfolders:*)"
 
           "WebFetch"
-          "Agent"
-          "Task"
 
           "Bash(sudo:*)"
         ];
