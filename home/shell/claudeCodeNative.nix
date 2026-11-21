@@ -243,6 +243,8 @@
           "Bash(mtp-reset:*)"
           "Bash(mtp-emptyfolders:*)"
 
+          "WebFetch"
+
           "Bash(sudo:*)"
         ];
       };
