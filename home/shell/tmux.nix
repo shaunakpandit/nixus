@@ -8,8 +8,9 @@
   };
 
   home.shellAliases = {
-    tm = "tmux new -A -s code -n code ';' neww -d -S -t code: -n term ';' neww -d -S -t code: -n frenchie";
-    tmm = "tmux new -A -s gen -n gen ';' neww -d -S -t gen: -n shell";
+    tm = "tmux new -A -s claude -n nvim ';' neww -d -S -t claude: -n shell ';' neww -d -S -t claude: -n claude";
+    tmm = "tmux new -A -s general -n term ';' neww -d -S -t general: -n runtime";
+    tmc = "tmux new -A -s sessions -n claude2 ';' neww -d -S -t sessions: -n claude3";
     tmn = "tmux new -A -s notes -n notes";
   };
 }
