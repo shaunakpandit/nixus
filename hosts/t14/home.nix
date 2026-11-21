@@ -5,6 +5,7 @@
     ../../home/nightlight.nix
     ../../home/tradingview.nix
     ../../home/games/chess.nix
+    ../../home/vnc.nix
   ];
 
   mytools.gowifi.enable = true;
