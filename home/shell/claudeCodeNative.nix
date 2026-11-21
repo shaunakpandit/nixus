@@ -52,6 +52,7 @@
       - Never rewrite history or discard work: no `commit --amend`, `rebase`, `reset`, force-push (`--force`, `-f`, `+refspec`), `branch -D`/`-f`, or `filter-branch`.
       - Branching, committing, pulling, pushing a feature branch, and opening or commenting on PRs with `gh` are fine. Ask before pushing to master/main.
       - Never change file ownership or permissions with `chmod`, `chown`, or `chgrp`.
+      - `git fetch`/`pull`/`push`/`ls-remote`, `gh pr`, and `nix` run outside the sandbox only when the command is exactly that one call. Run them alone: no `cd … &&`, pipes, `;`, `&&`, or `| tail`. The working directory is already the project.
       - Reading files, searching (see File Search block), and creating files or directories are fine.
 
       ## File search
@@ -274,6 +275,7 @@
           "git pull"
           "git pull *"
           "git push *"
+          "git ls-remote *"
           "gh pr *"
         ];
       };
