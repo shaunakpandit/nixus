@@ -34,7 +34,7 @@ in
 
   virtualisation.oci-containers.containers.pihole = {
     image = "pihole/pihole:latest";
-    pull = "always";
+    # pull = "always";
     environment = {
       TZ = config.time.timeZone;
       # Unbound from containers/unbound.nix, reached through its published host port.
