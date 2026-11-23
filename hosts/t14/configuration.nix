@@ -60,6 +60,15 @@
     publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJg5rB28CPMtl44xAIjSkdyEuZlh99Iw5+LlM+5O6F/C root@nixos";
   };
 
+  # Client only; system/tailscale.nix is the homelab-server variant. Switch tailnets with `tailscale switch`.
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+    extraUpFlags = [
+      "--accpet-routes"
+    ];
+  };
+
   environment.systemPackages = [ pkgs.compose2nix ];
 
   system.stateVersion = "25.11"; # Release of the first install; never change it.

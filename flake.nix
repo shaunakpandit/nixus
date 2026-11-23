@@ -1,5 +1,5 @@
 {
-  description = "NixOS hosts: t14, d4080, thoth, rama";
+  description = "NixOS hosts: t14, d4080, thoth, rama, thea";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -83,6 +83,7 @@
         d4080 = mkHost "d4080";
         thoth = mkHost "thoth";
         rama = mkHost "rama";
+        thea = mkHost "thea";
       };
     };
 }
