@@ -64,8 +64,8 @@
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "client";
-    extraUpFlags = [
-      "--accpet-routes"
+    extraSetFlags = [
+      "--accept-routes"
     ];
   };
 
