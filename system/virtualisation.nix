@@ -8,14 +8,20 @@ let
   containers = config.virtualisation.oci-containers.containers;
 in
 {
-  # Containers only pull (pull = "always") when their service starts, so restart them weekly to update.
+  # Pull before restarting: a host running pihole has no DNS once pihole stops, so the
+  # restart must not need the network. set -e skips the restart if any pull fails.
   systemd.services.update-containers = lib.mkIf (containers != { }) {
-    description = "Restart OCI containers to pull updated images";
+    description = "Pull updated OCI container images and restart the containers";
     startAt = lib.mkDefault "Tue *-*-* 03:00:00";
     serviceConfig.Type = "oneshot";
-    script = "${config.systemd.package}/bin/systemctl restart ${
-      lib.concatMapStringsSep " " (name: "docker-${name}.service") (lib.attrNames containers)
-    }";
+    script = ''
+      ${lib.concatMapStrings (
+        container: "${config.virtualisation.docker.package}/bin/docker pull ${container.image}\n"
+      ) (lib.attrValues containers)}
+      ${config.systemd.package}/bin/systemctl restart ${
+        lib.concatMapStringsSep " " (name: "docker-${name}.service") (lib.attrNames containers)
+      }
+    '';
   };
 
   # for nvidia docker containers

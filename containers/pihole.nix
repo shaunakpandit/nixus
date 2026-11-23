@@ -33,8 +33,8 @@ in
   systemd.tmpfiles.rules = [ "d /var/lib/pihole 0755 root root -" ];
 
   virtualisation.oci-containers.containers.pihole = {
+    # No pull = "always": update-containers pulls first, since pihole is this host's DNS.
     image = "pihole/pihole:latest";
-    pull = "always";
     environment = {
       TZ = config.time.timeZone;
       # Unbound from containers/unbound.nix, reached through its published host port.
