@@ -1,8 +1,25 @@
-# Mounts Proton Drive at ~/ProtonDrive. Create the `protondrive` remote once with `rclone config`
-# (protondrive -> username, password, 2FA): it caches session tokens, so it is state, not Nix config.
-{ pkgs, ... }:
+# Mounts Proton Drive at ~/ProtonDrive. Needs the protondrive_* sops secrets from the host.
+# rclone-config rewrites ~/.config/rclone/rclone.conf on every login, wiping hand-made remotes.
+{ config, osConfig, ... }:
+let
+  secret = name: osConfig.sops.secrets.${name}.path;
+in
 {
-  home.packages = [ pkgs.rclone ];
-
-  systemd.user.services.protondrive = import ./rcloneMount.nix pkgs "protondrive" "ProtonDrive";
+  programs.rclone = {
+    enable = true;
+    remotes.protondrive = {
+      config.type = "protondrive";
+      secrets = {
+        username = secret "protondrive_username";
+        password = secret "protondrive_password";
+        # rclone generates the 2FA code from this TOTP seed
+        otp_secret_key = secret "protondrive_otp_secret";
+      };
+      mounts."" = {
+        enable = true;
+        mountPoint = "${config.home.homeDirectory}/ProtonDrive";
+        options.vfs-cache-mode = "full";
+      };
+    };
+  };
 }
