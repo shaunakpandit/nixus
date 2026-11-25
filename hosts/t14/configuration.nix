@@ -29,6 +29,10 @@
       owner = config.var.username;
       path = "/home/void/.config/openrouter/api_key";
     };
+    # Read by home/protondrive.nix
+    secrets.protondrive_username.owner = config.var.username;
+    secrets.protondrive_password.owner = config.var.username;
+    secrets.protondrive_otp_secret.owner = config.var.username;
   };
 
   # Offload builds to thoth; falls back to building locally when thoth is unreachable.
