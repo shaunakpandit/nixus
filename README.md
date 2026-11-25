@@ -86,6 +86,20 @@ Secrets live encrypted in `secrets/<host>.yaml`. Each host can only decrypt its 
    ```
 5. Declare secrets (next section) and rebuild.
 
+### Reinstall a sops host
+
+Building never needs the key: the encrypted files are in git and sops keeps secret names in plain text. Only activation decrypts, using the key file. So on a fresh install:
+
+1. Install NixOS and clone the repo as usual.
+2. Restore the backed-up key (one line, e.g. a secure note in Proton Pass) to the path in `sops.age.keyFile`:
+   ```sh
+   mkdir -p ~/.config/sops/age
+   $EDITOR ~/.config/sops/age/keys.txt
+   ```
+3. Run the first `nixos-rebuild switch`.
+
+If you forget step 2, the switch still activates everything else and reports a secrets error; restore the key and `rb` again. If the key is lost for good, the encrypted file can't be recovered: generate a new key, replace the host's recipient in `.sops.yaml`, and recreate `secrets/<host>.yaml` with fresh values.
+
 ### Add a secret
 
 1. `sops secrets/<host>.yaml`, add a line `my_secret: value`, save.
