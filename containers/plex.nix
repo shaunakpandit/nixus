@@ -49,6 +49,9 @@ in
     ];
   };
 
+  # Provides the CDI spec behind --device=nvidia.com/gpu=all.
+  hardware.nvidia-container-toolkit.enable = true;
+
   # Host networking skips Docker's port publishing, so the firewall has to open these.
   networking.firewall = {
     allowedTCPPorts = [ 32400 ];

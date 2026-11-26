@@ -73,7 +73,9 @@
         hosts = inputs.self.nixosConfigurations;
       };
       formatter.x86_64-linux = pkgs.nixfmt-rs;
-      ports = builtins.mapAttrs (_: import ./ports.nix) inputs.self.nixosConfigurations;
+      ports = builtins.mapAttrs (
+        _: (import ./ports.nix { inherit (nixpkgs) lib; }).report
+      ) inputs.self.nixosConfigurations;
 
       # `nix develop` provides the tools for creating keys and editing secrets/
       devShells.x86_64-linux.default = pkgs.mkShell {

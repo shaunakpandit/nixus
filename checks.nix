@@ -53,42 +53,116 @@ in
   # couldn't pull pihole's image. Rebuild that config and require the pihole assertion to fire.
   pihole-dns-fallback =
     let
-      broken = hosts.rama.extendModules {
-        modules = [ { networking.networkmanager.insertNameservers = lib.mkForce [ "127.0.0.1" ]; } ];
-      };
+      fires =
+        servers:
+        lib.any (assertion: !assertion.assertion && lib.hasPrefix "containers/pihole.nix" assertion.message)
+          (hosts.rama.extendModules {
+            modules = [ { networking.networkmanager.insertNameservers = lib.mkForce servers; } ];
+          }).config.assertions;
     in
-    assert lib.assertMsg (lib.any
-      (assertion: !assertion.assertion && lib.hasPrefix "containers/pihole.nix" assertion.message)
-      broken.config.assertions
-    ) "containers/pihole.nix no longer catches a host that resolves only through itself.";
+    assert lib.assertMsg (lib.all fires [
+      [ "127.0.0.1" ]
+      [ "127.0.0.53" ]
+      [
+        "127.0.0.1"
+        "::1"
+      ]
+    ]) "containers/pihole.nix no longer catches a host that resolves only through itself.";
     pkgs.emptyFile;
 
   # The glance outage: containers reach each other through the host's address, and that traffic
-  # goes through the NixOS firewall even though LAN traffic to the same ports doesn't. These are
-  # the paths that broke (glance -> thoth's services) or would have (pihole -> unbound on rama).
+  # goes through the NixOS firewall even though LAN traffic to the same ports doesn't. On every host,
+  # each published container port must be open.
   published-ports-open =
     let
-      opens =
-        host: protocol: port:
+      inherit (import ./ports.nix { inherit lib; }) publishedPort;
+      isOpen =
+        firewall: port:
         let
-          firewall = host.config.networking.firewall;
+          protocol = lib.toUpper port.protocol;
         in
-        lib.elem port firewall."allowed${protocol}Ports"
-        || lib.any (range: range.from <= port && port <= range.to) firewall."allowed${protocol}PortRanges";
+        lib.any (open: open.from <= port.from && port.to <= open.to) (
+          firewall."allowed${protocol}PortRanges"
+          ++ map (number: {
+            from = number;
+            to = number;
+          }) firewall."allowed${protocol}Ports"
+        );
+      closed = lib.concatLists (
+        lib.mapAttrsToList (
+          hostName: host:
+          lib.concatMap (
+            container:
+            map (spec: "${hostName}: ${spec}") (
+              lib.filter (
+                spec:
+                lib.any (port: !port.hostOnly && !isOpen host.config.networking.firewall port) (publishedPort spec)
+              ) container.ports
+            )
+          ) (lib.attrValues host.config.virtualisation.oci-containers.containers)
+        ) hosts
+      );
     in
-    assert lib.assertMsg (
-      lib.all (port: opens hosts.thoth "TCP" port) [
-        3000
-        6060
-        8080
-        8081
-        8443
-        25550
-      ]
-      && opens hosts.thoth "UDP" 19132
-    ) "thoth: published container ports are closed, so glance's checks time out.";
-    assert lib.assertMsg (
-      opens hosts.rama "TCP" 5335 && opens hosts.rama "UDP" 5335 && opens hosts.rama "UDP" 53
-    ) "rama: unbound or pihole ports are closed, so pihole can't reach its upstream.";
+    assert lib.assertMsg (closed == [ ])
+      "Published container ports closed in the firewall, so other containers can't reach them: ${lib.concatStringsSep ", " closed}";
+    pkgs.emptyFile;
+
+  port-parser =
+    let
+      inherit (import ./ports.nix { inherit lib; }) publishedPort;
+      port = protocol: from: to: hostOnly: [
+        {
+          inherit
+            protocol
+            from
+            to
+            hostOnly
+            ;
+        }
+      ];
+      failures = lib.runTests {
+        testPlain = {
+          expr = publishedPort "3000:8080";
+          expected = port "tcp" 3000 3000 false;
+        };
+        testUdp = {
+          expr = publishedPort "53:53/udp";
+          expected = port "udp" 53 53 false;
+        };
+        testRange = {
+          expr = publishedPort "25500-25600:25500-25600";
+          expected = port "tcp" 25500 25600 false;
+        };
+        testAddress = {
+          expr = publishedPort "192.168.1.2:8089:80/tcp";
+          expected = port "tcp" 8089 8089 false;
+        };
+        testLoopback = {
+          expr = publishedPort "127.0.0.1:2375:2375";
+          expected = port "tcp" 2375 2375 true;
+        };
+        testLocalhost = {
+          expr = publishedPort "localhost:2375:2375";
+          expected = port "tcp" 2375 2375 true;
+        };
+        testIpv6 = {
+          expr = publishedPort "[::]:53:53/udp";
+          expected = port "udp" 53 53 false;
+        };
+        testIpv6Loopback = {
+          expr = publishedPort "[::1]:8080:80";
+          expected = port "tcp" 8080 8080 true;
+        };
+        testRandomHostPort = {
+          expr = publishedPort "0.0.0.0::80";
+          expected = [ ];
+        };
+        testContainerOnly = {
+          expr = publishedPort "8080";
+          expected = [ ];
+        };
+      };
+    in
+    assert lib.assertMsg (failures == [ ]) "ports.nix publishedPort: ${builtins.toJSON failures}";
     pkgs.emptyFile;
 }

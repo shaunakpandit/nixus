@@ -17,27 +17,24 @@ let
     lib.filter (definition: definition.value != [ ]) (
       options.networking.firewall.allowedTCPPorts.definitionsWithLocations
       ++ options.networking.firewall.allowedUDPPorts.definitionsWithLocations
+      ++ options.networking.firewall.allowedTCPPortRanges.definitionsWithLocations
+      ++ options.networking.firewall.allowedUDPPortRanges.definitionsWithLocations
     )
   );
 
-  # "8089:80/tcp", "127.0.0.1:2375:2375" or "25500-25600:25500-25600/udp" -> the host side.
-  # shortcut: specs without a host port ("8080") or with IPv6 addresses are skipped; parse them if one appears.
-  hostSide =
-    spec:
-    let
-      parts = lib.splitString "/" spec;
-      fields = lib.splitString ":" (lib.head parts);
-      count = lib.length fields;
-      bounds = map lib.toInt (lib.splitString "-" (lib.elemAt fields (count - 2)));
-    in
-    lib.optional (count == 2 || (count == 3 && !lib.hasPrefix "127." (lib.head fields))) {
-      protocol = if lib.length parts == 2 then lib.last parts else "tcp";
-      from = lib.head bounds;
-      to = lib.last bounds;
-    };
-  published = lib.concatMap hostSide (
-    lib.concatMap (container: container.ports) (lib.attrValues containers)
+  inherit (import ../ports.nix { inherit lib; }) publishedPort;
+  published = lib.filter (port: !port.hostOnly) (
+    lib.concatMap publishedPort (lib.concatMap (container: container.ports) (lib.attrValues containers))
   );
+  hostNetwork =
+    container:
+    lib.any (option: lib.elem option container.extraOptions) [
+      "--network=host"
+      "--net=host"
+    ]
+    || lib.elem "host" container.networks;
+  # Containers that update themselves; the rest (pihole, unbound) are updated by hand.
+  pulling = lib.filterAttrs (_: container: container.pull == "always") containers;
   rangesFor =
     protocol:
     map (port: { inherit (port) from to; }) (lib.filter (port: port.protocol == protocol) published);
@@ -51,19 +48,17 @@ in
   # Host-network containers skip Docker's port publishing, so the file defining one must open its
   # ports itself, as containers/plex.nix does.
   assertions = lib.mapAttrsToList (name: container: {
-    assertion =
-      !(lib.elem "--network=host" container.extraOptions || lib.elem "host" container.networks)
-      || lib.elem (fileDefining name) filesOpeningPorts;
+    assertion = !(hostNetwork container) || lib.elem (fileDefining name) filesOpeningPorts;
     message = "${fileDefining name}: container ${name} uses host networking, so open its ports with networking.firewall in that file.";
   }) containers;
 
-  # Containers only pull (pull = "always") when their service starts, so restart them weekly to update.
-  systemd.services.update-containers = lib.mkIf (containers != { }) {
+  # Containers only pull (pull = "always") when their service starts, so restart those weekly to update.
+  systemd.services.update-containers = lib.mkIf (pulling != { }) {
     description = "Restart OCI containers to pull updated images";
     startAt = lib.mkDefault "Tue *-*-* 03:00:00";
     serviceConfig.Type = "oneshot";
     script = "${config.systemd.package}/bin/systemctl restart ${
-      lib.concatMapStringsSep " " (name: "docker-${name}.service") (lib.attrNames containers)
+      lib.concatMapStringsSep " " (name: "docker-${name}.service") (lib.attrNames pulling)
     }";
   };
 
