@@ -40,6 +40,15 @@ in
       hash = "sha256-PhPtZbeX2wBp19GtWRy+fV93+fFYZe5S487eXPDl/us=";
     };
 
+    plugins.pstack =
+      pkgs.fetchFromGitHub {
+        owner = "michael-denyer";
+        repo = "pstack-claude";
+        rev = "4b809ea1be5e3f032e14506c28114f27c8bb4a95";
+        hash = "sha256-6S4an5/c5+8RnOdhhZ4TJ2QzDPDt/I4zhVNNmRDxIec=";
+      }
+      + "/plugins/pstack";
+
     settings = {
       effortLevel = lib.mkDefault "high";
       # Claude Code ranks model defaults/experiments above effortLevel; the env var beats them.
@@ -67,8 +76,10 @@ in
     };
   };
 
-  # HM wraps plugins in a dir of per-entry symlinks, so Claude Code rejects ponytail's hooks as escaping
+  # HM wraps plugins in a dir of per-entry symlinks, so Claude Code rejects plugin hooks as escaping
   # the plugin dir; link the real source instead.
   home.file."${config.programs.claude-code.configDir}/skills/ponytail".source =
     lib.mkForce config.programs.claude-code.plugins.ponytail;
+  home.file."${config.programs.claude-code.configDir}/skills/pstack".source =
+    lib.mkForce config.programs.claude-code.plugins.pstack;
 }
