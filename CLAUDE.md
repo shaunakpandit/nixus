@@ -26,7 +26,7 @@ Prefer enforcement over prose: when a mistake happens twice, turn it into a chec
 | A host-network container opens its ports in its own file | assertion in `system/virtualisation.nix` |
 | Every published container port is open on its host (containers reach each other through it) | derived in `system/virtualisation.nix` with the parser in `ports.nix`; `checks.published-ports-open`, `checks.port-parser` |
 | Host values (`config.var.*`) exist and have the right type | option types in `var.nix` |
-| No activation, lock bumps, or history rewrites | permission deny list in `home/shell/claudeCodeNative.nix` |
+| No activation, lock bumps, or history rewrites | permission deny list in `home/shell/claudeCode.nix` |
 | Everything declarative; no imperative fixes | this file |
 | Don't touch `hardware-configuration.nix`, `stateVersion`, or `flake.lock` | this file |
 | No new flake inputs without asking | this file |
@@ -42,7 +42,7 @@ The edit hook (`home/shell/claudeCodeBase.nix`) formats and lints each `.nix` fi
 5. New files are invisible to flakes until `git add`ed. Stage them.
 6. Never activate. Report the files changed, the hosts affected, and what you verified, then ask the user to run `rb` (`sudo nixos-rebuild switch --flake ~/dev/nixus#<host>`).
 
-Claude's allowed and denied commands are in `home/shell/claudeCodeNative.nix`. Run `nix` commands alone (no pipes or `&&`), or the Bash sandbox blocks the daemon socket. Use `nix build --no-link` so no `result` symlink lands in the repo.
+Claude's allowed and denied commands are in `home/shell/claudeCode.nix`. Run `nix` commands alone (no pipes or `&&`), or the Bash sandbox blocks the daemon socket. Use `nix build --no-link` so no `result` symlink lands in the repo.
 
 ## The Nix way
 

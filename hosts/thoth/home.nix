@@ -3,7 +3,7 @@
   imports = [
     ./variables.nix
     ../../home/profiles/base.nix
-    ../../home/shell/claudeCodeNative.nix
+    ../../home/shell/claudeCode.nix
   ];
 
   # thoth reaches the VM's tap directly, no jump through itself.

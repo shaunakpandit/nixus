@@ -1,4 +1,4 @@
-# Claude Code pieces shared by the hosts (claudeCodeNative.nix) and the claudebox VM (system/claudebox.nix).
+# Claude Code pieces shared by the hosts (claudeCode.nix) and the claudebox VM (system/claudebox.nix).
 {
   config,
   lib,

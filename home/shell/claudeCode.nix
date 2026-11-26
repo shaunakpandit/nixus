@@ -4,56 +4,35 @@
   pkgs,
   ...
 }:
-let
-  # Lives outside the repo; never enters git or the Nix store.
-  keyFile = "${config.home.homeDirectory}/.config/openrouter/api_key";
-
-  opus = "anthropic/claude-opus-5.5";
-  sonnet = "anthropic/claude-sonnet-5.5";
-  haiku = "anthropic/claude-haiku-5.5";
-
-  # Cost is Claude Code's own estimate from token counts, not OpenRouter's bill.
-  statusLine = pkgs.writeShellScript "claude-statusline" ''
-    IFS=$'\t' read -r model directory used tokens size cost < <(${lib.getExe pkgs.jq} -r '[
-      .model.display_name,
-      (.workspace.current_dir | split("/") | last),
-      (.context_window.used_percentage // 0),
-      (.context_window.total_input_tokens // 0) / 1000,
-      (.context_window.context_window_size // 0) / 1000,
-      (.cost.total_cost_usd // 0)
-    ] | @tsv')
-    printf '[%s] 📁 %s | ctx %.0f%% (%.0fk/%.0fk) | $%.2f' \
-      "$model" "$directory" "$used" "$tokens" "$size" "$cost"
-  '';
-in
 {
+  imports = [ ./claudeCodeBase.nix ];
+
   programs.claude-code = {
     enable = true;
-    # Wrap claude so the key is read from the file at launch time.
-    # setup apiey file:
-    # mkdir -p ~/.config/openrouter
-    # printf '%s' 'sk-or-v1-...' > ~/.config/openrouter/api_key
-    # chmod 600 ~/.config/openrouter/api_key
+    # Auth is Claude Code's own browser login (`/login`); credentials stay in ~/.claude.
     package = pkgs.symlinkJoin {
-      name = "claude-code-openrouter";
+      # Versioned name so home-manager detects >= 2.1.157 and drops the legacy --plugin-dir wrapper.
+      name = "claude-code-native-${pkgs.claude-code.version}";
       paths = [ pkgs.claude-code ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
       # The formatters otherwise only exist on nvim's PATH (extraPackages),
-      # so expose them to Claude's shell too.
+      # so expose them to Claude's shell too, with the linters from checks.nix. Node runs ponytail's hooks.
       postBuild = ''
         wrapProgram $out/bin/claude \
           --prefix PATH : ${
             lib.makeBinPath [
               pkgs.nixfmt-rs
               pkgs.nixpkgs-fmt
+              pkgs.statix
+              pkgs.deadnix
+              pkgs.nodejs
             ]
-          } \
-          --run 'export ANTHROPIC_AUTH_TOKEN="$(cat ${keyFile})"'
+          }
       '';
     };
 
     # ~/.claude/CLAUDE.md, loaded in every project alongside any project CLAUDE.md.
-    memory.text = ''
+    context = ''
       # Global rules
 
       ## Code style
@@ -72,31 +51,29 @@ in
       ## Bash tool
 
       - Never run destructive commands: no `rm`, `shred`, `dd`, `truncate`, or overwriting files with redirection.
-      - Never run git commands that change commit history, push, or overwrite branch history: no `commit --amend`, `rebase`, `reset`, `push` (forced or not), `branch -D`/`-f`, or `filter-branch`.
+      - Never rewrite history or discard work: no `commit --amend`, `rebase`, `reset`, force-push (`--force`, `-f`, `+refspec`), `branch -D`/`-f`, or `filter-branch`.
+      - Branching, committing, pulling, pushing a feature branch, and opening or commenting on PRs with `gh` are fine. Ask before pushing to master/main.
       - Never change file ownership or permissions with `chmod`, `chown`, or `chgrp`.
-      - Reading files, searching (`grep`, `rg`, `fd`, `fzf --filter`), and creating files or directories are fine.
+      - `git fetch`/`pull`/`push`/`ls-remote`, `gh pr`, and `nix` run outside the sandbox only when the command is exactly that one call. Run them alone: no `cd … &&`, pipes, `;`, `&&`, or `| tail`. The working directory is already the project.
+      - Reading files, searching (see File Search block), and creating files or directories are fine.
+
+      ## File search
+
+      - Prefer the fff MCP tools (`find_files`, `grep`, `multi_grep`) over Glob, Grep, `find`, `rg`, or `fd` for finding files and searching code in the current project. Fall back to the built-in tools only when fff is unavailable or the target is outside the project.
     '';
+
+    mcpServers.fff = {
+      type = "stdio";
+      command = lib.getExe pkgs.fff-mcp;
+    };
 
     settings = {
       skipDangerousModePermissionPrompt = false;
-      model = sonnet;
-      effortLevel = "medium";
-
-      # No apiKeyHelper: auth comes from ANTHROPIC_AUTH_TOKEN via the wrapper.
-      env = {
-        ANTHROPIC_BASE_URL = "https://openrouter.ai/api";
-        # Must be explicitly empty so Claude Code doesn't try Anthropic's own auth.
-        ANTHROPIC_API_KEY = "";
-        ANTHROPIC_MODEL = opus;
-        ANTHROPIC_DEFAULT_OPUS_MODEL = opus;
-        ANTHROPIC_DEFAULT_SONNET_MODEL = sonnet;
-        ANTHROPIC_DEFAULT_HAIKU_MODEL = haiku;
-        ANTHROPIC_SMALL_FAST_MODEL = haiku;
-      };
+      model = "opus";
 
       permissions = {
-        defaultMode = "default";
-        additionalDirectories = [ ];
+        defaultMode = "plan";
+        additionalDirectories = [ "${config.home.homeDirectory}/dev/nixus" ];
         allow = [
           "Read(./**)"
           "Write(./**)"
@@ -104,6 +81,8 @@ in
           "Glob"
           "Grep"
           "WebSearch"
+          # fff MCP, loaded through home-manager's generated "hm" plugin.
+          "mcp__plugin_hm_fff"
 
           # Evaluate, build, format, and inspect. Any shell command not listed
           # here prompts for approval.
@@ -119,12 +98,15 @@ in
           "Bash(nix derivation show:*)"
           "Bash(nix log:*)"
           "Bash(nix hash:*)"
+          "Bash(nix store diff-closures:*)"
           "Bash(nix store prefetch-file:*)"
           "Bash(nix-prefetch-url:*)"
           "Bash(nix-instantiate:*)"
           "Bash(nixos-option:*)"
           "Bash(nixfmt:*)"
           "Bash(nixpkgs-fmt:*)"
+          "Bash(statix:*)"
+          "Bash(deadnix:*)"
 
           "Bash(cat:*)"
           "Bash(head:*)"
@@ -139,6 +121,13 @@ in
           "Bash(mkdir:*)"
           "Bash(touch:*)"
 
+          # Read-only MTP (libmtp, installed by system/mtp.nix).
+          "Bash(mtp-detect:*)"
+          "Bash(mtp-files:*)"
+          "Bash(mtp-filetree:*)"
+          "Bash(mtp-folders:*)"
+          "Bash(mtp-getfile:*)"
+
           # Read-only git, for the history behind a file.
           "Bash(git log:*)"
           "Bash(git show:*)"
@@ -149,6 +138,32 @@ in
           "Bash(git rev-parse:*)"
           "Bash(git ls-files:*)"
           "Bash(git grep:*)"
+
+          # Branch, commit, push, and PR work. Rewrites and force pushes stay
+          # denied. Plain `git checkout` prompts: it also discards file changes.
+          "Bash(git add:*)"
+          "Bash(git commit:*)"
+          "Bash(git branch:*)"
+          "Bash(git switch:*)"
+          "Bash(git checkout -b:*)"
+          "Bash(git fetch:*)"
+          "Bash(git pull:*)"
+          "Bash(git push:*)"
+          "Bash(gh pr create:*)"
+          "Bash(gh pr comment:*)"
+          "Bash(gh pr view:*)"
+          "Bash(gh pr list:*)"
+          "Bash(gh pr diff:*)"
+          "Bash(gh pr checks:*)"
+          "Bash(gh pr status:*)"
+        ];
+        # Pushes that may land on master prompt.
+        ask = [
+          "Bash(git push)"
+          "Bash(git push origin)"
+          "Bash(git push *master*)"
+          "Bash(git push *main*)"
+          "Bash(git push *HEAD*)"
         ];
         # Refused outright, never prompted. Activation and imperative state
         # changes are the user's job.
@@ -179,15 +194,25 @@ in
           "Bash(nix flake update:*)"
           "Bash(nix flake lock:*)"
 
-          # History rewrites, discarding uncommitted work, and anything
-          # that leaves the machine. Commits are the user's job too.
-          "Bash(git commit:*)"
-          "Bash(git push:*)"
+          # History rewrites, force pushes, and discarding uncommitted work.
+          # shortcut: prefix patterns miss combined short flags (`git push -uf`);
+          # the CLAUDE.md rule is the backstop.
+          "Bash(git push *--force*)"
+          "Bash(git push -f*)"
+          "Bash(git push * -f*)"
+          "Bash(git push *+*)"
+          "Bash(git push *--delete*)"
+          "Bash(git push * -d*)"
+          "Bash(git push *--mirror*)"
+          "Bash(git commit *--amend*)"
+          "Bash(git switch -f*)"
+          "Bash(git switch *--force*)"
+          "Bash(git switch *--discard-changes*)"
+          "Bash(git switch -C*)"
+          "Bash(git branch -M:*)"
           "Bash(git reset:*)"
           "Bash(git clean:*)"
-          "Bash(git checkout:*)"
           "Bash(git restore:*)"
-          "Bash(git switch:*)"
           "Bash(git rebase:*)"
           "Bash(git merge:*)"
           "Bash(git cherry-pick:*)"
@@ -214,9 +239,16 @@ in
           "Bash(chown:*)"
           "Bash(chgrp:*)"
 
+          # MTP commands that change the device.
+          "Bash(mtp-delfile:*)"
+          "Bash(mtp-sendfile:*)"
+          "Bash(mtp-sendtr:*)"
+          "Bash(mtp-format:*)"
+          "Bash(mtp-newfolder:*)"
+          "Bash(mtp-reset:*)"
+          "Bash(mtp-emptyfolders:*)"
+
           "WebFetch"
-          "Agent"
-          "Task"
 
           "Bash(sudo:*)"
         ];
@@ -230,22 +262,28 @@ in
         # so nix can't evaluate or build inside it. Builds still run in nix's
         # own sandbox, and only the subcommands allowed above can run.
         excludedCommands = [
-          "nix"
-          "nix-instantiate"
-          "nix-prefetch-url"
-          "nixos-option"
+          "nix *"
+          "nix-instantiate *"
+          "nix-prefetch-url *"
+          "nixos-option *"
+          # The sandbox's /dev has no USB nodes, so MTP can't see devices inside it.
+          "mtp-detect"
+          "mtp-files"
+          "mtp-filetree"
+          "mtp-folders"
+          "mtp-getfile"
+          # The SSH remote and GitHub API aren't reachable through the sandbox proxy.
+          "git fetch"
+          "git fetch *"
+          "git pull"
+          "git pull *"
+          "git push *"
+          "git ls-remote *"
+          "gh pr *"
         ];
       };
 
       enableAllProjectMcpServers = false;
-      # true would also suppress the status line.
-      disableAllHooks = false;
-
-      statusLine = {
-        command = "${statusLine}";
-        padding = 0;
-        type = "command";
-      };
       theme = "dark";
     };
   };

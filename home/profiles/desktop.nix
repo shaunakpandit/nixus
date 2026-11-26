@@ -14,6 +14,6 @@
     ../idleSuspend.nix
     ../shell/cliamp.nix
     ../shell/newsboat.nix
-    ../shell/claudeCodeNative.nix
+    ../shell/claudeCode.nix
   ];
 }
