@@ -24,7 +24,7 @@
     age.keyFile = "/home/void/.config/sops/age/keys.txt";
     # root's key for the thoth remote builder; its public half is in hosts/thoth/configuration.nix
     secrets.nixbuild_ssh_key = { };
-    # Symlinked to where home/shell/claudeCode.nix reads it
+    # OpenRouter API key, decrypted to ~/.config/openrouter/api_key
     secrets.openrouter_api_key = {
       owner = config.var.username;
       path = "/home/void/.config/openrouter/api_key";

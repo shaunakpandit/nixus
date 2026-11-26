@@ -26,7 +26,7 @@ Prefer enforcement over prose: when a mistake happens twice, turn it into a chec
 | A host-network container opens its ports in its own file | assertion in `system/virtualisation.nix` |
 | Every published container port is open on its host (containers reach each other through it) | derived in `system/virtualisation.nix` with the parser in `ports.nix`; `checks.published-ports-open`, `checks.port-parser` |
 | Host values (`config.var.*`) exist and have the right type | option types in `var.nix` |
-| No activation, lock bumps, or history rewrites | permission deny list in `home/shell/claudeCodeNative.nix` |
+| No activation, lock bumps, or history rewrites | permission deny list in `home/shell/claudeCode.nix` |
 | Everything declarative; no imperative fixes | this file |
 | Don't touch `hardware-configuration.nix`, `stateVersion`, or `flake.lock` | this file |
 | No new flake inputs without asking | this file |
@@ -35,14 +35,14 @@ The edit hook (`home/shell/claudeCodeBase.nix`) formats and lints each `.nix` fi
 
 ## Verify before claiming done
 
-1. `nix flake check`: lints, repo rules, regression tests, and every host's evaluation (which runs all module assertions).
+1. `nix flake check`: lints, repo rules, regression tests, and every host's evaluation (which runs all module assertions). It takes about two minutes, so run it once when the change is finished, not after every edit; while iterating, the edit hook lints each file and step 2's `nix eval` covers the hosts you touched.
 2. Prove behavior, not just evaluation: `nix eval` the exact options you changed on every host they affect, and compare against the old values. To see what a change ships, diff the closure against master: `nix store diff-closures "git+file://$PWD?ref=master#nixosConfigurations.<host>.config.system.build.toplevel" ".#nixosConfigurations.<host>.config.system.build.toplevel"` (this builds both, and lists only package version and size changes: a config-only change prints nothing, so the option values from the step above are its proof).
 3. **Bug fixes reproduce first.** Rebuild the broken config with `extendModules` and watch it fail. Then add an assertion to the feature file whose message names the fix, plus a `checks.nix` entry proving the assertion fires on the broken config. `checks.pihole-dns-fallback` is the template.
 4. Evaluation can't see runtime paths like who connects to which port. Don't remove access (firewall ports, services, permissions) based on reasoning alone; compare the effective result against master (e.g. the open port set) and keep it identical unless the user agrees to change it.
 5. New files are invisible to flakes until `git add`ed. Stage them.
 6. Never activate. Report the files changed, the hosts affected, and what you verified, then ask the user to run `rb` (`sudo nixos-rebuild switch --flake ~/dev/nixus#<host>`).
 
-Claude's allowed and denied commands are in `home/shell/claudeCodeNative.nix`. Run `nix` commands alone (no pipes or `&&`), or the Bash sandbox blocks the daemon socket. Use `nix build --no-link` so no `result` symlink lands in the repo.
+Claude's allowed and denied commands are in `home/shell/claudeCode.nix`. Run `nix` commands alone (no pipes or `&&`), or the Bash sandbox blocks the daemon socket. Use `nix build --no-link` so no `result` symlink lands in the repo.
 
 ## The Nix way
 

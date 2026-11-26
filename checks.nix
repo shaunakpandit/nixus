@@ -16,9 +16,10 @@ let
       (src + "/statix.toml")
     ];
   };
+  # Local: with a remote builder configured (t14), Nix would ship the whole repo over SSH for a second of linting.
   check =
     name: tools: script:
-    pkgs.runCommand name { nativeBuildInputs = tools; } ''
+    pkgs.runCommandLocal name { nativeBuildInputs = tools; } ''
       cd ${nixFiles}
       ${script}
       touch $out

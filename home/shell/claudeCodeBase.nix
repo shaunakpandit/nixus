@@ -1,4 +1,4 @@
-# Claude Code pieces shared by the hosts (claudeCodeNative.nix) and the claudebox VM (system/claudebox.nix).
+# Claude Code pieces shared by the hosts (claudeCode.nix) and the claudebox VM (system/claudebox.nix).
 {
   config,
   lib,
@@ -44,6 +44,8 @@ in
       effortLevel = lib.mkDefault "high";
       # Claude Code ranks model defaults/experiments above effortLevel; the env var beats them.
       env.CLAUDE_CODE_EFFORT_LEVEL = lib.mkDefault "high";
+      # No Co-Authored-By trailer on Claude's commits.
+      attribution.commit = "";
       # true would also suppress the status line.
       disableAllHooks = false;
       hooks.PostToolUse = [
