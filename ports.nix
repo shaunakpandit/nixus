@@ -1,5 +1,5 @@
 # Everything a host exposes and which file opened it: `nix eval --raw .#ports.<host>`.
-# Docker-published container ports bypass the NixOS firewall, so they're listed separately.
+# Published container ports are listed per container; system/virtualisation.nix opens them in the firewall.
 # shortcut: per-interface openings (networking.firewall.interfaces) aren't listed; add them when a host uses one.
 host:
 let
@@ -12,12 +12,22 @@ let
     else
       lib.last (lib.splitString "-source/" file);
   show =
-    port: if builtins.isInt port then toString port else "${toString port.from}-${toString port.to}";
+    port:
+    if builtins.isInt port then
+      toString port
+    else if port.from == port.to then
+      toString port.from
+    else
+      "${toString port.from}-${toString port.to}";
   opened =
     protocol: option:
-    lib.concatMap (
-      definition: map (port: "${protocol}\t${show port}\t${source definition.file}") definition.value
-    ) option.definitionsWithLocations;
+    lib.concatMap
+      (definition: map (port: "${protocol}\t${show port}\t${source definition.file}") definition.value)
+      (
+        lib.filter (
+          definition: !lib.hasSuffix "system/virtualisation.nix" definition.file
+        ) option.definitionsWithLocations
+      );
   published = lib.concatLists (
     lib.mapAttrsToList (
       name: container: map (port: "docker\t${port}\tcontainer ${name}") container.ports

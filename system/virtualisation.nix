@@ -19,10 +19,37 @@ let
       ++ options.networking.firewall.allowedUDPPorts.definitionsWithLocations
     )
   );
+
+  # "8089:80/tcp", "127.0.0.1:2375:2375" or "25500-25600:25500-25600/udp" -> the host side.
+  # shortcut: specs without a host port ("8080") or with IPv6 addresses are skipped; parse them if one appears.
+  hostSide =
+    spec:
+    let
+      parts = lib.splitString "/" spec;
+      fields = lib.splitString ":" (lib.head parts);
+      count = lib.length fields;
+      bounds = map lib.toInt (lib.splitString "-" (lib.elemAt fields (count - 2)));
+    in
+    lib.optional (count == 2 || (count == 3 && !lib.hasPrefix "127." (lib.head fields))) {
+      protocol = if lib.length parts == 2 then lib.last parts else "tcp";
+      from = lib.head bounds;
+      to = lib.last bounds;
+    };
+  published = lib.concatMap hostSide (
+    lib.concatMap (container: container.ports) (lib.attrValues containers)
+  );
+  rangesFor =
+    protocol:
+    map (port: { inherit (port) from to; }) (lib.filter (port: port.protocol == protocol) published);
 in
 {
-  # Host-network containers skip Docker's port publishing (which bypasses the firewall), so the
-  # file defining one must open its ports itself, as containers/plex.nix does.
+  # Docker steers LAN traffic for published ports around this firewall, but a container reaching
+  # another through the host's address (glance's checks, pihole -> unbound) goes through it.
+  networking.firewall.allowedTCPPortRanges = rangesFor "tcp";
+  networking.firewall.allowedUDPPortRanges = rangesFor "udp";
+
+  # Host-network containers skip Docker's port publishing, so the file defining one must open its
+  # ports itself, as containers/plex.nix does.
   assertions = lib.mapAttrsToList (name: container: {
     assertion =
       !(lib.elem "--network=host" container.extraOptions || lib.elem "host" container.networks)

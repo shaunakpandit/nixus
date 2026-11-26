@@ -30,8 +30,8 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOST1BDY81RViIwoRqex1mYipRpRdDf3fwBgUAYmusVS shaunakdpandit@gmail.com"
   ];
 
-  # Docker-published container ports bypass this firewall, and containers/ open their own
-  # host-network ports. See everything exposed with `nix eval --raw .#ports.thoth`.
+  # Container ports are opened by system/virtualisation.nix (published) or their containers/ file
+  # (host network). See everything exposed with `nix eval --raw .#ports.thoth`.
   networking.firewall.allowedTCPPorts = [
     8000 # portainer
     9443 # portainer

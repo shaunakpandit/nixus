@@ -47,7 +47,7 @@ LAN addresses for all of them are in `homelab.nix`.
 
 - Import `system/profiles/server.nix` and `home/profiles/base.nix`, plus the `containers/*.nix` this server runs.
 - The host **must** have an entry in `homelab.nix`: tailscale advertises it as a subnet route.
-- Docker-published container ports bypass the NixOS firewall, so don't list them in `networking.firewall`. A host-network container (like plex) opens its own ports in its `containers/` file. `nix eval --raw .#ports.<host>` lists everything a host exposes and which file opened it.
+- Don't list container ports in `networking.firewall`: `system/virtualisation.nix` opens every published port automatically. A host-network container (like plex) opens its own ports in its `containers/` file. `nix eval --raw .#ports.<host>` lists everything a host exposes and which file opened it.
 - Add your SSH public key to `users.users.<user>.openssh.authorizedKeys.keys`.
 - Join the tailnet after the first switch: `sudo tailscale login` (or put an auth key in `/etc/tailscale/authkey`).
 

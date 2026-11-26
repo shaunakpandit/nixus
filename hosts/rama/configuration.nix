@@ -23,8 +23,8 @@
   # After thoth's 03:00 run, so thoth's pulls don't land while pihole is restarting.
   systemd.services.update-containers.startAt = "Tue *-*-* 03:15:00";
 
-  # No firewall entries: pihole, unbound and the glance agent are Docker-published, which bypasses
-  # the firewall on every interface (LAN and tailscale0). See `nix eval --raw .#ports.rama`.
+  # No firewall entries: system/virtualisation.nix opens every container's published ports
+  # (on every interface, so tailscale0 too). See `nix eval --raw .#ports.rama`.
 
   system.stateVersion = "26.05"; # Release of the first install; never change it.
 }

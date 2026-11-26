@@ -62,4 +62,33 @@ in
       broken.config.assertions
     ) "containers/pihole.nix no longer catches a host that resolves only through itself.";
     pkgs.emptyFile;
+
+  # The glance outage: containers reach each other through the host's address, and that traffic
+  # goes through the NixOS firewall even though LAN traffic to the same ports doesn't. These are
+  # the paths that broke (glance -> thoth's services) or would have (pihole -> unbound on rama).
+  published-ports-open =
+    let
+      opens =
+        host: protocol: port:
+        let
+          firewall = host.config.networking.firewall;
+        in
+        lib.elem port firewall."allowed${protocol}Ports"
+        || lib.any (range: range.from <= port && port <= range.to) firewall."allowed${protocol}PortRanges";
+    in
+    assert lib.assertMsg (
+      lib.all (port: opens hosts.thoth "TCP" port) [
+        3000
+        6060
+        8080
+        8081
+        8443
+        25550
+      ]
+      && opens hosts.thoth "UDP" 19132
+    ) "thoth: published container ports are closed, so glance's checks time out.";
+    assert lib.assertMsg (
+      opens hosts.rama "TCP" 5335 && opens hosts.rama "UDP" 5335 && opens hosts.rama "UDP" 53
+    ) "rama: unbound or pihole ports are closed, so pihole can't reach its upstream.";
+    pkgs.emptyFile;
 }
