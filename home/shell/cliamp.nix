@@ -1,6 +1,12 @@
 { config, pkgs, ... }:
 let
   c = config.lib.stylix.colors.withHashtag;
+  nowPlaying = ''
+    local p = plugin.register({ name = "now-playing", type = "hook", description = "Desktop notification on track change" })
+    p:on("track.change", function(track)
+      cliamp.notify(track.title or "", track.artist or "")
+    end)
+  '';
 in
 {
   home.packages = with pkgs; [
@@ -60,6 +66,17 @@ in
         author = "Sean Carroll";
       }
     ];
+  };
+
+  xdg.configFile."cliamp/plugins/now-playing.lua".text = nowPlaying;
+  # cliamp runs a plugin only if this manifest holds its sha256; writing it here replaces `cliamp plugins trust`.
+  # force: `cliamp plugins trust` replaces the store symlink with a regular file.
+  xdg.configFile."cliamp/plugins/.trust.json" = {
+    force = true;
+    text = builtins.toJSON {
+      version = 1;
+      plugins.now-playing = builtins.hashString "sha256" nowPlaying;
+    };
   };
 
   programs.cava = {

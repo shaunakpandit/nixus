@@ -160,7 +160,7 @@ A host imports one system profile and one home profile; each profile imports the
 | `home/protondrive.nix` | Mounts Proton Drive at `~/ProtonDrive` with rclone (needs sops secrets, below) | t14 |
 | `home/helium.nix`, `home/discord.nix`, `home/games/*` | Helium browser, Discord (Vencord), Prism Launcher, chess-tui | various |
 | `home/nightlight.nix`, `home/idleSuspend.nix`, `home/joystickIdleInhibit.nix` | Waybar night-light toggle, idle suspend (battery-only on laptops), no blanking while a gamepad/HOTAS is in use | various |
-| `home/tradingview.nix`, `home/vnc.nix`, `home/dunst.nix` | TradingView, VNC client, notifications | t14, t14, thea |
+| `home/tradingview.nix`, `home/vnc.nix`, `home/dunst.nix` | TradingView, VNC client, notifications | t14, t14, t14 + thea |
 
 ### Proton Drive
 
