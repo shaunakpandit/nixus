@@ -35,7 +35,7 @@ The edit hook (`home/shell/claudeCodeBase.nix`) formats and lints each `.nix` fi
 
 ## Verify before claiming done
 
-1. `nix flake check`: lints, repo rules, regression tests, and every host's evaluation (which runs all module assertions).
+1. `nix flake check`: lints, repo rules, regression tests, and every host's evaluation (which runs all module assertions). It takes about two minutes, so run it once when the change is finished, not after every edit; while iterating, the edit hook lints each file and step 2's `nix eval` covers the hosts you touched.
 2. Prove behavior, not just evaluation: `nix eval` the exact options you changed on every host they affect, and compare against the old values. To see what a change ships, diff the closure against master: `nix store diff-closures "git+file://$PWD?ref=master#nixosConfigurations.<host>.config.system.build.toplevel" ".#nixosConfigurations.<host>.config.system.build.toplevel"` (this builds both, and lists only package version and size changes: a config-only change prints nothing, so the option values from the step above are its proof).
 3. **Bug fixes reproduce first.** Rebuild the broken config with `extendModules` and watch it fail. Then add an assertion to the feature file whose message names the fix, plus a `checks.nix` entry proving the assertion fires on the broken config. `checks.pihole-dns-fallback` is the template.
 4. Evaluation can't see runtime paths like who connects to which port. Don't remove access (firewall ports, services, permissions) based on reasoning alone; compare the effective result against master (e.g. the open port set) and keep it identical unless the user agrees to change it.
