@@ -49,6 +49,21 @@ in
     ];
   };
 
+  # Provides the CDI spec behind --device=nvidia.com/gpu=all.
+  hardware.nvidia-container-toolkit.enable = true;
+
+  # Host networking skips Docker's port publishing, so the firewall has to open these.
+  networking.firewall = {
+    allowedTCPPorts = [ 32400 ];
+    # Local network discovery.
+    allowedUDPPorts = [
+      32410
+      32412
+      32413
+      32414
+    ];
+  };
+
   # Ensure configured filesystem mounts are available before starting Plex.
   systemd.services.docker-plex.unitConfig.RequiresMountsFor = [
     configDir

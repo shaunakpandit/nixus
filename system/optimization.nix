@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+_: {
   ## STORAGE
   # Perform garbage collection weekly to maintain low disk usage
   nix.gc = {

@@ -19,6 +19,15 @@ let
     printf '[%s] 📁 %s | ctx %.0f%% (%.0fk/%.0fk) | $%.2f' \
       "$model" "$directory" "$used" "$tokens" "$size" "$cost"
   '';
+
+  # Same lints as `nix flake check` (checks.nix), per edited file; exit 2 hands the findings back to Claude.
+  lintNix = pkgs.writeShellScript "claude-lint-nix" ''
+    file=$(${lib.getExe pkgs.jq} -r '.tool_input.file_path // empty')
+    [[ $file == *.nix && -f $file && $file != */hardware-configuration.nix ]] || exit 0
+    { ${lib.getExe pkgs.nixfmt-rs} "$file" &&
+      ${lib.getExe pkgs.statix} check "$file" &&
+      ${lib.getExe pkgs.deadnix} --fail --no-underscore "$file"; } >&2 || exit 2
+  '';
 in
 {
   programs.claude-code = {
@@ -37,6 +46,17 @@ in
       env.CLAUDE_CODE_EFFORT_LEVEL = lib.mkDefault "high";
       # true would also suppress the status line.
       disableAllHooks = false;
+      hooks.PostToolUse = [
+        {
+          matcher = "Edit|Write";
+          hooks = [
+            {
+              type = "command";
+              command = "${lintNix}";
+            }
+          ];
+        }
+      ];
       statusLine = {
         command = "${statusLine}";
         padding = 0;

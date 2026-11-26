@@ -16,13 +16,15 @@
       paths = [ pkgs.claude-code ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
       # The formatters otherwise only exist on nvim's PATH (extraPackages),
-      # so expose them to Claude's shell too. Node runs ponytail's hooks.
+      # so expose them to Claude's shell too, with the linters from checks.nix. Node runs ponytail's hooks.
       postBuild = ''
         wrapProgram $out/bin/claude \
           --prefix PATH : ${
             lib.makeBinPath [
               pkgs.nixfmt-rs
               pkgs.nixpkgs-fmt
+              pkgs.statix
+              pkgs.deadnix
               pkgs.nodejs
             ]
           }
@@ -96,12 +98,15 @@
           "Bash(nix derivation show:*)"
           "Bash(nix log:*)"
           "Bash(nix hash:*)"
+          "Bash(nix store diff-closures:*)"
           "Bash(nix store prefetch-file:*)"
           "Bash(nix-prefetch-url:*)"
           "Bash(nix-instantiate:*)"
           "Bash(nixos-option:*)"
           "Bash(nixfmt:*)"
           "Bash(nixpkgs-fmt:*)"
+          "Bash(statix:*)"
+          "Bash(deadnix:*)"
 
           "Bash(cat:*)"
           "Bash(head:*)"

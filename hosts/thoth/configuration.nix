@@ -30,43 +30,13 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOST1BDY81RViIwoRqex1mYipRpRdDf3fwBgUAYmusVS shaunakdpandit@gmail.com"
   ];
 
-  networking.firewall = {
-    allowedTCPPorts = [
-      8000 # portainer
-      9443 # portainer
-
-      3000 # webui
-
-      32400 # plex
-
-      6060 # grimmory
-
-      8443 # Crafty Controller; web page
-      8123 # Crafty Controller; Optional map web server, e.g. Dynmap
-
-      8080 # glance
-      8081 # gatus
-
-      4200 # pattern game
-    ];
-
-    allowedTCPPortRanges = [
-      {
-        # for crafy controller
-        from = 25500;
-        to = 25600;
-      }
-    ];
-    # Optional: local network discovery for plex
-    allowedUDPPorts = [
-      32410 # plex
-      32412 # plex
-      32413 # plex
-      32414 # plex
-
-      19132 # Craftcontroller; Bedrock
-    ];
-  };
+  # Container ports are opened by system/virtualisation.nix (published) or their containers/ file
+  # (host network). See everything exposed with `nix eval --raw .#ports.thoth`.
+  networking.firewall.allowedTCPPorts = [
+    8000 # portainer
+    9443 # portainer
+    4200 # pattern game
+  ];
 
   system.stateVersion = "26.05"; # Release of the first install; never change it.
 }

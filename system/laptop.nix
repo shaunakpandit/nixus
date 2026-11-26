@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+_: {
   hardware.trackpoint = {
     enable = true;
     sensitivity = 50;

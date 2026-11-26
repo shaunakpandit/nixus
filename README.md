@@ -27,7 +27,7 @@ LAN addresses for all of them are in `homelab.nix`.
 3. Copy the closest sibling host: `hosts/t14` for a laptop, `hosts/d4080` for a desktop, `hosts/rama` for a server.
 4. In the new `hosts/<name>/`:
    - replace `hardware-configuration.nix` with `/etc/nixos/hardware-configuration.nix`;
-   - set `hostname`, `username` and `rebuildCommand` in `variables.nix`;
+   - set `hostname` and `username` in `variables.nix` (every option and its default is in `var.nix`);
    - set `system.stateVersion` (and `home.stateVersion`) to the installer's value from `/etc/nixos/configuration.nix`;
    - drop imports and settings that belong to the machine you copied (sops secrets, remote builder, firewall ports, GPU modules).
 5. Add `<name> = mkHost "<name>";` to `flake.nix`, and its LAN IP to `homelab.nix`.
@@ -47,7 +47,7 @@ LAN addresses for all of them are in `homelab.nix`.
 
 - Import `system/profiles/server.nix` and `home/profiles/base.nix`, plus the `containers/*.nix` this server runs.
 - The host **must** have an entry in `homelab.nix`: tailscale advertises it as a subnet route.
-- Open every container port in the host's `networking.firewall`.
+- Don't list container ports in `networking.firewall`: `system/virtualisation.nix` opens every published port automatically. A host-network container (like plex) opens its own ports in its `containers/` file. `nix eval --raw .#ports.<host>` lists everything a host exposes and which file opened it.
 - Add your SSH public key to `users.users.<user>.openssh.authorizedKeys.keys`.
 - Join the tailnet after the first switch: `sudo tailscale login` (or put an auth key in `/etc/tailscale/authkey`).
 
@@ -118,6 +118,9 @@ Other commands: `sops updatekeys secrets/<host>.yaml` after changing a file's re
 ```
 flake.nix            inputs and mkHost; one line per host
 homelab.nix          LAN IPs, available as config.var.homelab.<name>
+var.nix              the typed config.var.* options every host sets in variables.nix
+checks.nix           lints, repo rules and regression tests run by nix flake check
+ports.nix            what a host exposes and which file opened it (nix eval --raw .#ports.<host>)
 hosts/<host>/        picks one profile + extra features; machine-only values (variables.nix)
 system/profiles/     base, desktop, server, work  (NixOS)
 home/profiles/       base, desktop, work          (home-manager)

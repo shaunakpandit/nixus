@@ -57,7 +57,7 @@ in
 {
   virtualisation.oci-containers.containers.unbound = {
     image = "mvance/unbound:latest";
-    # pull = "always";
+    # No pull: pihole's only upstream; a bad image or no internet would take DNS down. Update by hand.
     # Listens on the LAN so pihole (and gatus on thoth) can reach it.
     ports = [
       "5335:5335/tcp"

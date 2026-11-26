@@ -30,11 +30,31 @@ in
     '';
   };
 
+  # While pihole is down (restart, update, crash), a host that only resolves through itself has no
+  # DNS, so image pulls fail and pihole may never come back (the "tech tuesday" outage).
+  # shortcut: the host's own tailscale IP isn't known at eval time, so it would pass as a fallback.
+  assertions = [
+    {
+      assertion = lib.any (
+        server:
+        !(
+          lib.hasPrefix "127." server
+          || lib.elem server [
+            "::1"
+            "localhost"
+            (config.var.homelab.${config.var.hostname} or "")
+          ]
+        )
+      ) (config.networking.nameservers ++ config.networking.networkmanager.insertNameservers);
+      message = "containers/pihole.nix: ${config.var.hostname} resolves only through its own pihole. Add an outside fallback, e.g. networking.networkmanager.insertNameservers = [ \"127.0.0.1\" \"1.1.1.1\" ].";
+    }
+  ];
+
   systemd.tmpfiles.rules = [ "d /var/lib/pihole 0755 root root -" ];
 
   virtualisation.oci-containers.containers.pihole = {
     image = "pihole/pihole:latest";
-    # pull = "always";
+    # No pull: a restart while the internet is down would leave the LAN without DNS. Update by hand.
     environment = {
       TZ = config.time.timeZone;
       # Unbound from containers/unbound.nix, reached through its published host port.

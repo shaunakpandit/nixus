@@ -23,20 +23,8 @@
   # After thoth's 03:00 run, so thoth's pulls don't land while pihole is restarting.
   systemd.services.update-containers.startAt = "Tue *-*-* 03:15:00";
 
-  # Global ports, so these are also open on tailscale0 for tailnet DNS.
-  networking.firewall = {
-    allowedTCPPorts = [
-      53 # pihole
-      8089 # pihole web ui
-      5335 # unbound
-      27973 # glance agent
-      2375 # docker socket proxy, read only, for glance
-    ];
-    allowedUDPPorts = [
-      53 # pihole
-      5335 # unbound
-    ];
-  };
+  # No firewall entries: system/virtualisation.nix opens every container's published ports
+  # (on every interface, so tailscale0 too). See `nix eval --raw .#ports.rama`.
 
   system.stateVersion = "26.05"; # Release of the first install; never change it.
 }

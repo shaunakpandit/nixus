@@ -1,4 +1,4 @@
-# Every NixOS host. The host sets var.username and var.hostname in its variables.nix.
+# Every NixOS host. The host sets var.username and var.hostname in its variables.nix (options in var.nix).
 {
   config,
   pkgs,
@@ -7,6 +7,7 @@
 }:
 {
   imports = [
+    ../../var.nix
     inputs.stylix.nixosModules.stylix
     ../stylix.nix
     ../optimization.nix
@@ -14,8 +15,6 @@
     ../locale.nix
     ../utils.nix
   ];
-
-  var.homelab = import ../../homelab.nix;
 
   networking.hostName = config.var.hostname;
   networking.networkmanager.enable = true;

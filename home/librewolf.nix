@@ -123,6 +123,7 @@ let
   '';
 
   # Self-contained (no remote fonts or scripts) so it loads offline and leaks nothing.
+  # deadnix: skip
   homepage = pkgs.writeText "librewolf-home.html" ''
     <!doctype html>
     <html lang="en">
