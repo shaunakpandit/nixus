@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 # Endpoints for thoth's glance (containers/monitoring.nix) to read this host's stats and containers.
 {

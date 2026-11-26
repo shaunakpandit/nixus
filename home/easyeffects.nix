@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-{
+_: {
   services.easyeffects = {
     enable = true;
 

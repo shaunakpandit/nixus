@@ -20,10 +20,6 @@
     ];
   };
 
-  networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
-    32400 # Plex
-  ];
-
   # run the following to find tailscale IP of new device
   # tailscale ip -4
 }

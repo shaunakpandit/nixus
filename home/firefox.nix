@@ -1,13 +1,9 @@
 {
-  config,
   pkgs,
   inputs,
   lib,
   ...
 }:
-let
-  c = config.lib.stylix.colors;
-in
 {
 
   programs.firefox = {

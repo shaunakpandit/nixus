@@ -1,0 +1,4 @@
+# `systemd.services.x` next to `systemd.tmpfiles.rules` reads better than one nested block.
+disabled = ["repeated_keys"]
+# Generated per machine by nixos-generate-config.
+ignore = ["hardware-configuration.nix"]

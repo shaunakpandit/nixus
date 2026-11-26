@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+_: {
   programs.newsboat = {
     enable = true;
     extraConfig = "

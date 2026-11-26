@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+_: {
   virtualisation.oci-containers.containers = {
     portainer = {
       image = "portainer/portainer-ce:latest";

@@ -30,11 +30,22 @@ in
     '';
   };
 
+  # update-containers restarts pihole to pull its image. If the host only resolves through
+  # itself, that pull has no DNS and pihole never comes back (the "tech tuesday" outage).
+  assertions = [
+    {
+      assertion = lib.any (
+        server: server != "127.0.0.1" && server != config.var.homelab.${config.var.hostname}
+      ) (config.networking.nameservers ++ config.networking.networkmanager.insertNameservers);
+      message = "containers/pihole.nix: ${config.var.hostname} resolves only through its own pihole. Add an outside fallback, e.g. networking.networkmanager.insertNameservers = [ \"127.0.0.1\" \"1.1.1.1\" ].";
+    }
+  ];
+
   systemd.tmpfiles.rules = [ "d /var/lib/pihole 0755 root root -" ];
 
   virtualisation.oci-containers.containers.pihole = {
     image = "pihole/pihole:latest";
-    # pull = "always";
+    pull = "always";
     environment = {
       TZ = config.time.timeZone;
       # Unbound from containers/unbound.nix, reached through its published host port.

@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}:
-{
+_: {
   # minecraft
   programs.prismlauncher = {
     enable = true;

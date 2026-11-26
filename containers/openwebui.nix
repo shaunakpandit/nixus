@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+_: {
   # see https://github.com/open-webui/open-webui#installing-open-webui-with-bundled-ollama-support
   virtualisation.oci-containers.containers = {
     open-webui = {

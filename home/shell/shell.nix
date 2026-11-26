@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-let
-  c = config.lib.stylix.colors;
-in
 {
   imports = [ ./tmux.nix ];
 

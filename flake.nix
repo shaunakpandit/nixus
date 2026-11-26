@@ -63,20 +63,26 @@
             )
           ];
         };
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
     in
     {
+      # `nix flake check` runs these and evaluates every host (including each module's assertions).
+      checks.x86_64-linux = import ./checks.nix {
+        inherit pkgs;
+        src = ./.;
+        hosts = inputs.self.nixosConfigurations;
+      };
+      formatter.x86_64-linux = pkgs.nixfmt-rs;
+      ports = builtins.mapAttrs (_: import ./ports.nix) inputs.self.nixosConfigurations;
+
       # `nix develop` provides the tools for creating keys and editing secrets/
-      devShells.x86_64-linux.default =
-        let
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        in
-        pkgs.mkShell {
-          packages = with pkgs; [
-            sops
-            age
-            ssh-to-age
-          ];
-        };
+      devShells.x86_64-linux.default = pkgs.mkShell {
+        packages = with pkgs; [
+          sops
+          age
+          ssh-to-age
+        ];
+      };
 
       nixosConfigurations = {
         t14 = mkHost "t14";

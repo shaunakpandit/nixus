@@ -1,13 +1,4 @@
-{
-  config,
-  pkgs,
-  inputs,
-  ...
-}:
-let
-  c = config.lib.stylix.colors;
-in
-{
+_: {
   programs.fuzzel = {
     enable = true;
     settings = {

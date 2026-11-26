@@ -3,6 +3,7 @@
   ...
 }:
 let
+  # deadnix: skip
   lilex = {
     package = pkgs.nerd-fonts.lilex;
     name = "Lilex Nerd Font";
@@ -11,16 +12,19 @@ let
     package = pkgs.nerd-fonts.zed-mono;
     name = "ZedMono Nerd Font";
   };
+  # deadnix: skip
   iosevka = {
     package = pkgs.nerd-fonts.iosevka;
     name = "Iosevka Nerd Font";
   };
+  # deadnix: skip
   space = {
     package = pkgs.nerd-fonts.space-mono;
     name = "SpaceMono Nerd Font";
   };
 
   # Dark Techbase theme.
+  # deadnix: skip
   techbase = {
     # Backgrounds and foregrounds
     base00 = "191d23"; # normal background
@@ -44,6 +48,7 @@ let
   };
 
   # Light Techbase theme.
+  # deadnix: skip
   techbaseLite = {
     # Backgrounds and foregrounds
     base00 = "d4d4d4"; # normal background

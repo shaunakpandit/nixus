@@ -1,10 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-{
+_: {
+  # GPU access for containers (plex, openwebui).
+  hardware.nvidia-container-toolkit.enable = true;
+
   # Enable OpenGL
   hardware.graphics = {
     enable = true;
